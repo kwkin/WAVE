@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LayerList>
+    <Layer className="gov.nasa.worldwind.layers.StarsLayer">
+        <Property name="Name" value="Stars"/>
+    </Layer>
+    <Layer className="gov.nasa.worldwind.layers.SkyGradientLayer"/>
+    <Layer href="config/Earth/BMNGWMSLayer2.xml" actuate="onLoad"/>
+    <Layer className="wave.layers.LatLonGraticule" actuate="onRequest">
+        <Property name="Name" value="Lat-Lon Graticule"/>
+    </Layer>
+    <Layer className="wave.layers.GARSGraticule" actuate="onRequest">
+        <Property name="Name" value="GARS Graticule"/>
+    </Layer>
+    <Layer className="gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer"/>
+    
+    <Layer className="gov.nasa.worldwind.layers.WorldMapLayer"/>
+    <Layer className="gov.nasa.worldwind.layers.ScalebarLayer"/>
+    <Layer className="gov.nasa.worldwind.layers.CompassLayer"/>
+</LayerList>

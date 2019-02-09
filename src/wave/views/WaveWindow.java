@@ -18,6 +18,9 @@ public class WaveWindow extends BorderPane
 		});
 		this.setCenter(swingNode);
 		
+		WaveMenu menu = new WaveMenu(session);
+		this.setTop(menu);
+		
 		StatusBar statusBar = new StatusBar();
 		statusBar.setEventSource(session.getWorldWindow());
 		this.setBottom(statusBar);

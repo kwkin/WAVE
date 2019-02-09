@@ -8,4 +8,6 @@
     
     <Property name="gov.nasa.worldwind.avkey.WorldWindowClassName"
               value="wave.models.WaveWindowDrawable"/>
+
+    <LayerList href="data/config/wave.layers.xml"/>
 </WorldWindConfiguration>
