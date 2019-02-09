@@ -1,6 +1,7 @@
 package wave.views;
 
 import gov.nasa.worldwind.layers.Layer;
+import javafx.application.Platform;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -13,6 +14,11 @@ public class WaveMenu extends MenuBar
 	{
 		Menu menuFile = new Menu("File");
 		MenuItem menuItemExit = new MenuItem("Exit");
+		menuItemExit.setOnAction(action ->
+		{
+			Platform.exit();
+			System.exit(0);
+		});
 		menuFile.getItems().add(menuItemExit);
 		
 		Menu menuLayer = new Menu("Layer");
@@ -26,7 +32,6 @@ public class WaveMenu extends MenuBar
 			});
 			menuLayer.getItems().add(layerItem);
 		}
-		
 		this.getMenus().add(menuFile);
 		this.getMenus().add(menuLayer);
 	}

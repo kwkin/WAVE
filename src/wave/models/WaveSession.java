@@ -14,7 +14,7 @@ public class WaveSession
 	{
 		this.worldWindow = new WorldWindowGLJPanel();
 		Model model = (Model)WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
-				
+		
 		this.worldWindow.setModel(model);
 	}
 	
