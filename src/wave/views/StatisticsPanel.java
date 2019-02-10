@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 import wave.models.WaveSession;
@@ -24,12 +25,32 @@ public class StatisticsPanel extends BorderPane implements RenderingListener
 	private int updateInterval = 500;
 	private long lastUpdate;
 
+	private final ToggleButton toggleStreamButton;
 	private final TableView<PerformanceStatistic> table;
 
 	public StatisticsPanel(WaveSession session, Set<String> statistics)
 	{
 		this.setEventSource(session.getWorldWindow());
 		session.getWorldWindow().setPerFrameStatisticsKeys(statistics);
+
+		// TODO replace with icons
+		this.toggleStreamButton = new ToggleButton("Stop Stream");
+		this.toggleStreamButton.setPrefWidth(150);
+		this.toggleStreamButton.setOnAction(event ->
+		{
+			if (this.toggleStreamButton.isSelected())
+			{
+				this.toggleStreamButton.setText("Resume Stream");
+				this.eventSource.removeRenderingListener(this);
+			}
+			else
+			{
+				this.toggleStreamButton.setText("Stop Stream");
+				this.eventSource.addRenderingListener(this);
+			}
+		});
+		this.toggleStreamButton.setSelected(false);
+		this.setTop(this.toggleStreamButton);
 
 		this.table = new TableView<PerformanceStatistic>();
 		this.table.setEditable(false);
