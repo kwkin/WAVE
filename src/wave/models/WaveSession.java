@@ -5,6 +5,7 @@ import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
+import javafx.application.Platform;
 
 public class WaveSession
 {
@@ -27,4 +28,12 @@ public class WaveSession
 	{
 		return this.worldWindow.getModel();
 	}
+	
+	public void shutdown()
+	{
+		this.worldWindow.shutdown();
+		Platform.exit();
+		System.exit(0);
+	}
+	
 }

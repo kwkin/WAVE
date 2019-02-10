@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.WorldWind;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import wave.models.WaveSession;
@@ -28,6 +29,10 @@ public class Wave extends Application
 		WaveSession session = new WaveSession();		
 		WaveWindow window = new WaveWindow(session);
 		primaryStage.setScene(new Scene(window, 1280, 720));
+		primaryStage.setOnCloseRequest(event ->
+		{
+			session.shutdown();
+		});
 		primaryStage.show();
 	}
 	

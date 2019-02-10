@@ -16,8 +16,7 @@ public class WaveMenu extends MenuBar
 		MenuItem menuItemExit = new MenuItem("Exit");
 		menuItemExit.setOnAction(action ->
 		{
-			Platform.exit();
-			System.exit(0);
+			session.shutdown();
 		});
 		menuFile.getItems().add(menuItemExit);
 		
