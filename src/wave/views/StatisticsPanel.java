@@ -21,8 +21,10 @@ import wave.models.WaveSession;
 
 public class StatisticsPanel extends BorderPane implements RenderingListener
 {
+	private final int DEFAULT_UPDATE_INTERVAL = 500;
+	
 	private WorldWindow eventSource;
-	private int updateInterval = 500;
+	private int updateInterval = DEFAULT_UPDATE_INTERVAL;
 	private long lastUpdate;
 
 	private final ToggleButton toggleStreamButton;
