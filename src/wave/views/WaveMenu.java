@@ -1,7 +1,6 @@
 package wave.views;
 
 import gov.nasa.worldwind.layers.Layer;
-import javafx.application.Platform;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;

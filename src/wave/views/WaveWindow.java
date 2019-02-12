@@ -26,7 +26,11 @@ public class WaveWindow extends BorderPane
 		statusBar.setEventSource(session.getWorldWindow());
 		this.setBottom(statusBar);
 
+		// TODO add tab pane and add panels to it
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
 		this.setLeft(statisticsPanel);
+		
+		MarkerPanel markerPanel = new MarkerPanel(session);
+		this.setRight(markerPanel);
 	}
 }
