@@ -1,4 +1,4 @@
-package wave.views;
+package wave.views.panel;
 
 import java.util.regex.Pattern;
 
@@ -6,6 +6,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -40,6 +41,9 @@ public class MarkerPanel extends BorderPane
 
 		// TODO change to table view
 		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(5, 5, 5, 5));
+		grid.setHgap(5);
+		grid.setVgap(5);
 		ColumnConstraints labelColumn = new ColumnConstraints();
 		labelColumn.setPercentWidth(33.3);
 		labelColumn.setHgrow(Priority.ALWAYS);

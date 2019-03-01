@@ -1,4 +1,4 @@
-package wave.views;
+package wave.views.panel;
 
 import java.util.Set;
 

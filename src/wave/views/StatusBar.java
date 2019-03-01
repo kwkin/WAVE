@@ -41,7 +41,6 @@ public class StatusBar extends GridPane implements PositionListener, RenderingLi
 		this.setPadding(new Insets(0, 10, 0, 10));
 
 		ColumnConstraints labelColumn = new ColumnConstraints();
-		labelColumn.setPercentWidth(12.5);
 		labelColumn.setHgrow(Priority.ALWAYS);
 		labelColumn.setHalignment(HPos.RIGHT);
 
