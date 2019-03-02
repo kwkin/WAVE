@@ -9,7 +9,6 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.util.UnitsFormat;
-import gov.nasa.worldwind.util.WWMath;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -17,13 +16,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import wave.infrastructure.util.UnitToString;
 
 public class WaveStatusBar extends GridPane implements PositionListener, RenderingListener
 {
-	private static String OFF_GLOBE_MESSAGE = "Off Globe";
-	private WorldWindow eventSource;
-	private String elevationSystem = UnitsFormat.METRIC_SYSTEM;
-	private String angleFormat = Angle.ANGLE_FORMAT_DMS;
+	protected static String OFF_GLOBE_MESSAGE = "Off Globe";
+	protected String elevationSystem = UnitsFormat.METRIC_SYSTEM;
+	protected String angleFormat = Angle.ANGLE_FORMAT_DMS;
+	protected WorldWindow eventSource;
 
 	private final Label latitudeLabel = new Label("Latitude: ");
 	private final Label latitudeDisplay = new Label("");
@@ -86,11 +86,17 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 			if (this.eventSource.getView() != null && this.eventSource.getView().getEyePosition() != null)
 			{
 				double elevation = this.eventSource.getView().getEyePosition().getElevation();
-				this.altitudeDisplay.setText(this.makeElevationDescription(elevation));
+				String displayText = UnitToString.distanceDescription(elevation, this.elevationSystem);
+				this.altitudeDisplay.setText(displayText);
 			}
 		});
 	}
 
+	/**
+	 * Sets the elevation system
+	 * 
+	 * @param format The unit system specified using UnitsFormat
+	 */
 	public void setElevationSystem(String format)
 	{
 		switch (format)
@@ -104,11 +110,21 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 		}
 	}
 
-	public String getElevation()
+	/**
+	 * Returns the current elevation system
+	 * 
+	 * @return The current elevation system
+	 */
+	public String getElevationSystem()
 	{
 		return this.elevationSystem;
 	}
 
+	/**
+	 * Sets the angle format
+	 * 
+	 * @param format The format specified using Angle
+	 */
 	public void setAngleFormat(String format)
 	{
 		switch (format)
@@ -123,11 +139,21 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 		}
 	}
 
+	/**
+	 * Returns the current Angle format
+	 * 
+	 * @return The current Angle format
+	 */
 	public String getAngleFormat()
 	{
 		return this.angleFormat;
 	}
 
+	/**
+	 * Changes the event source used to update the position and cursor information
+	 * 
+	 * @param newEventSource The event source
+	 */
 	public void setEventSource(WorldWindow newEventSource)
 	{
 		if (this.eventSource != null)
@@ -148,11 +174,12 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 		Position newPosition = event.getPosition();
 		if (newPosition != null)
 		{
-			String latitudeStr = makeAngleDescription(newPosition.getLatitude());
-			String longitudeStr = makeAngleDescription(newPosition.getLongitude());
+			String latitudeStr = UnitToString.angleDescription(newPosition.getLatitude(), this.angleFormat);
+			String longitudeStr = UnitToString.angleDescription(newPosition.getLongitude(), this.angleFormat);
+
 			Globe globe = this.eventSource.getModel().getGlobe();
 			double elevation = globe.getElevation(newPosition.getLatitude(), newPosition.getLongitude());
-			String elevationStr = makeElevationDescription(elevation);
+			String elevationStr = UnitToString.distanceDescription(elevation, this.elevationSystem);
 			this.latitudeDisplay.setText(latitudeStr);
 			this.longitudeDisplay.setText(longitudeStr);
 			this.elevationDisplay.setText(elevationStr);
@@ -163,59 +190,5 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 			this.longitudeDisplay.setText(OFF_GLOBE_MESSAGE);
 			this.elevationDisplay.setText(OFF_GLOBE_MESSAGE);
 		}
-	}
-
-	protected String makeAngleDescription(Angle angle)
-	{
-		String string = "";
-		switch (this.angleFormat)
-		{
-		case Angle.ANGLE_FORMAT_DD:
-			string = String.format("%7.4f\u00B0", angle.degrees);
-			break;
-		case Angle.ANGLE_FORMAT_DM:
-			double[] degreeMinute = angle.toDMS();
-			double minute = degreeMinute[1] + (degreeMinute[2] * 1 / 60);
-			string = String.format("%3.0f\u00B0 %6.4f\u00B0", degreeMinute[0], minute);
-			break;
-		case Angle.ANGLE_FORMAT_DMS:
-			string = angle.toDMSString();
-			break;
-		default:
-			string = angle.toDMSString();
-			break;
-		}
-		return string;
-	}
-
-	protected String makeElevationDescription(double meters)
-	{
-		String string;
-		if (UnitsFormat.METRIC_SYSTEM.equals(this.elevationSystem))
-		{
-			if (Math.abs(meters) > 1000)
-			{
-				double km = meters / 1e3;
-				string = String.format("%7.4f km", km);
-			}
-			else
-			{
-				string = String.format("%7.4f m", meters);
-			}
-		}
-		else
-		{
-			int miles = (int) Math.round(WWMath.convertMetersToMiles(meters));
-			if (Math.abs(miles) >= 1)
-			{
-				string = String.format("%7d mi", miles);
-			}
-			else
-			{
-				int feet = (int) Math.round(WWMath.convertMetersToFeet(meters));
-				string = String.format("%7d ft", feet);
-			}
-		}
-		return string;
 	}
 }
