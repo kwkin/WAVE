@@ -21,12 +21,11 @@ import wave.infrastructure.WaveSession;
 
 public class StatisticsPanel extends BorderPane implements RenderingListener
 {
-	private final int DEFAULT_UPDATE_INTERVAL = 500;
-	
+	public final int DEFAULT_UPDATE_INTERVAL = 500;
+
 	private WorldWindow eventSource;
 	private int updateInterval = DEFAULT_UPDATE_INTERVAL;
 	private long lastUpdate;
-
 	private final ToggleButton toggleStreamButton;
 	private final TableView<PerformanceStatistic> table;
 
@@ -40,16 +39,7 @@ public class StatisticsPanel extends BorderPane implements RenderingListener
 		this.toggleStreamButton.setPrefWidth(150);
 		this.toggleStreamButton.setOnAction(event ->
 		{
-			if (this.toggleStreamButton.isSelected())
-			{
-				this.toggleStreamButton.setText("Resume Stream");
-				this.eventSource.removeRenderingListener(this);
-			}
-			else
-			{
-				this.toggleStreamButton.setText("Stop Stream");
-				this.eventSource.addRenderingListener(this);
-			}
+			this.toggleStream(this.toggleStreamButton.isSelected());
 		});
 		this.toggleStreamButton.setSelected(false);
 		this.setTop(this.toggleStreamButton);
@@ -127,5 +117,19 @@ public class StatisticsPanel extends BorderPane implements RenderingListener
 			return;
 		}
 		table.setItems(data);
+	}
+	
+	public void toggleStream(boolean isEnabled)
+	{
+		if (this.toggleStreamButton.isSelected())
+		{
+			this.toggleStreamButton.setText("Resume Stream");
+			this.eventSource.removeRenderingListener(this);
+		}
+		else
+		{
+			this.toggleStreamButton.setText("Stop Stream");
+			this.eventSource.addRenderingListener(this);
+		}
 	}
 }
