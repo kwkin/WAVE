@@ -19,6 +19,8 @@ import wave.infrastructure.WaveSession;
 import wave.infrastructure.survey.Survey;
 import wave.infrastructure.survey.SurveyScenario;
 
+// TODO add survey completion dialog
+// TODO write results of survey to file
 public class SurveyPanel extends BorderPane
 {
 	protected Survey survey;
@@ -49,7 +51,7 @@ public class SurveyPanel extends BorderPane
 		titlePane.setCenter(titleText);
 		titlePane.setBottom(new Separator());
 		this.setTop(titlePane);
-		
+
 		// Center content
 		TextFlow initialText = new TextFlow();
 		initialText.setTextAlignment(TextAlignment.CENTER);
@@ -73,7 +75,7 @@ public class SurveyPanel extends BorderPane
 		Text text8 = new Text("when you are ready to proceed. ");
 		initialText.getChildren().add(text8);
 		this.setCenter(initialText);
-		
+
 		// Bottom Content
 		this.buttonPanel = new GridPane();
 		this.buttonPanel.setPadding(new Insets(5, 5, 5, 5));
@@ -123,16 +125,33 @@ public class SurveyPanel extends BorderPane
 			Button repeatSound = new Button("Repeat Sound");
 			this.buttonPanel.add(repeatSound, 0, 1);
 		}
-		SurveyScenario nextScenario = this.survey.getNextScenario();
-		QuestionPanel panel = QuestionPanel.CreatePanel(nextScenario);
-		this.currentPanel = panel;
-		this.nextScenario.disableProperty().unbind();
-		this.nextScenario.disableProperty().bind(this.currentPanel.isAnswerSelectedProperty().not());
-		StringBuilder questionText = new StringBuilder("Question ");
-		questionText.append(this.survey.getScenarioIndex() + 1);
-		questionText.append(" of ");
-		questionText.append(this.survey.getScenarioCount());
-		this.questionTextProperty.setValue(questionText.toString());
-		this.setCenter(panel.getNode());
+		int questionIndex = this.survey.getScenarioIndex();
+		// Write answer
+		if (this.currentPanel != null)
+		{
+			String answer = this.currentPanel.getAnswer();
+			this.survey.writeAnswer(questionIndex, answer);
+		}
+		if (questionIndex == this.survey.getScenarioCount() - 1)
+		{
+			this.survey.closeSurveyFile();
+			System.out.println("You completed the survey.");
+		}
+		else
+		{
+			// Update window for next scenario
+			SurveyScenario nextScenario = this.survey.getNextScenario();
+			QuestionPanel panel = QuestionPanel.CreatePanel(nextScenario);
+			this.currentPanel = panel;
+			this.nextScenario.disableProperty().unbind();
+			this.nextScenario.disableProperty().bind(this.currentPanel.isAnswerSelectedProperty().not());
+			StringBuilder questionText = new StringBuilder("Question ");
+			questionText.append(this.survey.getScenarioIndex() + 1);
+			questionText.append(" of ");
+			questionText.append(this.survey.getScenarioCount());
+			this.questionTextProperty.setValue(questionText.toString());
+			this.setCenter(panel.getNode());
+		}
+
 	}
 }

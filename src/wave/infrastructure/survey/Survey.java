@@ -1,10 +1,12 @@
 package wave.infrastructure.survey;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 import wave.infrastructure.WaveSession;
@@ -12,6 +14,7 @@ import wave.infrastructure.WaveSession;
 public class Survey
 {
 	protected WaveSession session;
+	protected BufferedWriter fileWriter;
 	protected Path file;
 	protected SurveyForm form;
 	protected int scenarioIndex;
@@ -20,6 +23,14 @@ public class Survey
 	{
 		this.session = session;
 		this.file = file;
+		try
+		{
+			this.fileWriter = Files.newBufferedWriter(this.file);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 		// TODO replace DI
 		this.form = new SurveyForm();
 		
@@ -50,7 +61,7 @@ public class Survey
 		}
 		LocalDateTime curTime = LocalDateTime.now();
 		// @formatter:off
-		String surveyFileName = String.format("participant%d_%d-%d-%d_%d-%d-%d.xml", 
+		String surveyFileName = String.format("participant%d_%d-%d-%d_%d-%d-%d.csv", 
 				numDirectories, 
 				curTime.getYear(),
 				curTime.getMonthValue(), 
@@ -99,5 +110,33 @@ public class Survey
 	public int getScenarioCount()
 	{
 		return this.form.getScenarios().size();
+	}
+	
+	public void writeAnswer(int questionNumber, String answer)
+	{
+		StringJoiner tokenizer = new StringJoiner(",");
+		tokenizer.add(Integer.toString(questionNumber));
+		tokenizer.add(answer);
+		try
+		{
+			this.fileWriter.write(tokenizer.toString());
+			this.fileWriter.newLine();
+		}
+		catch (IOException e)
+		{
+			
+		}
+	}
+	
+	public void closeSurveyFile()
+	{
+		try
+		{
+			this.fileWriter.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
