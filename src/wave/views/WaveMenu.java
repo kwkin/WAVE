@@ -3,6 +3,7 @@ package wave.views;
 import java.io.File;
 import java.nio.file.Paths;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
@@ -12,10 +13,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 import wave.Wave;
 import wave.layers.KMLLayer;
 import wave.layers.KMLLayerLoader;
 import wave.models.WaveSession;
+import wave.views.survey.SurveyWindow;
 
 public class WaveMenu extends MenuBar
 {
@@ -67,7 +70,14 @@ public class WaveMenu extends MenuBar
 		MenuItem surveyMenuItem = new MenuItem("Take Survey...");
 		surveyMenuItem.setOnAction((event) ->
 		{
-			System.out.println("Open survey...");
+			// TODO this
+			Scene surveyScene = new Scene(new SurveyWindow(session), 480, 480);
+			Stage newWindow = new Stage();
+            newWindow.setTitle("WAVE Survey");
+            newWindow.setScene(surveyScene);
+            newWindow.setX(Wave.getStage().getX() + 200);
+            newWindow.setY(Wave.getStage().getY() + 100);
+            newWindow.show();
 		});
 		menuFile.getItems().add(surveyMenuItem);
 		menuFile.getItems().add(new SeparatorMenuItem());
@@ -79,7 +89,6 @@ public class WaveMenu extends MenuBar
 		});
 		menuFile.getItems().add(menuItemExit);
 
-		
 		// Layer Tabs
 		Menu menuLayer = new Menu("Layer");
 		this.getMenus().add(menuLayer);
