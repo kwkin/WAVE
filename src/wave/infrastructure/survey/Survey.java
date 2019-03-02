@@ -63,7 +63,6 @@ public class Survey
 		if (!Files.exists(surveyFile))
 		{
 			surveyFile = Files.createFile(surveyFile);
-			System.out.println("Created File: " + surveyFile.toAbsolutePath());
 		}
 		else
 		{
@@ -90,5 +89,15 @@ public class Survey
 	{
 		this.scenarioIndex = index;
 		return this.form.getScenario(this.scenarioIndex);
+	}
+	
+	public int getScenarioIndex()
+	{
+		return this.scenarioIndex;
+	}
+	
+	public int getScenarioCount()
+	{
+		return this.form.getScenarios().size();
 	}
 }

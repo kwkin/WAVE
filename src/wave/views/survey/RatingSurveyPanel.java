@@ -1,9 +1,14 @@
 package wave.views.survey;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -12,11 +17,14 @@ import wave.infrastructure.survey.SurveyScenario;
 // TODO replace rating with better input (stars?)
 public class RatingSurveyPanel extends BorderPane implements SurveyPanel
 {
+	private final BooleanProperty isAnswerSelectedProperty;
 	private final Label questionLabel;
 	private ToggleGroup toggleGroup;
 	
 	public RatingSurveyPanel(SurveyScenario scenario)
 	{
+		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
+		
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
 		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
@@ -27,6 +35,14 @@ public class RatingSurveyPanel extends BorderPane implements SurveyPanel
 		scenarioPane.setHgap(5);
 		scenarioPane.setVgap(8);
 		this.toggleGroup = new ToggleGroup();
+		this.toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue)
+			{
+				isAnswerSelectedProperty.setValue(true);
+			}
+		});
 		RadioButton rating1 = new RadioButton("1");
 		rating1.setToggleGroup(this.toggleGroup);
 		scenarioPane.add(rating1, 0, 0);
@@ -62,5 +78,17 @@ public class RatingSurveyPanel extends BorderPane implements SurveyPanel
 	public Node getNode()
 	{
 		return this;
+	}
+
+	@Override
+	public boolean getIsAnswerSelected()
+	{
+		return this.isAnswerSelectedProperty.getValue();
+	}
+
+	@Override
+	public BooleanProperty isAnswerSelectedProperty()
+	{
+		return this.isAnswerSelectedProperty;
 	}
 }

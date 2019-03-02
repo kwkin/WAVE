@@ -1,8 +1,12 @@
 package wave.views.survey;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -17,6 +21,7 @@ import wave.infrastructure.survey.SurveyScenario;
 
 public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
 {
+	private final BooleanProperty isAnswerSelectedProperty;
 	private final StringProperty degreeProperty;
 	private final static int MIN_DEGREE = 0;
 	private final static int MAX_DEGREE = 359;
@@ -26,6 +31,7 @@ public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
 
 	public DirectionSurveyPanel(SurveyScenario scenario)
 	{
+		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
 		this.degreeProperty = new SimpleStringProperty();
 
 		this.setPadding(new Insets(10, 10, 10, 10));
@@ -68,7 +74,7 @@ public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
 				return (int) Math.round(Double.parseDouble(string));
 			}
 		});
-		
+
 		// Commit to property when spinner loses focus
 		spinner.focusedProperty().addListener((observable, oldValue, newValue) ->
 		{
@@ -79,6 +85,15 @@ public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
 		});
 		spinner.setValueFactory(valueFactory);
 		scenarioPane.add(spinner, 2, 0);
+
+		this.degreeProperty.addListener(new ChangeListener<String>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+			{
+				isAnswerSelectedProperty.setValue(true);
+			}
+		});
 	}
 
 	@Override
@@ -97,5 +112,17 @@ public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
 	public Node getNode()
 	{
 		return this;
+	}
+
+	@Override
+	public boolean getIsAnswerSelected()
+	{
+		return this.isAnswerSelectedProperty.getValue();
+	}
+
+	@Override
+	public BooleanProperty isAnswerSelectedProperty()
+	{
+		return this.isAnswerSelectedProperty;
 	}
 }

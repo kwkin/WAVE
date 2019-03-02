@@ -1,5 +1,6 @@
 package wave.views.survey;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import wave.infrastructure.survey.ScenarioType;
 import wave.infrastructure.survey.SurveyScenario;
@@ -9,6 +10,8 @@ public interface SurveyPanel
 	public String getQuestion();
 	public String getAnswer();
 	public Node getNode();
+	public boolean getIsAnswerSelected();
+	public BooleanProperty isAnswerSelectedProperty();
 	
 	/**
 	 * Create a survey panel given the survey scenario
