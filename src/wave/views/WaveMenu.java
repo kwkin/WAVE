@@ -15,9 +15,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import wave.Wave;
-import wave.layers.KMLLayer;
-import wave.layers.KMLLayerLoader;
-import wave.models.WaveSession;
+import wave.infrastructure.layers.KMLLayer;
+import wave.infrastructure.layers.KMLLayerLoader;
+import wave.infrastructure.models.WaveSession;
 import wave.views.survey.SurveyWindow;
 
 public class WaveMenu extends MenuBar

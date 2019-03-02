@@ -8,11 +8,11 @@ import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import wave.models.WaveSession;
-import wave.views.panel.LayersPanel;
-import wave.views.panel.MarkerPanel;
-import wave.views.panel.StatisticsPanel;
-import wave.views.panel.WeatherOverlayPanel;
+import wave.infrastructure.models.WaveSession;
+import wave.views.panels.LayersPanel;
+import wave.views.panels.MarkerPanel;
+import wave.views.panels.StatisticsPanel;
+import wave.views.panels.WeatherOverlayPanel;
 
 public class WaveWindow extends BorderPane
 {

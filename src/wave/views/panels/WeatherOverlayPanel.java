@@ -1,6 +1,5 @@
-package wave.views.panel;
+package wave.views.panels;
 
-import gov.nasa.worldwind.layers.Layer;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -9,11 +8,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import wave.models.WaveSession;
+import wave.infrastructure.layers.KMLLayer;
+import wave.infrastructure.models.WaveSession;
 
-public class LayersPanel extends BorderPane
+public class WeatherOverlayPanel extends BorderPane
 {
-	public LayersPanel(WaveSession session)
+	public WeatherOverlayPanel(WaveSession session)
 	{
 		GridPane layerPane = new GridPane();
 		layerPane.setPadding(new Insets(5, 5, 5, 5));
@@ -29,18 +29,18 @@ public class LayersPanel extends BorderPane
 		displayColumn.setHalignment(HPos.CENTER);
 
 		int layerIndex = 0;
-		for (Layer layer : session.getLayers())
+		for (KMLLayer layer : session.getWeatherLayers())
 		{
 			String layerName = layer.getName();
 			Label layerLabel = new Label(layerName);
 			ToggleButton layerToggleButton = new ToggleButton("Toggle");
-			layerToggleButton.setSelected(layer.isEnabled());
+			layerToggleButton.selectedProperty().bindBidirectional(layer.isEnabledProperty());
 			layerToggleButton.setOnAction((event) ->
 			{
 				layer.setEnabled(layerToggleButton.isSelected());
 			});
 			layerPane.add(layerLabel, 0, layerIndex);
-			layerPane.add(layerToggleButton, 1, layerIndex);			
+			layerPane.add(layerToggleButton, 1, layerIndex);
 			layerIndex = layerIndex + 1;
 		}
 		this.setCenter(layerPane);

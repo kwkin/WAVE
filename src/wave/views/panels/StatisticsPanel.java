@@ -1,4 +1,4 @@
-package wave.views.panel;
+package wave.views.panels;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
-import wave.models.WaveSession;
+import wave.infrastructure.models.WaveSession;
 
 public class StatisticsPanel extends BorderPane implements RenderingListener
 {

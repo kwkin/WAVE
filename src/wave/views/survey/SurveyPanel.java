@@ -1,8 +1,8 @@
 package wave.views.survey;
 
 import javafx.scene.Node;
-import wave.models.survey.ScenarioType;
-import wave.models.survey.SurveyScenario;
+import wave.infrastructure.survey.ScenarioType;
+import wave.infrastructure.survey.SurveyScenario;
 
 public interface SurveyPanel
 {

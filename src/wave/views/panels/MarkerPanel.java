@@ -1,4 +1,4 @@
-package wave.views.panel;
+package wave.views.panels;
 
 import java.util.regex.Pattern;
 
@@ -16,7 +16,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
-import wave.models.WaveSession;
+import wave.infrastructure.models.WaveSession;
 
 public class MarkerPanel extends BorderPane
 {

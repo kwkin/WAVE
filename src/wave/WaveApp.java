@@ -9,10 +9,10 @@ import gov.nasa.worldwind.WorldWind;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import wave.models.WaveSession;
+import wave.infrastructure.WaveSession;
 import wave.views.WaveWindow;
 
-public class Wave extends Application
+public class WaveApp extends Application
 {
 	private static final String APP_NAME = "Weather Auditory and Visual Environment";
 	private static Stage primaryStage;
@@ -24,26 +24,22 @@ public class Wave extends Application
 
 	public static Stage getStage()
 	{
-		return Wave.primaryStage;
+		return WaveApp.primaryStage;
 	}
 	
 	@Override
 	public void start(Stage primaryStage)
 	{
-		Wave.primaryStage = primaryStage;
-		Wave.primaryStage.setTitle(APP_NAME);
+		WaveApp.primaryStage = primaryStage;
+		WaveApp.primaryStage.setTitle(APP_NAME);
 		WaveSession session = new WaveSession();
 		WaveWindow window = new WaveWindow(session);
-		Wave.primaryStage.setScene(new Scene(window, 1280, 720));
-
-//		Path darkThemeCss = Paths.get("data", "css", "modena_dark.css");
-//		this.loadTheme(scene, darkThemeCss);
-		
-		Wave.primaryStage.setOnCloseRequest(event ->
+		WaveApp.primaryStage.setScene(new Scene(window, 1280, 720));		
+		WaveApp.primaryStage.setOnCloseRequest(event ->
 		{
 			session.shutdown();
 		});
-		Wave.primaryStage.show();
+		WaveApp.primaryStage.show();
 	}
 	
 	public void loadTheme(Path stylesheet)

@@ -10,9 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import wave.models.WaveSession;
-import wave.models.survey.Survey;
-import wave.models.survey.SurveyScenario;
+import wave.infrastructure.models.WaveSession;
+import wave.infrastructure.survey.Survey;
+import wave.infrastructure.survey.SurveyScenario;
 
 // TODO MVP design
 public class SurveyWindow extends BorderPane

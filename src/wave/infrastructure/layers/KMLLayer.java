@@ -1,4 +1,4 @@
-package wave.layers;
+package wave.infrastructure.layers;
 
 import gov.nasa.worldwind.layers.RenderableLayer;
 import javafx.beans.property.BooleanProperty;

@@ -1,4 +1,4 @@
-package wave.models;
+package wave.infrastructure.models;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,8 +23,8 @@ import gov.nasa.worldwind.render.markers.BasicMarkerShape;
 import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
-import wave.layers.KMLLayer;
-import wave.layers.KMLLayerLoader;
+import wave.infrastructure.layers.KMLLayer;
+import wave.infrastructure.layers.KMLLayerLoader;
 
 public class WaveSession
 {

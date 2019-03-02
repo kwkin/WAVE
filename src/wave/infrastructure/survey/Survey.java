@@ -1,4 +1,4 @@
-package wave.models.survey;
+package wave.infrastructure.survey;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import wave.models.WaveSession;
+import wave.infrastructure.models.WaveSession;
 
 public class Survey
 {

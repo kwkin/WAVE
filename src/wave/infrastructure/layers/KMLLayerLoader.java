@@ -1,4 +1,4 @@
-package wave.layers;
+package wave.infrastructure.layers;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import gov.nasa.worldwind.ogc.kml.KMLRoot;
 import gov.nasa.worldwind.util.WWIO;
 import gov.nasa.worldwind.util.WWUtil;
 import javafx.application.Platform;
-import wave.models.WaveSession;
+import wave.infrastructure.models.WaveSession;
 
 public class KMLLayerLoader extends Thread
 {

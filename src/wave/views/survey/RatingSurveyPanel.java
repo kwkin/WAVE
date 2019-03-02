@@ -7,7 +7,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import wave.models.survey.SurveyScenario;
+import wave.infrastructure.survey.SurveyScenario;
 
 // TODO replace rating with better input (stars?)
 public class RatingSurveyPanel extends BorderPane implements SurveyPanel

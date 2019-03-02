@@ -1,4 +1,4 @@
-package wave.models;
+package wave.infrastructure.models;
 
 import gov.nasa.worldwind.Movable;
 import gov.nasa.worldwind.WorldWind;

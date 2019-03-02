@@ -1,4 +1,4 @@
-package wave.models;
+package wave.infrastructure.models;
 
 import javax.swing.event.EventListenerList;
 

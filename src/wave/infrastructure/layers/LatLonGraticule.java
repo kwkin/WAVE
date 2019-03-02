@@ -1,4 +1,4 @@
-package wave.layers;
+package wave.infrastructure.layers;
 
 import java.awt.Color;
 

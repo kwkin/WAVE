@@ -13,7 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
-import wave.models.survey.SurveyScenario;
+import wave.infrastructure.survey.SurveyScenario;
 
 public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
 {

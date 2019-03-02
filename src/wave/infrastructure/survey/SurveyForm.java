@@ -1,4 +1,4 @@
-package wave.models.survey;
+package wave.infrastructure.survey;
 
 import java.util.ArrayList;
 import java.util.List;
