@@ -13,7 +13,7 @@ import gov.nasa.worldwind.ogc.kml.KMLRoot;
 import gov.nasa.worldwind.util.WWIO;
 import gov.nasa.worldwind.util.WWUtil;
 import javafx.application.Platform;
-import wave.infrastructure.models.WaveSession;
+import wave.infrastructure.WaveSession;
 
 public class KMLLayerLoader extends Thread
 {

@@ -14,10 +14,10 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import wave.Wave;
+import wave.WaveApp;
+import wave.infrastructure.WaveSession;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
-import wave.infrastructure.models.WaveSession;
 import wave.views.survey.SurveyWindow;
 
 public class WaveMenu extends MenuBar
@@ -40,7 +40,7 @@ public class WaveMenu extends MenuBar
 		{
 			try
 			{
-				File kmlFile = kmlChooser.showOpenDialog(Wave.getStage());
+				File kmlFile = kmlChooser.showOpenDialog(WaveApp.getStage());
 				if (kmlFile == null)
 				{
 					return;
@@ -75,8 +75,8 @@ public class WaveMenu extends MenuBar
 			Stage newWindow = new Stage();
             newWindow.setTitle("WAVE Survey");
             newWindow.setScene(surveyScene);
-            newWindow.setX(Wave.getStage().getX() + 200);
-            newWindow.setY(Wave.getStage().getY() + 100);
+            newWindow.setX(WaveApp.getStage().getX() + 200);
+            newWindow.setY(WaveApp.getStage().getY() + 100);
             newWindow.show();
 		});
 		menuFile.getItems().add(surveyMenuItem);

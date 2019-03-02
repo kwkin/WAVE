@@ -18,7 +18,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-public class StatusBar extends GridPane implements PositionListener, RenderingListener
+public class WaveStatusBar extends GridPane implements PositionListener, RenderingListener
 {
 	private static String OFF_GLOBE_MESSAGE = "Off Globe";
 	private WorldWindow eventSource;
@@ -34,7 +34,7 @@ public class StatusBar extends GridPane implements PositionListener, RenderingLi
 	private final Label altitudeLabel = new Label("Altitude: ");
 	private final Label altitudeDisplay = new Label("");
 
-	public StatusBar()
+	public WaveStatusBar()
 	{
 		this.setHgap(10);
 		this.setVgap(10);

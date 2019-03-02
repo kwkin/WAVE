@@ -1,4 +1,4 @@
-package wave.infrastructure.models;
+package wave.infrastructure;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +25,7 @@ import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
+import wave.infrastructure.models.DraggableMarker;
 
 public class WaveSession
 {

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import wave.infrastructure.models.WaveSession;
+import wave.infrastructure.WaveSession;
 
 public class Survey
 {

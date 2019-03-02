@@ -1,4 +1,4 @@
-package wave.infrastructure.models;
+package wave.infrastructure.handlers;
 
 import javax.swing.event.EventListenerList;
 
@@ -10,7 +10,7 @@ import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import javafx.application.Platform;
 
-public class WaveWindowDrawable extends WorldWindowGLAutoDrawable
+public class FXWindowDrawable extends WorldWindowGLAutoDrawable
 {
 	private final EventListenerList eventListeners = new EventListenerList();
 

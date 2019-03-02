@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import wave.infrastructure.models.WaveSession;
+import wave.infrastructure.WaveSession;
 import wave.infrastructure.survey.Survey;
 import wave.infrastructure.survey.SurveyScenario;
 

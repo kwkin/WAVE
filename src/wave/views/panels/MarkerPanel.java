@@ -16,7 +16,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
-import wave.infrastructure.models.WaveSession;
+import wave.infrastructure.WaveSession;
 
 public class MarkerPanel extends BorderPane
 {

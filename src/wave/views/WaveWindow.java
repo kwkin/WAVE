@@ -8,7 +8,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import wave.infrastructure.models.WaveSession;
+import wave.infrastructure.WaveSession;
 import wave.views.panels.LayersPanel;
 import wave.views.panels.MarkerPanel;
 import wave.views.panels.StatisticsPanel;
@@ -28,7 +28,7 @@ public class WaveWindow extends BorderPane
 		WaveMenu menu = new WaveMenu(session);
 		this.setTop(menu);
 
-		StatusBar statusBar = new StatusBar();
+		WaveStatusBar statusBar = new WaveStatusBar();
 		statusBar.setEventSource(session.getWorldWindow());
 		this.setBottom(statusBar);
 
