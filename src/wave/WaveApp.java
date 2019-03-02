@@ -43,9 +43,6 @@ public class WaveApp extends Application
 		WaveApp.primaryStage.show();
 	}
 
-	/**
-	 * Set default configuration
-	 */
 	static
 	{
 		WorldWind.setOfflineMode(true);
