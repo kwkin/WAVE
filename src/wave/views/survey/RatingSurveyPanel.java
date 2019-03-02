@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 import wave.infrastructure.survey.SurveyScenario;
 
 // TODO replace rating with better input (stars?)
-public class RatingSurveyPanel extends BorderPane implements SurveyPanel
+public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
 	private final Label questionLabel;

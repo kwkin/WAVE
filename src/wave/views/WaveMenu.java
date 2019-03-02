@@ -3,7 +3,6 @@ package wave.views;
 import java.io.File;
 import java.nio.file.Paths;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
@@ -13,7 +12,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import wave.WaveApp;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.layers.KMLLayer;
@@ -24,15 +22,15 @@ public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;
 	private WaveSession session;
-	
+
 	public WaveMenu(WaveSession session)
 	{
 		this.session = session;
-		
+
 		// File tabs
 		Menu menuFile = new Menu("File");
 		this.getMenus().add(menuFile);
-		
+
 		initializeKMLChooser();
 		MenuItem menuItemLoadKML = new MenuItem("Open KML...");
 		menuItemLoadKML.setOnAction(action ->
@@ -72,7 +70,7 @@ public class WaveMenu extends MenuBar
 			menuLayer.getItems().add(layerItem);
 		}
 	}
-	
+
 	protected void openKMLLayer()
 	{
 		try
@@ -101,18 +99,13 @@ public class WaveMenu extends MenuBar
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected void openSurvey()
 	{
-		Scene surveyScene = new Scene(new SurveyWindow(session), 480, 480);
-		Stage newWindow = new Stage();
-        newWindow.setTitle("WAVE Survey");
-        newWindow.setScene(surveyScene);
-        newWindow.setX(WaveApp.getStage().getX() + 200);
-        newWindow.setY(WaveApp.getStage().getY() + 100);
-        newWindow.show();
+		SurveyWindow window = new SurveyWindow(this.session);
+		window.show();
 	}
-	
+
 	private void initializeKMLChooser()
 	{
 		this.kmlChooser = new FileChooser();
@@ -120,7 +113,7 @@ public class WaveMenu extends MenuBar
 		ExtensionFilter kmzFilter = new ExtensionFilter("kmz files (*.kmz)", "*.kmz", "*.KMZ");
 		this.kmlChooser.getExtensionFilters().add(kmlFilter);
 		this.kmlChooser.getExtensionFilters().add(kmzFilter);
-		
+
 		String executionDirectory = System.getProperty("user.dir");
 		this.kmlChooser.setInitialDirectory(Paths.get(executionDirectory).toFile());
 	}

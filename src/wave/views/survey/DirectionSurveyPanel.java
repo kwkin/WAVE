@@ -19,7 +19,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import wave.infrastructure.survey.SurveyScenario;
 
-public class DirectionSurveyPanel extends BorderPane implements SurveyPanel
+public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
 	private final StringProperty degreeProperty;
