@@ -22,47 +22,22 @@ import wave.views.survey.SurveyWindow;
 
 public class WaveMenu extends MenuBar
 {
+	private FileChooser kmlChooser;
+	private WaveSession session;
+	
 	public WaveMenu(WaveSession session)
 	{
+		this.session = session;
+		
 		// File tabs
 		Menu menuFile = new Menu("File");
 		this.getMenus().add(menuFile);
-		MenuItem menuItemLoadKML = new MenuItem("Open KML...");
-		FileChooser kmlChooser = new FileChooser();
-		ExtensionFilter kmlFilter = new ExtensionFilter("kml files (*.kml)", "*.kml", "*.KML");
-		ExtensionFilter kmzFilter = new ExtensionFilter("kmz files (*.kmz)", "*.kmz", "*.KMZ");
-		kmlChooser.getExtensionFilters().add(kmlFilter);
-		kmlChooser.getExtensionFilters().add(kmzFilter);
 		
-		String executionDirectory = System.getProperty("user.dir");
-		kmlChooser.setInitialDirectory(Paths.get(executionDirectory).toFile());
+		initializeKMLChooser();
+		MenuItem menuItemLoadKML = new MenuItem("Open KML...");
 		menuItemLoadKML.setOnAction(action ->
 		{
-			try
-			{
-				File kmlFile = kmlChooser.showOpenDialog(WaveApp.getStage());
-				if (kmlFile == null)
-				{
-					return;
-				}
-				else if (kmlFile.exists())
-				{
-					new KMLLayerLoader(kmlFile, session).start();
-				}
-				else
-				{
-					Alert errorDialog = new Alert(AlertType.ERROR);
-					StringBuilder errorMessage = new StringBuilder("Error: File ");
-					errorMessage.append(kmlFile.toString());
-					errorMessage.append(" was not found.");
-					errorDialog.setContentText(errorMessage.toString());
-					errorDialog.show();
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			openKMLLayer();
 		});
 		menuFile.getItems().add(menuItemLoadKML);
 		menuFile.getItems().add(new SeparatorMenuItem());
@@ -70,14 +45,7 @@ public class WaveMenu extends MenuBar
 		MenuItem surveyMenuItem = new MenuItem("Take Survey...");
 		surveyMenuItem.setOnAction((event) ->
 		{
-			// TODO this
-			Scene surveyScene = new Scene(new SurveyWindow(session), 480, 480);
-			Stage newWindow = new Stage();
-            newWindow.setTitle("WAVE Survey");
-            newWindow.setScene(surveyScene);
-            newWindow.setX(WaveApp.getStage().getX() + 200);
-            newWindow.setY(WaveApp.getStage().getY() + 100);
-            newWindow.show();
+			openSurvey();
 		});
 		menuFile.getItems().add(surveyMenuItem);
 		menuFile.getItems().add(new SeparatorMenuItem());
@@ -103,5 +71,57 @@ public class WaveMenu extends MenuBar
 			});
 			menuLayer.getItems().add(layerItem);
 		}
+	}
+	
+	protected void openKMLLayer()
+	{
+		try
+		{
+			File kmlFile = kmlChooser.showOpenDialog(WaveApp.getStage());
+			if (kmlFile == null)
+			{
+				return;
+			}
+			else if (kmlFile.exists())
+			{
+				new KMLLayerLoader(kmlFile, this.session).start();
+			}
+			else
+			{
+				Alert errorDialog = new Alert(AlertType.ERROR);
+				StringBuilder errorMessage = new StringBuilder("Error: File ");
+				errorMessage.append(kmlFile.toString());
+				errorMessage.append(" was not found.");
+				errorDialog.setContentText(errorMessage.toString());
+				errorDialog.show();
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	protected void openSurvey()
+	{
+		Scene surveyScene = new Scene(new SurveyWindow(session), 480, 480);
+		Stage newWindow = new Stage();
+        newWindow.setTitle("WAVE Survey");
+        newWindow.setScene(surveyScene);
+        newWindow.setX(WaveApp.getStage().getX() + 200);
+        newWindow.setY(WaveApp.getStage().getY() + 100);
+        newWindow.show();
+	}
+	
+	private void initializeKMLChooser()
+	{
+		this.kmlChooser = new FileChooser();
+		ExtensionFilter kmlFilter = new ExtensionFilter("kml files (*.kml)", "*.kml", "*.KML");
+		ExtensionFilter kmzFilter = new ExtensionFilter("kmz files (*.kmz)", "*.kmz", "*.KMZ");
+		this.kmlChooser.getExtensionFilters().add(kmlFilter);
+		this.kmlChooser.getExtensionFilters().add(kmzFilter);
+		
+		String executionDirectory = System.getProperty("user.dir");
+		this.kmlChooser.setInitialDirectory(Paths.get(executionDirectory).toFile());
 	}
 }
