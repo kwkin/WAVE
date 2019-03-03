@@ -1,12 +1,10 @@
 package wave.views.panels;
 
-import java.util.regex.Pattern;
-
-import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,8 +13,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.util.StringConverter;
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.converters.PositionConverter;
+import wave.infrastructure.converters.PositionConverterOption;
+import wave.infrastructure.layers.KMLLayer;
 
 public class MarkerPanel extends BorderPane
 {
@@ -25,9 +25,11 @@ public class MarkerPanel extends BorderPane
 	private final Label latitudeLabel;
 	private final Label longitudeLabel;
 	private final Label elevationLabel;
+	private final Label humidityLabel;
 	private final TextField latitudeTextfield;
-	private final TextField longitudeextfield;
+	private final TextField longitudetextfield;
 	private final TextField elevationTextfield;
+	private final TextField humidityTextfield;
 
 	public MarkerPanel(WaveSession session)
 	{
@@ -57,85 +59,42 @@ public class MarkerPanel extends BorderPane
 		grid.getColumnConstraints().add(labelColumn);
 		grid.getColumnConstraints().add(displayColumn);
 
-		String patternString = "[0-9]+[.][0-9]+";
-		Pattern pattern = Pattern.compile(patternString);
+		PositionConverter latitudeConverter = new PositionConverter(session, PositionConverterOption.LATITUDE);
+		PositionConverter longitudeConverter = new PositionConverter(session, PositionConverterOption.LONGITUDE);
+		PositionConverter elevationConverter = new PositionConverter(session, PositionConverterOption.ELEVATION);
 		ObjectProperty<Position> soundPosition = session.getSoundMarker().positionProperty();
 		this.latitudeLabel = new Label("Latitude: ");
-		this.longitudeLabel = new Label("Longitude: ");
-		this.elevationLabel = new Label("Elevation: ");
-		this.latitudeTextfield = new TextField();
-		this.latitudeTextfield.textProperty().bindBidirectional(soundPosition, new StringConverter<Position>()
-		{
-			@Override
-			public Position fromString(String latitudeStr)
-			{
-				latitudeStr = pattern.matcher(latitudeStr).group();
-				double latitude = Double.valueOf(latitudeStr);
-				double longitude = soundPosition.getValue().longitude.degrees;
-				Angle latitudeAngle = Angle.fromDegrees(latitude);
-				Angle longitudeAngle = Angle.fromDegrees(longitude);
-				double elevation = session.getModel().getGlobe().getElevation(latitudeAngle, longitudeAngle);
-				Position position = Position.fromDegrees(latitude, longitude, elevation);
-				return position;
-			}
-
-			@Override
-			public String toString(Position position)
-			{
-				return position.latitude.toString();
-			}
-		});
-
-		this.longitudeextfield = new TextField();
-		this.longitudeextfield.textProperty().bindBidirectional(soundPosition, new StringConverter<Position>()
-		{
-			@Override
-			public Position fromString(String longitudeStr)
-			{
-				double latitude = soundPosition.getValue().latitude.degrees;
-				longitudeStr = pattern.matcher(longitudeStr).group();
-				double longitude = Double.valueOf(longitudeStr);
-				Angle latitudeAngle = Angle.fromDegrees(latitude);
-				Angle longitudeAngle = Angle.fromDegrees(longitude);
-				double elevation = session.getModel().getGlobe().getElevation(latitudeAngle, longitudeAngle);
-				Position position = Position.fromDegrees(latitude, longitude, elevation);
-				return position;
-			}
-
-			@Override
-			public String toString(Position position)
-			{
-				return position.longitude.toString();
-			}
-		});
-
-		this.elevationTextfield = new TextField();
-		this.elevationTextfield.textProperty().bindBidirectional(soundPosition, new StringConverter<Position>()
-		{
-			@Override
-			public Position fromString(String elevationStr)
-			{
-				double latitude = soundPosition.getValue().latitude.degrees;
-				double longitude = soundPosition.getValue().longitude.degrees;
-				double elevation = Double.valueOf(elevationStr);
-				Position position = Position.fromDegrees(latitude, longitude, elevation);
-				return position;
-			}
-
-			@Override
-			public String toString(Position position)
-			{
-				return Double.toString(position.elevation);
-			}
-		});
-
 		grid.add(this.latitudeLabel, 0, 0);
-		grid.add(this.longitudeLabel, 0, 1);
-		grid.add(this.elevationLabel, 0, 2);
+		this.latitudeTextfield = new TextField();
+		this.latitudeTextfield.textProperty().bindBidirectional(soundPosition, latitudeConverter);
 		grid.add(this.latitudeTextfield, 1, 0);
-		grid.add(this.longitudeextfield, 1, 1);
+		
+		this.longitudeLabel = new Label("Longitude: ");
+		grid.add(this.longitudeLabel, 0, 1);
+		this.longitudetextfield = new TextField();
+		this.longitudetextfield.textProperty().bindBidirectional(soundPosition, longitudeConverter);
+		grid.add(this.longitudetextfield, 1, 1);
+		
+		this.elevationLabel = new Label("Elevation: ");
+		grid.add(this.elevationLabel, 0, 2);
+		this.elevationTextfield = new TextField();
+		this.elevationTextfield.textProperty().bindBidirectional(soundPosition, elevationConverter);
 		grid.add(this.elevationTextfield, 1, 2);
 
+		KMLLayer humidityLayer = session.getWeatherLayers().get(1);
+		this.humidityLabel = new Label("Humidity: ");
+		grid.add(this.humidityLabel, 0, 3);
+		this.humidityTextfield = new TextField();
+		this.humidityTextfield.textProperty().bindBidirectional(humidityLayer.valueProperty());
+		grid.add(this.humidityTextfield, 1, 3);
+
+		Button updateButton = new Button("Update");
+		updateButton.setOnAction((event) ->
+		{
+			humidityLayer.getColor();
+		});
+		grid.add(updateButton, 0, 4, 2, 1);
+		
 		this.setTop(buttons);
 		this.setCenter(grid);
 	}
