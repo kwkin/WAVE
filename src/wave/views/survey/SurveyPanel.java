@@ -17,19 +17,20 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.survey.Survey;
+import wave.infrastructure.survey.SurveyForm;
 import wave.infrastructure.survey.SurveyScenario;
 
 // TODO add survey completion dialog
-// TODO write results of survey to file
 public class SurveyPanel extends BorderPane
 {
 	protected Survey survey;
 	protected QuestionPanel currentPanel;
+	protected SurveyScenario currentScenario;
 	protected Button repeatSound;
 
 	private final StringProperty questionTextProperty;
 	private WaveSession session;
-	private Button nextScenario;
+	private Button nextScenarioButton;
 	private boolean isSurveyStarted;
 	private GridPane buttonPanel;
 
@@ -94,9 +95,9 @@ public class SurveyPanel extends BorderPane
 
 		Separator separator = new Separator();
 		this.buttonPanel.add(separator, 0, 0, 2, 1);
-		this.nextScenario = new Button("Start Survey");
-		this.buttonPanel.add(this.nextScenario, 1, 1);
-		this.nextScenario.setOnAction((event) ->
+		this.nextScenarioButton = new Button("Start Survey");
+		this.buttonPanel.add(this.nextScenarioButton, 1, 1);
+		this.nextScenarioButton.setOnAction((event) ->
 		{
 			nextScenario();
 		});
@@ -106,8 +107,9 @@ public class SurveyPanel extends BorderPane
 	{
 		try
 		{
-			this.survey = Survey.CreateSurveyFile(this.session);
-			this.nextScenario.setText("Next Scenario");
+			SurveyForm form = new SurveyForm();
+			this.survey = Survey.CreateSurveyFile(this.session, form);
+			this.nextScenarioButton.setText("Next Scenario");
 			this.isSurveyStarted = true;
 		}
 		catch (IOException e)
@@ -119,20 +121,24 @@ public class SurveyPanel extends BorderPane
 
 	protected void nextScenario()
 	{
+		// Initialize survey if not already started
 		if (!this.isSurveyStarted)
 		{
 			startSurvey();
 			Button repeatSound = new Button("Repeat Sound");
 			this.buttonPanel.add(repeatSound, 0, 1);
 		}
+		
+		// Get answer of current scenario
 		int questionIndex = this.survey.getScenarioIndex();
-		// Write answer
 		if (this.currentPanel != null)
 		{
 			String answer = this.currentPanel.getAnswer();
-			this.survey.writeAnswer(questionIndex, answer);
+			this.survey.writeAnswer(questionIndex, this.currentScenario, answer);
 		}
-		if (questionIndex == this.survey.getScenarioCount() - 1)
+		
+		// Check if survey complete
+		if (questionIndex == this.survey.getScenarioCount())
 		{
 			this.survey.closeSurveyFile();
 			System.out.println("You completed the survey.");
@@ -140,13 +146,13 @@ public class SurveyPanel extends BorderPane
 		else
 		{
 			// Update window for next scenario
-			SurveyScenario nextScenario = this.survey.getNextScenario();
-			QuestionPanel panel = QuestionPanel.CreatePanel(nextScenario);
+			this.currentScenario = this.survey.getNextScenario();
+			QuestionPanel panel = QuestionPanel.CreatePanel(this.currentScenario);
 			this.currentPanel = panel;
-			this.nextScenario.disableProperty().unbind();
-			this.nextScenario.disableProperty().bind(this.currentPanel.isAnswerSelectedProperty().not());
+			this.nextScenarioButton.disableProperty().unbind();
+			this.nextScenarioButton.disableProperty().bind(this.currentPanel.isAnswerSelectedProperty().not());
 			StringBuilder questionText = new StringBuilder("Question ");
-			questionText.append(this.survey.getScenarioIndex() + 1);
+			questionText.append(this.survey.getScenarioIndex());
 			questionText.append(" of ");
 			questionText.append(this.survey.getScenarioCount());
 			this.questionTextProperty.setValue(questionText.toString());

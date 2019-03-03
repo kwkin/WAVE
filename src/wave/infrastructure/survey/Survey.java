@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -18,24 +19,22 @@ public class Survey
 	protected Path file;
 	protected SurveyForm form;
 	protected int scenarioIndex;
-	
-	private Survey(WaveSession session, Path file)
+
+	private Survey(WaveSession session, Path file, SurveyForm form)
 	{
 		this.session = session;
 		this.file = file;
+		this.form = form;
+		this.scenarioIndex = 0;
 		try
 		{
 			this.fileWriter = Files.newBufferedWriter(this.file);
+			writeHeader();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		// TODO replace DI
-		this.form = new SurveyForm();
-		
-		// TODO find better way other than initializing to -1
-		this.scenarioIndex = -1;
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class Survey
 	 * @return The path to the created survey file.
 	 * @throws IOException If there was an error creating the survey file
 	 */
-	public static Survey CreateSurveyFile(WaveSession session) throws IOException
+	public static Survey CreateSurveyFile(WaveSession session, SurveyForm form) throws IOException
 	{
 		Path surveyDirectory = Paths.get("data", "survey");
 		long numDirectories = 0;
@@ -82,41 +81,44 @@ public class Survey
 			message.append(" already exists.");
 			throw new IOException(message.toString());
 		}
-		Survey survey = new Survey(session, surveyFile);
-		return survey;
+		return new Survey(session, surveyFile, form);
 	}
-	
+
 	public SurveyScenario getNextScenario()
 	{
-		// TODO handle last scenario case
-		if (scenarioIndex < this.form.getScenarios().size() - 1)
+		if (scenarioIndex == this.form.getScenarios().size())
 		{
-			this.scenarioIndex++;
+			throw new IndexOutOfBoundsException("Last scenario already reached.");
 		}
-		return this.form.getScenario(this.scenarioIndex);
+		return this.form.getScenario(this.scenarioIndex++);
 	}
-	
+
 	public SurveyScenario getScenario(int index)
 	{
 		this.scenarioIndex = index;
 		return this.form.getScenario(this.scenarioIndex);
 	}
-	
+
 	public int getScenarioIndex()
 	{
 		return this.scenarioIndex;
 	}
-	
+
 	public int getScenarioCount()
 	{
 		return this.form.getScenarios().size();
 	}
-	
-	public void writeAnswer(int questionNumber, String answer)
+
+	public void writeAnswer(int questionNumber, SurveyScenario scenario, String answer)
 	{
 		StringJoiner tokenizer = new StringJoiner(",");
 		tokenizer.add(Integer.toString(questionNumber));
+		tokenizer.add(scenario.getType().toString());
 		tokenizer.add(answer);
+		
+		LocalDateTime curTime = LocalDateTime.now();
+		long curEpoch = curTime.toEpochSecond(ZoneOffset.UTC);
+		tokenizer.add(Long.toString(curEpoch));
 		try
 		{
 			this.fileWriter.write(tokenizer.toString());
@@ -124,10 +126,10 @@ public class Survey
 		}
 		catch (IOException e)
 		{
-			
+
 		}
 	}
-	
+
 	public void closeSurveyFile()
 	{
 		try
@@ -137,6 +139,24 @@ public class Survey
 		catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	private void writeHeader()
+	{
+		StringJoiner tokenizer = new StringJoiner(",");
+		tokenizer.add("question");
+		tokenizer.add("type");
+		tokenizer.add("answer");
+		tokenizer.add("timestamp");
+		try
+		{
+			this.fileWriter.write(tokenizer.toString());
+			this.fileWriter.newLine();
+		}
+		catch (IOException e)
+		{
+
 		}
 	}
 }
