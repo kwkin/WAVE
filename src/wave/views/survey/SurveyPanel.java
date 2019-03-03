@@ -142,7 +142,7 @@ public class SurveyPanel extends BorderPane
 			errorAlert.setX(xPosition);
 			double yPosition = this.parent.getY() + this.parent.getHeight() / 2 - errorAlert.getHeight() / 2;
 			errorAlert.setY(yPosition);
-			
+
 			errorAlert.show();
 		}
 	}
@@ -160,20 +160,22 @@ public class SurveyPanel extends BorderPane
 		{
 			this.SurveyCompleted();
 		}
-		
-		// Next scenario
-		this.currentScenario = this.survey.getNextScenario();
-		QuestionPanel panel = QuestionPanel.CreatePanel(this.currentScenario);
-		this.currentPanel = panel;
-		this.nextScenarioButton.disableProperty().unbind();
-		this.nextScenarioButton.disableProperty().bind(this.currentPanel.isAnswerSelectedProperty().not());
-		StringBuilder questionText = new StringBuilder("Question ");
-		questionText.append(this.survey.getScenarioIndex());
-		questionText.append(" of ");
-		questionText.append(this.survey.getScenarioCount());
-		this.questionTextProperty.setValue(questionText.toString());
-		this.setCenter(panel.getNode());
-		
+		else
+		{
+
+			// Next scenario
+			this.currentScenario = this.survey.getNextScenario();
+			QuestionPanel panel = QuestionPanel.CreatePanel(this.currentScenario);
+			this.currentPanel = panel;
+			this.nextScenarioButton.disableProperty().unbind();
+			this.nextScenarioButton.disableProperty().bind(this.currentPanel.isAnswerSelectedProperty().not());
+			StringBuilder questionText = new StringBuilder("Question ");
+			questionText.append(this.survey.getScenarioIndex());
+			questionText.append(" of ");
+			questionText.append(this.survey.getScenarioCount());
+			this.questionTextProperty.setValue(questionText.toString());
+			this.setCenter(panel.getNode());
+		}
 	}
 
 	protected void SurveyCompleted()
