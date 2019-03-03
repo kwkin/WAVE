@@ -37,15 +37,15 @@ public class WaveWindow extends BorderPane
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
 		Tab weatherOverlayTab = new Tab("Weather Layers", weatherOverlayPanel);
 		tabPane.getTabs().add(weatherOverlayTab);
-		
+
 		LayersPanel layersPanel = new LayersPanel(session);
 		Tab layersTab = new Tab("Layers", layersPanel);
 		tabPane.getTabs().add(layersTab);
-		
+
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
 		Tab statisticsTab = new Tab("Performance", statisticsPanel);
 		tabPane.getTabs().add(statisticsTab);
-		
+
 		MarkerPanel markerPanel = new MarkerPanel(session);
 		this.setRight(markerPanel);
 	}

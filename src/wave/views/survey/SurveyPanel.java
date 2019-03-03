@@ -62,7 +62,7 @@ public class SurveyPanel extends BorderPane
 		TextFlow initialText = new TextFlow();
 		initialText.setTextAlignment(TextAlignment.CENTER);
 		initialText.setPadding(new Insets(10, 10, 10, 10));
-		
+
 		// @formatter:off
 		Text text2 = new Text("In this experiment, you will be asked several questions related to the audio design of WAVE. ");
 		Text text3 = new Text("The questions mainly consist of listening to various weather scenarios, and selecting an answer based upon the perceived audio. ");
@@ -174,7 +174,7 @@ public class SurveyPanel extends BorderPane
 		this.questionTextProperty.setValue(questionText.toString());
 		this.setCenter(panel.getNode());
 	}
-	
+
 	protected void SurveyCompleted()
 	{
 		this.survey.closeSurveyFile();
@@ -189,7 +189,7 @@ public class SurveyPanel extends BorderPane
 		// @formatter:off
 		Text text1 = new Text("You may now leave the testing area.");
 		// @formatter:on
-		
+
 		completionText.getChildren().add(text1);
 		this.setCenter(completionText);
 		this.isSurveyCompleted = true;

@@ -56,7 +56,7 @@ public class MarkerPanel extends BorderPane
 
 		grid.getColumnConstraints().add(labelColumn);
 		grid.getColumnConstraints().add(displayColumn);
-		
+
 		String patternString = "[0-9]+[.][0-9]+";
 		Pattern pattern = Pattern.compile(patternString);
 		ObjectProperty<Position> soundPosition = session.getSoundMarker().positionProperty();

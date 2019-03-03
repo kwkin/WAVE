@@ -20,16 +20,16 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 	private final BooleanProperty isAnswerSelectedProperty;
 	private final Label questionLabel;
 	private ToggleGroup toggleGroup;
-	
+
 	public RatingSurveyPanel(SurveyScenario scenario)
 	{
 		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
-		
+
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
 		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
 		this.setTop(this.questionLabel);
-		
+
 		GridPane scenarioPane = new GridPane();
 		scenarioPane.setPadding(new Insets(5, 5, 5, 5));
 		scenarioPane.setHgap(5);
@@ -70,7 +70,7 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 	@Override
 	public String getAnswer()
 	{
-		RadioButton answer = (RadioButton)this.toggleGroup.getSelectedToggle();
+		RadioButton answer = (RadioButton) this.toggleGroup.getSelectedToggle();
 		return answer.getText();
 	}
 

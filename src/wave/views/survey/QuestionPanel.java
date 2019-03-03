@@ -8,20 +8,25 @@ import wave.infrastructure.survey.SurveyScenario;
 public interface QuestionPanel
 {
 	public String getQuestion();
+
 	public String getAnswer();
+
 	public Node getNode();
+
 	public boolean getIsAnswerSelected();
+
 	public BooleanProperty isAnswerSelectedProperty();
-	
+
 	/**
 	 * Create a survey panel given the survey scenario
+	 * 
 	 * @param scenario
 	 */
 	public static QuestionPanel CreatePanel(SurveyScenario scenario)
 	{
 		ScenarioType type = scenario.getType();
 		QuestionPanel panel = null;
-		switch(type)
+		switch (type)
 		{
 		case DIRECTION:
 			panel = new DirectionSurveyPanel(scenario);

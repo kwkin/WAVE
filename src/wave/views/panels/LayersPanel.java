@@ -40,7 +40,7 @@ public class LayersPanel extends BorderPane
 				layer.setEnabled(layerToggleButton.isSelected());
 			});
 			layerPane.add(layerLabel, 0, layerIndex);
-			layerPane.add(layerToggleButton, 1, layerIndex);			
+			layerPane.add(layerToggleButton, 1, layerIndex);
 			layerIndex = layerIndex + 1;
 		}
 		this.setCenter(layerPane);

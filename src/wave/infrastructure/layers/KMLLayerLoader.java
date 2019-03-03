@@ -95,7 +95,7 @@ public class KMLLayerLoader extends Thread
 	{
 		loadKML();
 	}
-	
+
 	protected void loadKML()
 	{
 		try

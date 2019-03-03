@@ -118,7 +118,7 @@ public class StatisticsPanel extends BorderPane implements RenderingListener
 		}
 		table.setItems(data);
 	}
-	
+
 	public void toggleStream(boolean isEnabled)
 	{
 		if (this.toggleStreamButton.isSelected())

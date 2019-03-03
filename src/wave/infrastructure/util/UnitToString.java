@@ -35,7 +35,7 @@ public class UnitToString
 		}
 		return string;
 	}
-	
+
 	/**
 	 * Converts meters to a unit description in the specified unit system
 	 * 
