@@ -14,7 +14,6 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class DraggableMarker extends BasicMarker implements Movable, Draggable
 {
-	// TODO overwrite position property
 	protected boolean dragEnabled = true;
 	protected DraggableSupport draggableSupport = null;
 

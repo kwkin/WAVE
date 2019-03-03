@@ -64,7 +64,7 @@ public class ConfirmCloseEventHandler implements EventHandler<WindowEvent>
 		// Set position of the window
 		double xPosition = this.parent.getX() + this.parent.getWidth() / 2 - closeConfirmation.getWidth() / 2;
 		closeConfirmation.setX(xPosition);
-		double yPosition = this.parent.getY() + this.parent.getHeight() / 2;
+		double yPosition = this.parent.getY() + this.parent.getHeight() / 2 - closeConfirmation.getHeight() / 2;
 		closeConfirmation.setY(yPosition);
 
 		// Change the text of the ok button

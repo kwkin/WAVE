@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.survey.Survey;
 import wave.infrastructure.survey.SurveyForm;
@@ -106,7 +108,7 @@ public class SurveyPanel extends BorderPane
 		this.buttonPanel.add(this.nextScenarioButton, 1, 1);
 		this.nextScenarioButton.setOnAction((event) ->
 		{
-			nextScenario();
+			startSurvey();
 		});
 	}
 
@@ -118,50 +120,48 @@ public class SurveyPanel extends BorderPane
 			this.survey = Survey.CreateSurveyFile(this.session, form);
 			this.nextScenarioTextProperty.setValue("Next Scenario");
 			this.isSurveyStarted = true;
+			this.replaySoundButton = new Button("Repeat Sound");
+			this.buttonPanel.add(this.replaySoundButton, 0, 1);
+			this.nextScenarioButton.setOnAction((event) ->
+			{
+				this.getNextScenario();
+			});
+			this.getNextScenario();
 		}
 		catch (IOException e)
 		{
-			// TODO create error dialog
-			System.out.println(e.getMessage());
+			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+			errorAlert.setHeaderText("Error");
+			errorAlert.initModality(Modality.APPLICATION_MODAL);
+			errorAlert.initOwner(this.parent);
+			StringBuilder errorMessage = new StringBuilder("Error: Unable to create survey file. \n\n");
+			errorMessage.append(e.getMessage());
+			errorAlert.setContentText(errorMessage.toString());
+
+			double xPosition = this.parent.getX() + this.parent.getWidth() / 2 - errorAlert.getWidth() / 2;
+			errorAlert.setX(xPosition);
+			double yPosition = this.parent.getY() + this.parent.getHeight() / 2 - errorAlert.getHeight() / 2;
+			errorAlert.setY(yPosition);
+			
+			errorAlert.show();
 		}
 	}
 
-	protected void nextScenario()
+	protected void getNextScenario()
 	{
-		// Initialize survey if not already started
-		if (this.isSurveyCompleted)
-		{
-			this.parent.surveyCompleted();
-			return;
-		}
-		else if (!this.isSurveyStarted)
-		{
-			startSurvey();
-			this.replaySoundButton = new Button("Repeat Sound");
-			this.buttonPanel.add(this.replaySoundButton, 0, 1);
-		}
-
-		// Get answer of current scenario
+		// Save answer
 		int questionIndex = this.survey.getScenarioIndex();
 		if (this.currentPanel != null)
 		{
 			String answer = this.currentPanel.getAnswer();
 			this.survey.writeAnswer(questionIndex, this.currentScenario, answer);
 		}
-
-		// Check if survey complete
 		if (questionIndex == this.survey.getScenarioCount())
 		{
 			this.SurveyCompleted();
 		}
-		else
-		{
-			this.getNextScenario();
-		}
-	}
-
-	protected void getNextScenario()
-	{
+		
+		// Next scenario
 		this.currentScenario = this.survey.getNextScenario();
 		QuestionPanel panel = QuestionPanel.CreatePanel(this.currentScenario);
 		this.currentPanel = panel;
@@ -173,6 +173,7 @@ public class SurveyPanel extends BorderPane
 		questionText.append(this.survey.getScenarioCount());
 		this.questionTextProperty.setValue(questionText.toString());
 		this.setCenter(panel.getNode());
+		
 	}
 
 	protected void SurveyCompleted()
@@ -193,5 +194,9 @@ public class SurveyPanel extends BorderPane
 		completionText.getChildren().add(text1);
 		this.setCenter(completionText);
 		this.isSurveyCompleted = true;
+		this.nextScenarioButton.setOnAction((event) ->
+		{
+			this.parent.surveyCompleted();
+		});
 	}
 }
