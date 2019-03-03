@@ -11,10 +11,10 @@ public class SurveyWindow extends Stage
 	protected final static String TITLE = "WAVE Survey";
 	protected final static int WINDOW_WIDTH = 480;
 	protected final static int WINDOW_HEIGHT = 480;
-
+	
 	public SurveyWindow(WaveSession session)
 	{
-		SurveyPanel panel = new SurveyPanel(session);
+		SurveyPanel panel = new SurveyPanel(session, this);
 		Scene surveyScene = new Scene(panel, WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setResizable(false);
 		this.setTitle(TITLE);
@@ -27,5 +27,11 @@ public class SurveyWindow extends Stage
 		closeHandler.setConfirmText("Exit");
 		closeHandler.setCancelText("Continue Survey");
 		this.setOnCloseRequest(closeHandler);
+	}
+	
+	public void surveyCompleted()
+	{
+		this.setOnCloseRequest(null);
+		this.close();
 	}
 }

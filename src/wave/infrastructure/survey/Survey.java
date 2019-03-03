@@ -115,7 +115,7 @@ public class Survey
 		tokenizer.add(Integer.toString(questionNumber));
 		tokenizer.add(scenario.getType().toString());
 		tokenizer.add(answer);
-		
+
 		LocalDateTime curTime = LocalDateTime.now();
 		long curEpoch = curTime.toEpochSecond(ZoneOffset.UTC);
 		tokenizer.add(Long.toString(curEpoch));
