@@ -1,5 +1,6 @@
 package wave.views.panels;
 
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.HPos;
@@ -91,9 +92,13 @@ public class MarkerPanel extends BorderPane
 		Button updateButton = new Button("Update");
 		updateButton.setOnAction((event) ->
 		{
-			humidityLayer.getColor();
+			Angle latitudeAngle = soundPosition.getValue().latitude;
+			Angle longitude = soundPosition.getValue().longitude;
+			double elevation = soundPosition.getValue().elevation;
+			humidityLayer.getLayerValue(latitudeAngle, longitude, elevation);
 		});
 		grid.add(updateButton, 0, 4, 2, 1);
+		
 		
 		this.setTop(buttons);
 		this.setCenter(grid);

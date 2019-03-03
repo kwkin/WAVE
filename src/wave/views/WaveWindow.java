@@ -16,6 +16,7 @@ import wave.views.panels.WeatherOverlayPanel;
 
 public class WaveWindow extends BorderPane
 {
+	// TODO prevent window from closing when survey window is open
 	public WaveWindow(WaveSession session)
 	{
 		SwingNode swingNode = new SwingNode();
