@@ -115,6 +115,7 @@ public class WaveMenu extends MenuBar
 	protected void openSurvey()
 	{
 		SurveyWindow window = new SurveyWindow(this.session);
+		this.session.setIsTakingSurvey(true);
 		window.show();
 	}
 

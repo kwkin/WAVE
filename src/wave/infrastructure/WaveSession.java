@@ -23,6 +23,8 @@ import gov.nasa.worldwind.render.markers.BasicMarkerShape;
 import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
+import wave.WaveApp;
+import wave.infrastructure.handlers.ConfirmCloseEventHandler;
 import wave.infrastructure.handlers.GlobeSpinAnimation;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
@@ -35,10 +37,12 @@ public class WaveSession
 	private final MarkerLayer markerLayer;
 	private DraggableMarker soundMarker;
 	private List<KMLLayer> weatherOverlays;
+	private boolean isTakingSurvey;
 
 	public WaveSession()
 	{
 		this.worldWindow = new WorldWindowGLJPanel();
+		this.isTakingSurvey = false;
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 
 		this.worldWindow.setModel(model);
@@ -76,7 +80,7 @@ public class WaveSession
 			layer.setIsEnabled(false);
 		}
 		weatherLayers.get(0).setIsEnabled(true);
-		
+
 		// Rotate the globe until a mouse click is detected
 		GlobeSpinAnimation animator = new GlobeSpinAnimation(this, -2);
 		animator.setEventSource(this.worldWindow);
@@ -112,6 +116,31 @@ public class WaveSession
 		this.worldWindow.shutdown();
 		Platform.exit();
 		System.exit(0);
+	}
+
+	public boolean isTakingSurvey()
+	{
+		return this.isTakingSurvey;
+	}
+
+	public void setIsTakingSurvey(boolean isTakingSurvey)
+	{
+		this.isTakingSurvey = isTakingSurvey;
+		if (this.isTakingSurvey)
+		{
+			ConfirmCloseEventHandler closeHandler = new ConfirmCloseEventHandler(WaveApp.getStage());
+			closeHandler.setCancelText("You are currently taking a survey. Are you sure you want to exit?");
+			closeHandler.setConfirmText("Exit");
+			closeHandler.setCancelText("Continue Survey");
+			WaveApp.getStage().setOnCloseRequest(closeHandler);
+		}
+		else
+		{
+			WaveApp.getStage().setOnCloseRequest(event ->
+			{
+				this.shutdown();
+			});
+		}
 	}
 
 	public void addKMLLayer(KMLRoot kmlRoot)

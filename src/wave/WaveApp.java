@@ -18,6 +18,7 @@ import wave.views.WaveWindow;
 public class WaveApp extends Application
 {
 	private static Stage primaryStage;
+	private static WaveSession session;
 
 	public static void main(String[] args)
 	{
@@ -42,15 +43,17 @@ public class WaveApp extends Application
 		{
 
 		}
-		WaveSession session = new WaveSession();
+		WaveApp.session = new WaveSession();
 		WaveWindow window = new WaveWindow(session);
 		Scene primaryScene = new Scene(window, Wave.DEFAULT_WINDOW_WIDTH, Wave.DEFAULT_WINDOW_HEIGHT);
 		WaveApp.primaryStage.setScene(primaryScene);
-		WaveApp.primaryStage.setOnCloseRequest(event ->
-		{
-			session.shutdown();
-		});
 		WaveApp.primaryStage.show();
+	}
+	
+	@Override
+	public void stop()
+	{
+		WaveApp.session.shutdown();
 	}
 
 	static
