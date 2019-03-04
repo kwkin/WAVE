@@ -23,6 +23,7 @@ import gov.nasa.worldwind.render.markers.BasicMarkerShape;
 import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
+import wave.infrastructure.handlers.GlobeSpinAnimation;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.models.DraggableMarker;
@@ -75,6 +76,10 @@ public class WaveSession
 			layer.setIsEnabled(false);
 		}
 		weatherLayers.get(0).setIsEnabled(true);
+		
+		// Rotate the globe until a mouse click is detected
+		GlobeSpinAnimation animator = new GlobeSpinAnimation(this, -2);
+		animator.setEventSource(this.worldWindow);
 	}
 
 	public DraggableMarker getSoundMarker()

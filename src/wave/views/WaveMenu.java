@@ -30,7 +30,6 @@ import wave.views.survey.SurveyWindow;
 // TODO add a toggle full screen
 // TODO fix stars layer
 // TODO add shortcut keys to the file menu
-// TODO animate globe to rotate upon opening
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;
