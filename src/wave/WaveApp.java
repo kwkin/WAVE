@@ -1,5 +1,6 @@
 package wave;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
+import wave.infrastructure.handlers.FXThemeLoader;
 import wave.views.WaveWindow;
 
 public class WaveApp extends Application
@@ -32,6 +34,14 @@ public class WaveApp extends Application
 	{
 		WaveApp.primaryStage = primaryStage;
 		WaveApp.primaryStage.setTitle(Wave.APPLICATION_NAME);
+		try
+		{
+			FXThemeLoader.setIcon(WaveApp.primaryStage, Wave.MAIN_ICON);
+		}
+		catch (IOException e)
+		{
+
+		}
 		WaveSession session = new WaveSession();
 		WaveWindow window = new WaveWindow(session);
 		Scene primaryScene = new Scene(window, Wave.DEFAULT_WINDOW_WIDTH, Wave.DEFAULT_WINDOW_HEIGHT);
