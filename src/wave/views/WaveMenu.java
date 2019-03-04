@@ -15,6 +15,9 @@ import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
 import gov.nasa.worldwind.util.UnitsFormat;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -40,7 +43,6 @@ import wave.views.survey.SurveyWindow;
 // TODO add an about dialog.
 // TODO add a help dialog for information about the weather overlays
 // TODO add a toggle full screen
-// TODO add shortcut keys to the file menu
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;
@@ -61,6 +63,7 @@ public class WaveMenu extends MenuBar
 			openKMLLayer();
 		});
 		fileMenu.getItems().add(loadKMLMenu);
+		loadKMLMenu.setAccelerator(new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN));
 		fileMenu.getItems().add(new SeparatorMenuItem());
 
 		MenuItem surveyMenu = new MenuItem("Take Survey...");
@@ -77,7 +80,7 @@ public class WaveMenu extends MenuBar
 			session.shutdown();
 		});
 		fileMenu.getItems().add(exitMenu);
-
+		exitMenu.setAccelerator(new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN));
 		Menu viewMenu = new Menu("View");
 		this.getMenus().add(viewMenu);
 		CheckMenuItem compassMenu = this.createLayerMenuItem(CompassLayer.class);
@@ -90,8 +93,10 @@ public class WaveMenu extends MenuBar
 		viewMenu.getItems().add(placeNamesMenu);
 		CheckMenuItem latLonMenu = this.createLayerMenuItem(LatLonGraticule.class);
 		viewMenu.getItems().add(latLonMenu);
+		latLonMenu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
 		CheckMenuItem garsMenu = this.createLayerMenuItem(GARSGraticule.class);
 		viewMenu.getItems().add(garsMenu);
+		garsMenu.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
 
 		viewMenu.getItems().add(new SeparatorMenuItem());
 		Menu unitsMenu = new Menu("Units");
@@ -105,6 +110,7 @@ public class WaveMenu extends MenuBar
 			this.session.setLengthUnitDisplay(UnitsFormat.METRIC_SYSTEM);
 		});
 		metricMenu.setSelected(WaveSession.DEFAULT_LENGTH_UNIT.equals(UnitsFormat.METRIC_SYSTEM));
+		metricMenu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
 		RadioMenuItem imperialMenu = new RadioMenuItem("Imperial");
 		imperialMenu.setToggleGroup(lengthGroup);
 		unitsMenu.getItems().add(imperialMenu);
@@ -113,6 +119,7 @@ public class WaveMenu extends MenuBar
 			this.session.setLengthUnitDisplay(UnitsFormat.IMPERIAL_SYSTEM);
 		});
 		imperialMenu.setSelected(WaveSession.DEFAULT_LENGTH_UNIT.equals(UnitsFormat.IMPERIAL_SYSTEM));
+		imperialMenu.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 		unitsMenu.getItems().add(new SeparatorMenuItem());
 		ToggleGroup angleGroup = new ToggleGroup();
 		RadioMenuItem dmsMenu = new RadioMenuItem("DMS");
