@@ -12,6 +12,7 @@ import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
@@ -22,7 +23,10 @@ import gov.nasa.worldwind.render.markers.BasicMarkerAttributes;
 import gov.nasa.worldwind.render.markers.BasicMarkerShape;
 import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
+import gov.nasa.worldwind.util.UnitsFormat;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import wave.infrastructure.handlers.GlobeSpinAnimation;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
@@ -32,6 +36,9 @@ import wave.views.WaveWindow;
 // TODO add kml tree
 public class WaveSession
 {
+	public final static String DEFAULT_LENGTH_UNIT = UnitsFormat.METRIC_SYSTEM;
+	public final static String DEFAULT_ANGLE_UNIT = Angle.ANGLE_FORMAT_DMS;
+
 	private WorldWindow worldWindow;
 	private WaveWindow waveWindow;
 
@@ -40,12 +47,18 @@ public class WaveSession
 	private List<KMLLayer> weatherOverlays;
 	private boolean isTakingSurvey;
 
+	private final StringProperty lengthUnitDisplayProperty;
+	private final StringProperty angleUnitDisplayProperty;
+
 	public WaveSession()
 	{
 		this.worldWindow = new WorldWindowGLJPanel();
 		this.isTakingSurvey = false;
 		this.weatherOverlays = new ArrayList<KMLLayer>();
-		
+
+		this.lengthUnitDisplayProperty = new SimpleStringProperty(DEFAULT_LENGTH_UNIT);
+		this.angleUnitDisplayProperty = new SimpleStringProperty(DEFAULT_ANGLE_UNIT);
+
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 		this.worldWindow.setModel(model);
 
@@ -77,6 +90,73 @@ public class WaveSession
 	public List<KMLLayer> getWeatherLayers()
 	{
 		return this.weatherOverlays;
+	}
+
+	/**
+	 * Returns the current length format
+	 * 
+	 * @return The current length format
+	 */
+	public String getLengthUnitDisplay()
+	{
+		return this.lengthUnitDisplayProperty.getValue();
+	}
+
+	/**
+	 * Sets the distance system
+	 * 
+	 * @param format The unit system specified using UnitsFormat
+	 */
+	public void setLengthUnitDisplay(String format)
+	{
+		switch (format)
+		{
+		case UnitsFormat.IMPERIAL_SYSTEM:
+		case UnitsFormat.METRIC_SYSTEM:
+			this.lengthUnitDisplayProperty.setValue(format);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public StringProperty lengthUnitDisplayProperty()
+	{
+		return this.lengthUnitDisplayProperty;
+	}
+
+	/**
+	 * Returns the current Angle format
+	 * 
+	 * @return The current Angle format
+	 */
+	public String getAngleUnitDisplay()
+	{
+		return this.angleUnitDisplayProperty.getValue();
+	}
+
+	/**
+	 * Sets the distance system
+	 * 
+	 * @param format The unit system specified using UnitsFormat
+	 */
+	public void setAngleUnitDisplay(String format)
+	{
+		switch (format)
+		{
+		case Angle.ANGLE_FORMAT_DMS:
+		case Angle.ANGLE_FORMAT_DD:
+		case Angle.ANGLE_FORMAT_DM:
+			this.angleUnitDisplayProperty.setValue(format);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public StringProperty angleUnitDisplayProperty()
+	{
+		return this.angleUnitDisplayProperty;
 	}
 
 	public void shutdown()
@@ -119,12 +199,12 @@ public class WaveSession
 	{
 		return this.waveWindow;
 	}
-	
+
 	public void setWaveWindow(WaveWindow window)
 	{
 		this.waveWindow = window;
 	}
-	
+
 	private void loadWeatherOverlays()
 	{
 		// TODO refactor this code
@@ -150,7 +230,7 @@ public class WaveSession
 		}
 		weatherLayers.get(0).setIsEnabled(true);
 	}
-	
+
 	private void initializeMarker()
 	{
 		double initialLatitude;
@@ -176,7 +256,7 @@ public class WaveSession
 		this.worldWindow.addSelectListener(new BasicDragger(this.worldWindow));
 		this.worldWindow.getModel().getLayers().add(this.markerLayer);
 	}
-	
+
 	private void intializeAnimator()
 	{
 		// Rotate the globe until a mouse click is detected

@@ -2,7 +2,6 @@ package wave.views.panels;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 import gov.nasa.worldwind.layers.Layer;
 import javafx.geometry.HPos;

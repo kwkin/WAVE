@@ -6,18 +6,22 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.layers.CompassLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.ScalebarLayer;
 import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
+import gov.nasa.worldwind.util.UnitsFormat;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import wave.WaveApp;
@@ -35,8 +39,6 @@ import wave.views.survey.SurveyWindow;
 // TODO add settings to enable/disable developer panels
 // TODO add an about dialog.
 // TODO add a help dialog for information about the weather overlays
-// TODO add a view tab to toggle compass, placenames, scalebar, graticules, crosshair
-// TODO add a view tab -> units to change units and display formats
 // TODO add a toggle full screen
 // TODO add shortcut keys to the file menu
 public class WaveMenu extends MenuBar
@@ -91,6 +93,53 @@ public class WaveMenu extends MenuBar
 		CheckMenuItem garsMenu = this.createLayerMenuItem(GARSGraticule.class);
 		viewMenu.getItems().add(garsMenu);
 
+		viewMenu.getItems().add(new SeparatorMenuItem());
+		Menu unitsMenu = new Menu("Units");
+		viewMenu.getItems().add(unitsMenu);
+		ToggleGroup lengthGroup = new ToggleGroup();
+		RadioMenuItem metricMenu = new RadioMenuItem("Metric");
+		metricMenu.setToggleGroup(lengthGroup);
+		unitsMenu.getItems().add(metricMenu);
+		metricMenu.setOnAction(action ->
+		{
+			this.session.setLengthUnitDisplay(UnitsFormat.METRIC_SYSTEM);
+		});
+		metricMenu.setSelected(WaveSession.DEFAULT_LENGTH_UNIT.equals(UnitsFormat.METRIC_SYSTEM));
+		RadioMenuItem imperialMenu = new RadioMenuItem("Imperial");
+		imperialMenu.setToggleGroup(lengthGroup);
+		unitsMenu.getItems().add(imperialMenu);
+		imperialMenu.setOnAction(action ->
+		{
+			this.session.setLengthUnitDisplay(UnitsFormat.IMPERIAL_SYSTEM);
+		});
+		imperialMenu.setSelected(WaveSession.DEFAULT_LENGTH_UNIT.equals(UnitsFormat.IMPERIAL_SYSTEM));
+		unitsMenu.getItems().add(new SeparatorMenuItem());
+		ToggleGroup angleGroup = new ToggleGroup();
+		RadioMenuItem dmsMenu = new RadioMenuItem("DMS");
+		dmsMenu.setToggleGroup(angleGroup);
+		unitsMenu.getItems().add(dmsMenu);
+		dmsMenu.setOnAction(action ->
+		{
+			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DMS);
+		});
+		dmsMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DMS));
+		RadioMenuItem ddMenu = new RadioMenuItem("DD");
+		ddMenu.setToggleGroup(angleGroup);
+		unitsMenu.getItems().add(ddMenu);
+		ddMenu.setOnAction(action ->
+		{
+			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DD);
+		});
+		ddMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DD));
+		RadioMenuItem dmMenu = new RadioMenuItem("DM");
+		dmMenu.setToggleGroup(angleGroup);
+		unitsMenu.getItems().add(dmMenu);
+		dmMenu.setOnAction(action ->
+		{
+			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DM);
+		});
+		dmMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DM));
+		
 		// Layer Tabs
 		Menu layerMenu = new Menu("Weather");
 		this.getMenus().add(layerMenu);
