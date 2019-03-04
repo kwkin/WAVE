@@ -11,9 +11,17 @@
     <Layer className="wave.infrastructure.layers.GARSGraticule" actuate="onRequest">
         <Property name="Name" value="GARS Graticule"/>
     </Layer>
-    <Layer className="gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer"/>
+    <Layer className="gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer">
+        <Property name="Name" value="Place names"/>
+    </Layer>
     
-    <Layer className="gov.nasa.worldwind.layers.WorldMapLayer"/>
-    <Layer className="gov.nasa.worldwind.layers.ScalebarLayer"/>
-    <Layer className="gov.nasa.worldwind.layers.CompassLayer"/>
+    <Layer className="gov.nasa.worldwind.layers.WorldMapLayer">
+        <Property name="Name" value="World Map"/>
+    </Layer>
+    <Layer className="gov.nasa.worldwind.layers.ScalebarLayer">
+        <Property name="Name" value="Scale Bar"/>
+    </Layer>
+    <Layer className="gov.nasa.worldwind.layers.CompassLayer">
+        <Property name="Name" value="Compass"/>
+    </Layer>
 </LayerList>
