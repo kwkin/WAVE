@@ -14,9 +14,12 @@ import wave.views.panels.MarkerPanel;
 import wave.views.panels.StatisticsPanel;
 import wave.views.panels.WeatherOverlayPanel;
 
+// TODO fix runtime exception when moving window to another desktop with a different scaling
+// TODO prevent window from closing when survey window is open
+// TODO embed fx panels into the wave window
+// TODO change icon to the WAVE icon
 public class WaveWindow extends BorderPane
 {
-	// TODO prevent window from closing when survey window is open
 	public WaveWindow(WaveSession session)
 	{
 		SwingNode swingNode = new SwingNode();

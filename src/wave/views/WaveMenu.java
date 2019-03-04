@@ -18,6 +18,19 @@ import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.views.survey.SurveyWindow;
 
+// TODO add a settings/preferences window.
+// TODO add settings for the audio settings
+// TODO add settings to change lat/lon display formats
+// TODO add setting to enable/disable network connection
+// TODO add settings to enable/disable developer panels
+// TODO add an about dialog.
+// TODO add a help dialog for information about the weather overlays
+// TODO add a view tab to toggle compass, placenames, scalebar, graticules, crosshair
+// TODO add a view tab -> units to change units and display formats
+// TODO add a toggle full screen
+// TODO fix stars layer
+// TODO add shortcut keys to the file menu
+// TODO animate globe to rotate upon opening
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;

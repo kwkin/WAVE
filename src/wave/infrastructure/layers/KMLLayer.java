@@ -26,6 +26,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import wave.infrastructure.util.PointUtil;
 
+// TODO Use a transformation to get the pixel value
+// TODO Add a pixel color value to range of value/unit converter
 public class KMLLayer extends RenderableLayer
 {
 	protected final BooleanProperty isEnabledProperty;

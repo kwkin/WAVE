@@ -19,6 +19,9 @@ import wave.infrastructure.converters.PositionConverter;
 import wave.infrastructure.converters.PositionConverterOption;
 import wave.infrastructure.layers.KMLLayer;
 
+// TODO add precipitation, temperature, and air pressure labels.
+// TODO enabled/disable marker visibility
+// TODO add reset button
 public class MarkerPanel extends BorderPane
 {
 	private final ToggleButton markerToggleButton;
@@ -98,7 +101,6 @@ public class MarkerPanel extends BorderPane
 			humidityLayer.getLayerValue(latitudeAngle, longitude, elevation);
 		});
 		grid.add(updateButton, 0, 4, 2, 1);
-		
 		
 		this.setTop(buttons);
 		this.setCenter(grid);

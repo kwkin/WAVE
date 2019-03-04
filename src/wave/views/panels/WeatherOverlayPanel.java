@@ -11,6 +11,7 @@ import javafx.scene.layout.Priority;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.layers.KMLLayer;
 
+// TODO Change weather overlay text to icon images
 public class WeatherOverlayPanel extends BorderPane
 {
 	public WeatherOverlayPanel(WaveSession session)

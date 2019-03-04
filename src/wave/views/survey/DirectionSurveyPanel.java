@@ -19,6 +19,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import wave.infrastructure.survey.SurveyScenario;
 
+//TODO add circle graph that changes based upon the slider degree
 public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
