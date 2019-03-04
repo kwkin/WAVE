@@ -1,7 +1,5 @@
 package wave.views;
 
-import java.lang.invoke.MethodHandle;
-
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 

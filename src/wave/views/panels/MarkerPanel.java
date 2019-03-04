@@ -22,6 +22,7 @@ import wave.infrastructure.layers.KMLLayer;
 // TODO add precipitation, temperature, and air pressure labels.
 // TODO enabled/disable marker visibility
 // TODO add reset button
+// TODO fix issue with marker being moved quickly
 public class MarkerPanel extends BorderPane
 {
 	private final ToggleButton markerToggleButton;

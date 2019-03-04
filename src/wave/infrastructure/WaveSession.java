@@ -29,12 +29,13 @@ import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
 
+// TODO add kml tree
 public class WaveSession
 {
 	private WorldWindow worldWindow;
 	private WaveWindow waveWindow;
 
-	private final MarkerLayer markerLayer;
+	private MarkerLayer markerLayer;
 	private DraggableMarker soundMarker;
 	private List<KMLLayer> weatherOverlays;
 	private boolean isTakingSurvey;
@@ -43,47 +44,14 @@ public class WaveSession
 	{
 		this.worldWindow = new WorldWindowGLJPanel();
 		this.isTakingSurvey = false;
+		this.weatherOverlays = new ArrayList<KMLLayer>();
+		
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
-
 		this.worldWindow.setModel(model);
 
-		// Initialize draggable marker attributes
-		double initialLatitude;
-		double initialLongitude;
-		try
-		{
-
-			initialLatitude = Configuration.getDoubleValue("gov.nasa.worldwind.avkey.InitialLatitude");
-			initialLongitude = Configuration.getDoubleValue("gov.nasa.worldwind.avkey.InitialLongitude");
-		}
-		catch (Exception e)
-		{
-			initialLatitude = 0;
-			initialLongitude = 0;
-		}
-		BasicMarkerAttributes attributes = new BasicMarkerAttributes(Material.RED, BasicMarkerShape.SPHERE, 1d, 10, 5);
-		Position initialPosition = Position.fromDegrees(initialLatitude, initialLongitude);
-		this.soundMarker = new DraggableMarker(initialPosition, attributes);
-		List<Marker> markers = new ArrayList<Marker>();
-		markers.add(soundMarker);
-		this.markerLayer = new MarkerLayer();
-		this.markerLayer.setMarkers(markers);
-		this.worldWindow.addSelectListener(new BasicDragger(this.worldWindow));
-		this.worldWindow.getModel().getLayers().add(this.markerLayer);
-
-		// TODO add kml tree
-		this.weatherOverlays = new ArrayList<KMLLayer>();
+		this.initializeMarker();
 		this.loadWeatherOverlays();
-		List<KMLLayer> weatherLayers = this.getWeatherLayers();
-		for (KMLLayer layer : weatherLayers)
-		{
-			layer.setIsEnabled(false);
-		}
-		weatherLayers.get(0).setIsEnabled(true);
-
-		// Rotate the globe until a mouse click is detected
-		GlobeSpinAnimation animator = new GlobeSpinAnimation(this, -2);
-		animator.setEventSource(this.worldWindow);
+		this.intializeAnimator();
 	}
 
 	public DraggableMarker getSoundMarker()
@@ -175,5 +143,44 @@ public class WaveSession
 		{
 			new KMLLayerLoader(temperatureLayer, this, true, "Avg. Land Temp. (Jan 2019)");
 		}
+		List<KMLLayer> weatherLayers = this.getWeatherLayers();
+		for (KMLLayer layer : weatherLayers)
+		{
+			layer.setIsEnabled(false);
+		}
+		weatherLayers.get(0).setIsEnabled(true);
+	}
+	
+	private void initializeMarker()
+	{
+		double initialLatitude;
+		double initialLongitude;
+		try
+		{
+
+			initialLatitude = Configuration.getDoubleValue("gov.nasa.worldwind.avkey.InitialLatitude");
+			initialLongitude = Configuration.getDoubleValue("gov.nasa.worldwind.avkey.InitialLongitude");
+		}
+		catch (Exception e)
+		{
+			initialLatitude = 0;
+			initialLongitude = 0;
+		}
+		BasicMarkerAttributes attributes = new BasicMarkerAttributes(Material.RED, BasicMarkerShape.SPHERE, 1d, 10, 5);
+		Position initialPosition = Position.fromDegrees(initialLatitude, initialLongitude);
+		this.soundMarker = new DraggableMarker(initialPosition, attributes);
+		List<Marker> markers = new ArrayList<Marker>();
+		markers.add(soundMarker);
+		this.markerLayer = new MarkerLayer();
+		this.markerLayer.setMarkers(markers);
+		this.worldWindow.addSelectListener(new BasicDragger(this.worldWindow));
+		this.worldWindow.getModel().getLayers().add(this.markerLayer);
+	}
+	
+	private void intializeAnimator()
+	{
+		// Rotate the globe until a mouse click is detected
+		GlobeSpinAnimation animator = new GlobeSpinAnimation(this, -2);
+		animator.setEventSource(this.worldWindow);
 	}
 }
