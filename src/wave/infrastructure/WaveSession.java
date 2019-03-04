@@ -23,16 +23,16 @@ import gov.nasa.worldwind.render.markers.BasicMarkerShape;
 import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
-import wave.WaveApp;
-import wave.infrastructure.handlers.ConfirmCloseEventHandler;
 import wave.infrastructure.handlers.GlobeSpinAnimation;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.models.DraggableMarker;
+import wave.views.WaveWindow;
 
 public class WaveSession
 {
 	private WorldWindow worldWindow;
+	private WaveWindow waveWindow;
 
 	private final MarkerLayer markerLayer;
 	private DraggableMarker soundMarker;
@@ -126,20 +126,9 @@ public class WaveSession
 	public void setIsTakingSurvey(boolean isTakingSurvey)
 	{
 		this.isTakingSurvey = isTakingSurvey;
-		if (this.isTakingSurvey)
+		if (this.waveWindow != null)
 		{
-			ConfirmCloseEventHandler closeHandler = new ConfirmCloseEventHandler(WaveApp.getStage());
-			closeHandler.setCancelText("You are currently taking a survey. Are you sure you want to exit?");
-			closeHandler.setConfirmText("Exit");
-			closeHandler.setCancelText("Continue Survey");
-			WaveApp.getStage().setOnCloseRequest(closeHandler);
-		}
-		else
-		{
-			WaveApp.getStage().setOnCloseRequest(event ->
-			{
-				this.shutdown();
-			});
+			this.waveWindow.setIsTakingSurvey(this.isTakingSurvey);
 		}
 	}
 
@@ -158,6 +147,16 @@ public class WaveSession
 		this.weatherOverlays.add(layer);
 	}
 
+	public WaveWindow getWaveWindow()
+	{
+		return this.waveWindow;
+	}
+	
+	public void setWaveWindow(WaveWindow window)
+	{
+		this.waveWindow = window;
+	}
+	
 	private void loadWeatherOverlays()
 	{
 		// TODO refactor this code

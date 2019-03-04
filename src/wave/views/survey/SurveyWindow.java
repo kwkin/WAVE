@@ -27,7 +27,7 @@ public class SurveyWindow extends Stage
 		this.setY(WaveApp.getStage().getY() + 100);
 
 		ConfirmCloseEventHandler closeHandler = new ConfirmCloseEventHandler(this);
-		closeHandler.setCancelText("The survey is not complete. Are you sure you want to exit?");
+		closeHandler.setDialogText("The survey is not complete. Are you sure you want to exit?");
 		closeHandler.setConfirmText("Exit");
 		closeHandler.setCancelText("Continue Survey");
 		this.setOnCloseRequest(closeHandler);

@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.WorldWind;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import wave.infrastructure.WaveSession;
@@ -54,6 +55,7 @@ public class WaveApp extends Application
 	public void stop()
 	{
 		WaveApp.session.shutdown();
+		Platform.exit();
 	}
 
 	static

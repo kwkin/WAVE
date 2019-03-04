@@ -2,6 +2,7 @@ package wave.infrastructure.handlers;
 
 import java.util.Optional;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,10 +17,12 @@ public class ConfirmCloseEventHandler implements EventHandler<WindowEvent>
 	protected String dialogText = "Are you sure you want to exit?";
 	protected String confirmText = "Exit";
 	protected String cancelText = "Cancel";
+	protected boolean shutdownOnClose;
 
 	public ConfirmCloseEventHandler(Stage parent)
 	{
 		this.parent = parent;
+		this.shutdownOnClose = false;
 	}
 
 	public void setDialogText(String dialogText)
@@ -51,6 +54,11 @@ public class ConfirmCloseEventHandler implements EventHandler<WindowEvent>
 	{
 		return this.cancelText;
 	}
+	
+	public void shutdownOnClose(boolean shutdownOnClose)
+	{
+		this.shutdownOnClose = shutdownOnClose;
+	}
 
 	@Override
 	public void handle(WindowEvent event)
@@ -79,6 +87,10 @@ public class ConfirmCloseEventHandler implements EventHandler<WindowEvent>
 		if (!ButtonType.OK.equals(closeResponse.get()))
 		{
 			event.consume();
+		}
+		if (this.shutdownOnClose)
+		{
+			Platform.exit();
 		}
 	}
 

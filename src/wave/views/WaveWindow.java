@@ -1,14 +1,19 @@
 package wave.views;
 
+import java.lang.invoke.MethodHandle;
+
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import gov.nasa.worldwind.util.PerformanceStatistic;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import wave.WaveApp;
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.handlers.ConfirmCloseEventHandler;
 import wave.views.panels.LayersPanel;
 import wave.views.panels.MarkerPanel;
 import wave.views.panels.StatisticsPanel;
@@ -18,8 +23,13 @@ import wave.views.panels.WeatherOverlayPanel;
 // TODO embed fx panels into the wave window
 public class WaveWindow extends BorderPane
 {
+	protected WaveSession session;
+
 	public WaveWindow(WaveSession session)
 	{
+		this.session = session;
+		this.session.setWaveWindow(this);
+
 		SwingNode swingNode = new SwingNode();
 		SwingUtilities.invokeLater(() ->
 		{
@@ -50,5 +60,26 @@ public class WaveWindow extends BorderPane
 
 		MarkerPanel markerPanel = new MarkerPanel(session);
 		this.setRight(markerPanel);
+	}
+
+	public void setIsTakingSurvey(boolean isTakingSurvey)
+	{
+		if (isTakingSurvey)
+		{
+			ConfirmCloseEventHandler closeHandler = new ConfirmCloseEventHandler(WaveApp.getStage());
+			closeHandler.setDialogText("You are currently taking a survey. Are you sure you want to exit?");
+			closeHandler.setConfirmText("Exit");
+			closeHandler.setCancelText("Continue Survey");
+			closeHandler.shutdownOnClose(true);
+			WaveApp.getStage().setOnCloseRequest(closeHandler);
+		}
+		else
+		{
+			WaveApp.getStage().setOnCloseRequest(event ->
+			{
+				this.session.shutdown();
+				Platform.exit();
+			});
+		}
 	}
 }
