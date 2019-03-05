@@ -37,13 +37,13 @@ import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.LatLonGraticule;
 import wave.views.survey.SurveyWindow;
 import wave.views.windows.AboutWindow;
+import wave.views.windows.preferences.PreferencesWindow;
 
 // TODO add a settings/preferences window.
 // TODO add settings for the audio settings
 // TODO add settings to change lat/lon display formats
 // TODO add setting to enable/disable network connection
 // TODO add settings to enable/disable developer panels
-// TODO add an about dialog.
 // TODO add a help dialog for information about the weather overlays
 public class WaveMenu extends MenuBar
 {
@@ -68,6 +68,14 @@ public class WaveMenu extends MenuBar
 		loadKMLMenu.setAccelerator(new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN));
 		fileMenu.getItems().add(new SeparatorMenuItem());
 
+
+		MenuItem preferencesMenu = new MenuItem("Preferences...");
+		preferencesMenu.setOnAction((event) ->
+		{
+			openPreferences();
+		});
+		fileMenu.getItems().add(preferencesMenu);
+		
 		MenuItem surveyMenu = new MenuItem("Take Survey...");
 		surveyMenu.setOnAction((event) ->
 		{
@@ -222,6 +230,12 @@ public class WaveMenu extends MenuBar
 		{
 			e.printStackTrace();
 		}
+	}
+
+	protected void openPreferences()
+	{
+		PreferencesWindow window = new PreferencesWindow(this.session);
+		window.show();
 	}
 
 	protected void openSurvey()
