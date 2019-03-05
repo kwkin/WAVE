@@ -13,6 +13,8 @@ import gov.nasa.worldwind.layers.ScalebarLayer;
 import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
 import gov.nasa.worldwind.util.UnitsFormat;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
@@ -146,7 +148,22 @@ public class WaveMenu extends MenuBar
 			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DM);
 		});
 		dmMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DM));
-		
+		viewMenu.getItems().add(new SeparatorMenuItem());
+		CheckMenuItem fullscreenMenu = new CheckMenuItem("Toggle full screen");
+		viewMenu.getItems().add(fullscreenMenu);
+		fullscreenMenu.setOnAction((action) ->
+		{
+			WaveApp.getStage().setFullScreen(fullscreenMenu.isSelected());
+		});
+		WaveApp.getStage().fullScreenProperty().addListener(new ChangeListener<Boolean>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+			{
+				fullscreenMenu.setSelected(newValue);
+			}
+		});
+
 		// Layer Tabs
 		Menu layerMenu = new Menu("Weather");
 		this.getMenus().add(layerMenu);
