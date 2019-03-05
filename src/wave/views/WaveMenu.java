@@ -36,6 +36,7 @@ import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.LatLonGraticule;
 import wave.views.survey.SurveyWindow;
+import wave.views.windows.AboutWindow;
 
 // TODO add a settings/preferences window.
 // TODO add settings for the audio settings
@@ -44,7 +45,6 @@ import wave.views.survey.SurveyWindow;
 // TODO add settings to enable/disable developer panels
 // TODO add an about dialog.
 // TODO add a help dialog for information about the weather overlays
-// TODO add a toggle full screen
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;
@@ -54,7 +54,7 @@ public class WaveMenu extends MenuBar
 	{
 		this.session = session;
 
-		// File tabs
+		// File menu
 		Menu fileMenu = new Menu("File");
 		this.getMenus().add(fileMenu);
 
@@ -83,6 +83,8 @@ public class WaveMenu extends MenuBar
 		});
 		fileMenu.getItems().add(exitMenu);
 		exitMenu.setAccelerator(new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN));
+		
+		// View menu
 		Menu viewMenu = new Menu("View");
 		this.getMenus().add(viewMenu);
 		CheckMenuItem compassMenu = this.createLayerMenuItem(CompassLayer.class);
@@ -164,7 +166,7 @@ public class WaveMenu extends MenuBar
 			}
 		});
 
-		// Layer Tabs
+		// Layer menu
 		Menu layerMenu = new Menu("Weather");
 		this.getMenus().add(layerMenu);
 		for (KMLLayer layer : session.getWeatherLayers())
@@ -172,6 +174,25 @@ public class WaveMenu extends MenuBar
 			CheckMenuItem layerMenuItem = this.createLayerMenuItem(layer.getName());
 			layerMenu.getItems().add(layerMenuItem);
 		}
+		
+		// Help menu
+		Menu helpMenu = new Menu("Help");
+		this.getMenus().add(helpMenu);
+		MenuItem weatherHelp = new MenuItem("Weather Information...");
+		helpMenu.getItems().add(weatherHelp);
+		weatherHelp.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
+		weatherHelp.setOnAction((value) ->
+		{
+			System.out.println("Opening weather information window...");
+		});
+		helpMenu.getItems().add(new SeparatorMenuItem());
+		MenuItem aboutHelp = new MenuItem("About WAVE...");
+		helpMenu.getItems().add(aboutHelp);
+		helpMenu.setOnAction((value) ->
+		{
+			AboutWindow about = new AboutWindow();
+			about.show();
+		});
 	}
 
 	protected void openKMLLayer()
