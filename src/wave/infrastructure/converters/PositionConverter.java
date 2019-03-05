@@ -4,18 +4,18 @@ import java.util.regex.Pattern;
 
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.util.UnitsFormat;
 import javafx.util.StringConverter;
 import wave.infrastructure.WaveSession;
-import wave.infrastructure.util.UnitToString;
+import wave.infrastructure.preferences.AngleFormat;
+import wave.infrastructure.preferences.MeasurementSystem;
 
 public class PositionConverter extends StringConverter<Position>
 {
 	protected WaveSession session;
 	protected PositionConverterOption option;
 	protected Pattern pattern;
-	protected String elevationSystem = UnitsFormat.METRIC_SYSTEM;
-	protected String angleFormat = Angle.ANGLE_FORMAT_DD;
+	protected MeasurementSystem elevationSystem = MeasurementSystem.METRIC;
+	protected AngleFormat angleFormat = AngleFormat.DD;
 
 	public PositionConverter(WaveSession session, PositionConverterOption option)
 	{
@@ -29,17 +29,9 @@ public class PositionConverter extends StringConverter<Position>
 	 * 
 	 * @param format The unit system specified using UnitsFormat
 	 */
-	public void setElevationSystem(String format)
+	public void setElevationSystem(MeasurementSystem format)
 	{
-		switch (format)
-		{
-		case UnitsFormat.IMPERIAL_SYSTEM:
-		case UnitsFormat.METRIC_SYSTEM:
-			this.elevationSystem = format;
-			break;
-		default:
-			break;
-		}
+		this.elevationSystem = format;
 	}
 
 	/**
@@ -47,7 +39,7 @@ public class PositionConverter extends StringConverter<Position>
 	 * 
 	 * @return The current elevation system
 	 */
-	public String getElevationSystem()
+	public MeasurementSystem getElevationSystem()
 	{
 		return this.elevationSystem;
 	}
@@ -57,18 +49,9 @@ public class PositionConverter extends StringConverter<Position>
 	 * 
 	 * @param format The format specified using Angle
 	 */
-	public void setAngleFormat(String format)
+	public void setAngleFormat(AngleFormat format)
 	{
-		switch (format)
-		{
-		case Angle.ANGLE_FORMAT_DD:
-		case Angle.ANGLE_FORMAT_DM:
-		case Angle.ANGLE_FORMAT_DMS:
-			this.angleFormat = format;
-			break;
-		default:
-			break;
-		}
+		this.angleFormat = format;
 	}
 
 	/**
@@ -76,7 +59,7 @@ public class PositionConverter extends StringConverter<Position>
 	 * 
 	 * @return The current Angle format
 	 */
-	public String getAngleFormat()
+	public AngleFormat getAngleFormat()
 	{
 		return this.angleFormat;
 	}
@@ -91,16 +74,16 @@ public class PositionConverter extends StringConverter<Position>
 			value = position.toString();
 			break;
 		case ALTITUDE:
-			value = UnitToString.distanceDescription(position.getAltitude(), this.elevationSystem);
+			value = this.elevationSystem.lengthDescription(position.getAltitude());
 			break;
 		case ELEVATION:
-			value = UnitToString.distanceDescription(position.elevation, this.elevationSystem);
+			value = this.elevationSystem.lengthDescription(position.elevation);
 			break;
 		case LATITUDE:
-			value = UnitToString.angleDescription(position.latitude, this.angleFormat);
+			value = this.angleFormat.angleDescription(position.latitude);
 			break;
 		case LONGITUDE:
-			value = UnitToString.angleDescription(position.longitude, this.angleFormat);
+			value = this.angleFormat.angleDescription(position.longitude);
 			break;
 		default:
 			break;

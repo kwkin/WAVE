@@ -17,9 +17,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import wave.infrastructure.WaveSession;
-import wave.infrastructure.util.UnitToString;
+import wave.infrastructure.preferences.PreferencesLoader;
 
-public class WaveStatusBar extends GridPane implements PositionListener, RenderingListener, ChangeListener<String>
+public class WaveStatusBar extends GridPane implements PositionListener, RenderingListener, ChangeListener<Object>
 {
 	protected static String OFF_GLOBE_MESSAGE = "Off Globe";
 	protected WorldWindow eventSource;
@@ -69,9 +69,9 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 		this.add(this.elevationDisplay, 5, 0);
 		this.add(this.altitudeLabel, 6, 0);
 		this.add(this.altitudeDisplay, 7, 0);
-		
-		this.session.lengthUnitDisplayProperty().addListener(this);
-		this.session.angleUnitDisplayProperty().addListener(this);
+
+		PreferencesLoader.preferences().lengthUnitDisplayProperty().addListener(this);
+		PreferencesLoader.preferences().angleUnitDisplayProperty().addListener(this);
 	}
 
 	@Override
@@ -93,9 +93,8 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 			if (this.eventSource.getView() != null && this.eventSource.getView().getEyePosition() != null)
 			{
 				double elevation = this.eventSource.getView().getEyePosition().getElevation();
-				String displayText = UnitToString.distanceDescription(elevation,
-						this.session.getLengthUnitDisplay());
-				this.altitudeDisplay.setText(displayText);
+				String elevationStr = PreferencesLoader.preferences().getLengthUnitDisplay().lengthDescription(elevation);
+				this.altitudeDisplay.setText(elevationStr);
 			}
 		});
 	}
@@ -124,14 +123,14 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 	{
 		if (this.lastPosition != null)
 		{
-			String latitudeStr = UnitToString.angleDescription(this.lastPosition.getLatitude(),
-					this.session.getAngleUnitDisplay());
-			String longitudeStr = UnitToString.angleDescription(this.lastPosition.getLongitude(),
-					this.session.getAngleUnitDisplay());
+			String latitudeStr = PreferencesLoader.preferences().getAngleUnitDisplay()
+					.angleDescription(this.lastPosition.getLatitude());
+			String longitudeStr = PreferencesLoader.preferences().getAngleUnitDisplay()
+					.angleDescription(this.lastPosition.getLongitude());
 
 			Globe globe = this.eventSource.getModel().getGlobe();
 			double elevation = globe.getElevation(this.lastPosition.getLatitude(), this.lastPosition.getLongitude());
-			String elevationStr = UnitToString.distanceDescription(elevation, this.session.getLengthUnitDisplay());
+			String elevationStr = PreferencesLoader.preferences().getLengthUnitDisplay().lengthDescription(elevation);
 			this.latitudeDisplay.setText(latitudeStr);
 			this.longitudeDisplay.setText(longitudeStr);
 			this.elevationDisplay.setText(elevationStr);
@@ -145,7 +144,7 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 	}
 
 	@Override
-	public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+	public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue)
 	{
 		handleCursorPositionChange();
 	}

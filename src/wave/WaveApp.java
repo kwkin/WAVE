@@ -3,7 +3,6 @@ package wave;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.WorldWind;
@@ -14,6 +13,7 @@ import javafx.stage.Stage;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.FXThemeLoader;
+import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.WaveWindow;
 
 public class WaveApp extends Application
@@ -50,7 +50,7 @@ public class WaveApp extends Application
 		WaveApp.primaryStage.setScene(primaryScene);
 		WaveApp.primaryStage.show();
 	}
-	
+
 	@Override
 	public void stop()
 	{
@@ -62,10 +62,22 @@ public class WaveApp extends Application
 	{
 		WorldWind.setOfflineMode(true);
 		System.setProperty("sun.awt.noerasebackground", "true");
-		Path configFile = Paths.get("data", "config", "wave.xml");
-		if (Files.exists(configFile))
+		Path configFile = Wave.WAVE_CONFIG_FILE;
+		Path wwConfigFile = Wave.WAVE_WW_CONFIG_FILE;
+
+		// TODO when error, throw javafx error dialog
+		try
 		{
-			Configuration.insertConfigurationDocument(configFile.toAbsolutePath().toString());
+			PreferencesLoader.loadPreferences(configFile);
+			if (Files.exists(wwConfigFile))
+			{
+				Configuration.insertConfigurationDocument(wwConfigFile.toAbsolutePath().toString());
+			}
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

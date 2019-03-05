@@ -6,13 +6,11 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 
-import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.layers.CompassLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.ScalebarLayer;
 import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
-import gov.nasa.worldwind.util.UnitsFormat;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
@@ -35,16 +33,15 @@ import wave.infrastructure.layers.GARSGraticule;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.LatLonGraticule;
+import wave.infrastructure.preferences.AngleFormat;
+import wave.infrastructure.preferences.MeasurementSystem;
+import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.survey.SurveyWindow;
 import wave.views.windows.AboutWindow;
 import wave.views.windows.preferences.PreferencesWindow;
 
-// TODO add a settings/preferences window.
-// TODO add settings for the audio settings
-// TODO add settings to change lat/lon display formats
 // TODO add setting to enable/disable network connection
 // TODO add settings to enable/disable developer panels
-// TODO add a help dialog for information about the weather overlays
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;
@@ -119,18 +116,18 @@ public class WaveMenu extends MenuBar
 		unitsMenu.getItems().add(metricMenu);
 		metricMenu.setOnAction(action ->
 		{
-			this.session.setLengthUnitDisplay(UnitsFormat.METRIC_SYSTEM);
+			PreferencesLoader.preferences().setLengthUnitDisplay(MeasurementSystem.METRIC);
 		});
-		metricMenu.setSelected(WaveSession.DEFAULT_LENGTH_UNIT.equals(UnitsFormat.METRIC_SYSTEM));
+		metricMenu.setSelected(PreferencesLoader.preferences().getLengthUnitDisplay() == MeasurementSystem.METRIC);
 		metricMenu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
 		RadioMenuItem imperialMenu = new RadioMenuItem("Imperial");
 		imperialMenu.setToggleGroup(lengthGroup);
 		unitsMenu.getItems().add(imperialMenu);
 		imperialMenu.setOnAction(action ->
 		{
-			this.session.setLengthUnitDisplay(UnitsFormat.IMPERIAL_SYSTEM);
+			PreferencesLoader.preferences().setLengthUnitDisplay(MeasurementSystem.IMPERIAL);
 		});
-		imperialMenu.setSelected(WaveSession.DEFAULT_LENGTH_UNIT.equals(UnitsFormat.IMPERIAL_SYSTEM));
+		imperialMenu.setSelected(PreferencesLoader.preferences().getLengthUnitDisplay() == MeasurementSystem.IMPERIAL);
 		imperialMenu.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 		unitsMenu.getItems().add(new SeparatorMenuItem());
 		ToggleGroup angleGroup = new ToggleGroup();
@@ -139,25 +136,25 @@ public class WaveMenu extends MenuBar
 		unitsMenu.getItems().add(dmsMenu);
 		dmsMenu.setOnAction(action ->
 		{
-			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DMS);
+			PreferencesLoader.preferences().setAngleUnitDisplay(AngleFormat.DMS);
 		});
-		dmsMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DMS));
+		dmsMenu.setSelected(PreferencesLoader.preferences().getAngleUnitDisplay() == AngleFormat.DMS);
 		RadioMenuItem ddMenu = new RadioMenuItem("DD");
 		ddMenu.setToggleGroup(angleGroup);
 		unitsMenu.getItems().add(ddMenu);
 		ddMenu.setOnAction(action ->
 		{
-			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DD);
+			PreferencesLoader.preferences().setAngleUnitDisplay(AngleFormat.DD);
 		});
-		ddMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DD));
+		ddMenu.setSelected(PreferencesLoader.preferences().getAngleUnitDisplay() == AngleFormat.DD);
 		RadioMenuItem dmMenu = new RadioMenuItem("DM");
 		dmMenu.setToggleGroup(angleGroup);
 		unitsMenu.getItems().add(dmMenu);
 		dmMenu.setOnAction(action ->
 		{
-			this.session.setAngleUnitDisplay(Angle.ANGLE_FORMAT_DM);
+			PreferencesLoader.preferences().setAngleUnitDisplay(AngleFormat.DM);
 		});
-		dmMenu.setSelected(WaveSession.DEFAULT_ANGLE_UNIT.equals(Angle.ANGLE_FORMAT_DM));
+		dmMenu.setSelected(PreferencesLoader.preferences().getAngleUnitDisplay() == AngleFormat.DM);
 		viewMenu.getItems().add(new SeparatorMenuItem());
 		CheckMenuItem fullscreenMenu = new CheckMenuItem("Toggle full screen");
 		viewMenu.getItems().add(fullscreenMenu);

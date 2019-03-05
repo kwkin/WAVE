@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WorldWindConfiguration version="1">
+    <Property name="gov.nasa.worldwind.avkey.InitialLongitude" value="-82.3248"/>
+    <Property name="gov.nasa.worldwind.avkey.InitialLatitude" value="0"/>
+    <!--<Property name="gov.nasa.worldwind.avkey.InitialLatitude" value="29.6516"/>-->
+    <Property name="gov.nasa.worldwind.avkey.InitialAltitude" value="15e6"/>
+
+    
+    <Property name="gov.nasa.worldwind.avkey.WorldWindowClassName"
+              value="wave.infrastructure.handlers.FXWindowDrawable"/>
+
+    <LayerList href="data/config/wave_ww_layers.xml"/>
+</WorldWindConfiguration>
