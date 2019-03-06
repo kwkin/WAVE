@@ -29,12 +29,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import wave.WaveApp;
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.core.AngleFormat;
+import wave.infrastructure.core.MeasurementSystem;
 import wave.infrastructure.layers.GARSGraticule;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.LatLonGraticule;
-import wave.infrastructure.preferences.AngleFormat;
-import wave.infrastructure.preferences.MeasurementSystem;
 import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.survey.SurveyWindow;
 import wave.views.windows.AboutWindow;
@@ -231,7 +231,7 @@ public class WaveMenu extends MenuBar
 
 	protected void openPreferences()
 	{
-		PreferencesWindow window = new PreferencesWindow(this.session);
+		PreferencesWindow window = new PreferencesWindow(PreferencesLoader.preferences());
 		window.show();
 	}
 

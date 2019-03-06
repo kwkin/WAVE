@@ -1,4 +1,4 @@
-package wave.infrastructure.preferences;
+package wave.infrastructure.core;
 
 import gov.nasa.worldwind.geom.Angle;
 

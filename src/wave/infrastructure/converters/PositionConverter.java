@@ -6,8 +6,8 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import javafx.util.StringConverter;
 import wave.infrastructure.WaveSession;
-import wave.infrastructure.preferences.AngleFormat;
-import wave.infrastructure.preferences.MeasurementSystem;
+import wave.infrastructure.core.AngleFormat;
+import wave.infrastructure.core.MeasurementSystem;
 
 public class PositionConverter extends StringConverter<Position>
 {

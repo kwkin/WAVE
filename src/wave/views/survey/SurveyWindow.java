@@ -1,10 +1,14 @@
 package wave.views.survey;
 
+import java.io.IOException;
+
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import wave.WaveApp;
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ConfirmCloseEventHandler;
+import wave.infrastructure.handlers.FXThemeLoader;
 
 public class SurveyWindow extends Stage
 {
@@ -17,6 +21,14 @@ public class SurveyWindow extends Stage
 	public SurveyWindow(WaveSession session)
 	{
 		this.session = session;
+		try
+		{
+			FXThemeLoader.setIcon(this, Wave.MAIN_ICON);
+		}
+		catch (IOException e)
+		{
+
+		}
 		
 		SurveyPanel panel = new SurveyPanel(session, this);
 		Scene surveyScene = new Scene(panel, WINDOW_WIDTH, WINDOW_HEIGHT);

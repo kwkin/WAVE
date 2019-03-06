@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,6 +18,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import wave.infrastructure.core.AngleFormat;
+import wave.infrastructure.core.AudioListener;
+import wave.infrastructure.core.MeasurementSystem;
 
 @XmlRootElement(name = "preferences")
 public class Preferences implements Serializable
@@ -36,6 +40,7 @@ public class Preferences implements Serializable
 	private DoubleProperty windVolumeProperty;
 	private DoubleProperty thunderVolumeProperty;
 	private BooleanProperty enableWeatherModulatorsProperty;
+	private ObjectProperty<AudioListener> audioListenerProperty;
 
 	private Preferences()
 	{
@@ -49,6 +54,7 @@ public class Preferences implements Serializable
 		this.enableNetworkProperty = new SimpleBooleanProperty(false);
 		this.enablePerformancePanelProperty = new SimpleBooleanProperty(true);
 		this.enableLayerPanelProperty = new SimpleBooleanProperty(true);
+		this.audioListenerProperty = new SimpleObjectProperty<AudioListener>(AudioListener.MARKER);
 	}
 
 	public static Preferences loadDefault()
@@ -59,18 +65,54 @@ public class Preferences implements Serializable
 	public static Preferences load(Path configFile) throws IOException
 	{
 		Preferences preferences = null;
-		try(InputStream inStream = new FileInputStream(configFile.toFile()))
+		try (InputStream inStream = new FileInputStream(configFile.toFile()))
 		{
 			JAXBContext contextRead = JAXBContext.newInstance(Preferences.class);
 			Unmarshaller unmarshaller = contextRead.createUnmarshaller();
 			preferences = (Preferences) unmarshaller.unmarshal(inStream);
 			inStream.close();
 		}
-		catch(IOException | JAXBException e)
+		catch (IOException | JAXBException e)
 		{
 			throw new IOException(e.getMessage());
 		}
 		return preferences;
+	}
+
+	/**
+	 * Writes the current preferences to the config file
+	 * 
+	 * If the file already exists, it will be overwritten
+	 * 
+	 * @param configFile Path to the config file
+	 * @throws JAXBException
+	 */
+	public void writePreferences(Path configFile) throws JAXBException
+	{
+		JAXBContext contextWrite = JAXBContext.newInstance(Preferences.class);
+		Marshaller marshaller = contextWrite.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(this, configFile.toFile());
+	}
+
+	/**
+	 * Sets all preferences to the specified preferences
+	 * 
+	 * @param preferences The preferencs to copy form
+	 */
+	public void setPreferences(Preferences preferences)
+	{
+		this.lengthUnitDisplayProperty.setValue(preferences.getLengthUnitDisplay());
+		this.angleFormatDisplayProperty.setValue(preferences.getAngleUnitDisplay());
+		this.masterVolumeProperty.setValue(preferences.getMasterVolume());
+		this.rainVolumeProperty.setValue(preferences.getRainVolume());
+		this.windVolumeProperty.setValue(preferences.getWindVolume());
+		this.thunderVolumeProperty.setValue(preferences.getThunderVolume());
+		this.enableWeatherModulatorsProperty.setValue(preferences.getEnableWeatherModulators());
+		this.enableNetworkProperty.setValue(preferences.getEnableNetwork());
+		this.enablePerformancePanelProperty.setValue(preferences.getEnablePerformancePanelProperty());
+		this.enableLayerPanelProperty.setValue(preferences.getEnableLayerPanel());
+		this.audioListenerProperty.setValue(preferences.getAudioListener());
 	}
 
 	/**
@@ -158,7 +200,7 @@ public class Preferences implements Serializable
 		this.rainVolumeProperty.setValue(rainVolume);
 	}
 
-	public DoubleProperty RainVolumeProperty()
+	public DoubleProperty rainVolumeProperty()
 	{
 		return this.rainVolumeProperty;
 	}
@@ -173,7 +215,7 @@ public class Preferences implements Serializable
 		this.windVolumeProperty.setValue(windVolume);
 	}
 
-	public DoubleProperty WindVolumeProperty()
+	public DoubleProperty windVolumeProperty()
 	{
 		return this.windVolumeProperty;
 	}
@@ -188,7 +230,7 @@ public class Preferences implements Serializable
 		this.thunderVolumeProperty.setValue(thunderVolume);
 	}
 
-	public DoubleProperty ThunderVolumeProperty()
+	public DoubleProperty thunderVolumeProperty()
 	{
 		return this.thunderVolumeProperty;
 	}
@@ -251,5 +293,20 @@ public class Preferences implements Serializable
 	public BooleanProperty enableLayerPanelProperty()
 	{
 		return this.enableLayerPanelProperty;
+	}
+
+	public AudioListener getAudioListener()
+	{
+		return this.audioListenerProperty.getValue();
+	}
+
+	public void setAudioListener(AudioListener audioListener)
+	{
+		this.audioListenerProperty.setValue(audioListener);
+	}
+
+	public ObjectProperty<AudioListener> audioListenerProperty()
+	{
+		return this.audioListenerProperty;
 	}
 }

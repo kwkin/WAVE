@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 public class PreferencesLoader
 {
@@ -20,10 +18,7 @@ public class PreferencesLoader
 			if (Files.notExists(configFile))
 			{
 				preferences = Preferences.loadDefault();
-				JAXBContext contextWrite = JAXBContext.newInstance(Preferences.class);
-				Marshaller marshaller = contextWrite.createMarshaller();
-				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-				marshaller.marshal(preferences, configFile.toFile());
+				preferences.writePreferences(configFile);
 			}
 			else
 			{
@@ -41,4 +36,5 @@ public class PreferencesLoader
 	{
 		return PreferencesLoader.currentPreferences;
 	}
+	
 }

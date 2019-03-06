@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <preferences>
     <angleUnitDisplay>DMS</angleUnitDisplay>
+    <audioListener>MARKER</audioListener>
+    <enableLayerPanel>true</enableLayerPanel>
     <enableNetwork>false</enableNetwork>
+    <enablePerformancePanelProperty>true</enablePerformancePanelProperty>
     <enableWeatherModulators>true</enableWeatherModulators>
     <lengthUnitDisplay>METRIC</lengthUnitDisplay>
     <masterVolume>100.0</masterVolume>

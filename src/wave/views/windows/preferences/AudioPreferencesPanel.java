@@ -14,10 +14,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import wave.infrastructure.core.AudioListener;
+import wave.infrastructure.preferences.Preferences;
 
 public class AudioPreferencesPanel extends BorderPane implements PreferencesPanel
 {
-	public AudioPreferencesPanel()
+	private final Slider masterVolumeSlider;
+	private final Slider rainVolumeSlider;
+	private final Slider windVolumeSlider;
+	private final Slider thunderVolumeSlider;
+	private final CheckBox weatherModulatorCheckBox;
+	private final ComboBox<AudioListener> listenerComboBox;
+
+	public AudioPreferencesPanel(Preferences preferences)
 	{
 		this.setPadding(new Insets(10, 10, 10, 10));
 
@@ -49,43 +60,65 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 		gridPane.getColumnConstraints().add(interfaceColumn);
 
 		Label masterVolumeLabel = new Label("Master Volume");
-		gridPane.add(masterVolumeLabel, 0, 1);
-		Slider masterVolumeSlider = new Slider(0, 100, 100);
-		gridPane.add(masterVolumeSlider, 1, 1);
+		gridPane.add(masterVolumeLabel, 0, 0);
+		this.masterVolumeSlider = new Slider(0, 100, preferences.getMasterVolume());
+		this.masterVolumeSlider.valueProperty().bindBidirectional(preferences.masterVolumeProperty());
+		gridPane.add(this.masterVolumeSlider, 1, 0);
+
+		TextFlow masterVolumeFlow = new TextFlow();
+		Text masterVolumeText1 = new Text("The master volume control adjusts the audio level of all played audio.");
+		Text masterVolumeText2 = new Text("This includes rain, wind, and thunder.");
+		masterVolumeFlow.getChildren().add(masterVolumeText1);
+		masterVolumeFlow.getChildren().add(masterVolumeText2);
+		gridPane.add(masterVolumeFlow, 1, 1, 2, 1);
 
 		Label rainVolumeLabel = new Label("Rain Volume");
 		gridPane.add(rainVolumeLabel, 0, 2);
-		Slider rainVolumeSlider = new Slider(0, 100, 100);
-		gridPane.add(rainVolumeSlider, 1, 2);
+		this.rainVolumeSlider = new Slider(0, 100, preferences.getRainVolume());
+		this.rainVolumeSlider.valueProperty().bindBidirectional(preferences.rainVolumeProperty());
+		gridPane.add(this.rainVolumeSlider, 1, 2);
 
 		Label windVolumeLabel = new Label("Wind Volume");
 		gridPane.add(windVolumeLabel, 0, 3);
-		Slider windVolumeSlider = new Slider(0, 100, 100);
-		gridPane.add(windVolumeSlider, 1, 3);
+		this.windVolumeSlider = new Slider(0, 100, preferences.getWindVolume());
+		this.windVolumeSlider.valueProperty().bindBidirectional(preferences.windVolumeProperty());
+		gridPane.add(this.windVolumeSlider, 1, 3);
 
 		Label thunderVolumeLabel = new Label("Thunder Volume");
 		gridPane.add(thunderVolumeLabel, 0, 4);
-		Slider thunderVolumeSlider = new Slider(0, 100, 100);
-		gridPane.add(thunderVolumeSlider, 1, 4);
+		this.thunderVolumeSlider = new Slider(0, 100, preferences.getThunderVolume());
+		this.thunderVolumeSlider.valueProperty().bindBidirectional(preferences.thunderVolumeProperty());
+		gridPane.add(this.thunderVolumeSlider, 1, 4);
 
 		Label weatherModulatorLabel = new Label("Use Modulators");
 		gridPane.add(weatherModulatorLabel, 0, 5);
-		CheckBox weatherModulatorCheckBox = new CheckBox("");
-		weatherModulatorCheckBox.setSelected(true);
-		weatherModulatorCheckBox.setAlignment(Pos.CENTER_LEFT);
-		gridPane.add(weatherModulatorCheckBox, 1, 5);
+		this.weatherModulatorCheckBox = new CheckBox("");
+		this.weatherModulatorCheckBox.setSelected(preferences.getEnableWeatherModulators());
+		this.weatherModulatorCheckBox.setAlignment(Pos.CENTER_LEFT);
+		gridPane.add(this.weatherModulatorCheckBox, 1, 5);
 
-		// TODO add audio settings class with enum container audio listener
+		TextFlow modulatorsFlow = new TextFlow();
+		Text modulatorsText1 = new Text("Weather modulators change the intensity and speed of sound for all sounds.");
+		Text modulatorsText2 = new Text("The intensity and speed of sound changes with humidity and temperature.");
+		modulatorsFlow.getChildren().add(modulatorsText1);
+		modulatorsFlow.getChildren().add(modulatorsText2);
+		gridPane.add(modulatorsFlow, 1, 6, 2, 1);
+
 		Label listenerLabel = new Label("Listener");
-		gridPane.add(listenerLabel, 0, 6);
-		// @formatter:off
-		ObservableList<String> options = FXCollections.observableArrayList(
-				"Camera", 
-				"Marker");
-		// @formatter:on
-		ComboBox<String> listenerComboBox = new ComboBox<String>(options);
-		listenerComboBox.setMaxWidth(Double.MAX_VALUE);
-		gridPane.add(listenerComboBox, 1, 6);
+		gridPane.add(listenerLabel, 0, 7);
+		ObservableList<AudioListener> options = FXCollections.observableArrayList(AudioListener.values());
+		this.listenerComboBox = new ComboBox<AudioListener>(options);
+		this.listenerComboBox.setMaxWidth(Double.MAX_VALUE);
+		this.listenerComboBox.valueProperty().bindBidirectional(preferences.audioListenerProperty());
+		gridPane.add(this.listenerComboBox, 1, 7);
+
+		TextFlow listenerFlow = new TextFlow();
+		Text listenerText1 = new Text("Audio can be rendered relative to various listeners.");
+		Text listenerText2 = new Text(
+				"The camera setting will render it relative to the view window, while the marker setting renders audio relative to the draggable marker.");
+		listenerFlow.getChildren().add(listenerText1);
+		listenerFlow.getChildren().add(listenerText2);
+		gridPane.add(listenerFlow, 1, 8, 2, 1);
 	}
 
 	@Override

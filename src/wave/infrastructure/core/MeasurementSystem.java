@@ -1,4 +1,4 @@
-package wave.infrastructure.preferences;
+package wave.infrastructure.core;
 
 import gov.nasa.worldwind.util.UnitsFormat;
 import gov.nasa.worldwind.util.WWMath;
