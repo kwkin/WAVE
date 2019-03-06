@@ -1,7 +1,5 @@
 package wave.views.windows.preferences;
 
-import java.io.IOException;
-
 import javax.xml.bind.JAXBException;
 
 import javafx.beans.value.ChangeListener;
@@ -46,15 +44,6 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 	public PreferencesWindow(Preferences preferences)
 	{
 		this.initialPreferences = WaveUtil.deepCopy(preferences);
-		this.setTitle(PreferencesWindow.TITLE);
-		try
-		{
-			FXThemeLoader.setIcon(this, Wave.MAIN_ICON);
-		}
-		catch (IOException e)
-		{
-
-		}
 
 		BorderPane border = new BorderPane();
 		border.setPadding(new Insets(10, 10, 5, 10));
@@ -129,6 +118,7 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 		this.splitPane.widthProperty().addListener(changeListener);
 		this.splitPane.heightProperty().addListener(changeListener);
 
+		FXThemeLoader.applyDefaultTheme(this);
 	}
 
 	@Override

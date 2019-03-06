@@ -7,9 +7,23 @@ import java.nio.file.Path;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import wave.infrastructure.core.Wave;
 
 public class FXThemeLoader
 {
+	public static void applyDefaultTheme(Stage stage)
+	{
+		try
+		{
+			FXThemeLoader.loadTheme(stage.getScene(), Wave.WAVE_CSS_FILE);
+			FXThemeLoader.setIcon(stage, Wave.MAIN_ICON);
+		}
+		catch (IOException e)
+		{
+
+		}
+	}
+
 	/**
 	 * Loads the css stylesheet for the scene
 	 * 
@@ -32,7 +46,7 @@ public class FXThemeLoader
 			throw new IOException(message.toString());
 		}
 	}
-	
+
 	/**
 	 * Sets the desktop and window icons
 	 * 

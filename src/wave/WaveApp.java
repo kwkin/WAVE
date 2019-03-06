@@ -35,19 +35,12 @@ public class WaveApp extends Application
 	public void start(Stage primaryStage)
 	{
 		WaveApp.primaryStage = primaryStage;
-		WaveApp.primaryStage.setTitle(Wave.APPLICATION_NAME);
-		try
-		{
-			FXThemeLoader.setIcon(WaveApp.primaryStage, Wave.MAIN_ICON);
-		}
-		catch (IOException e)
-		{
-
-		}
 		WaveApp.session = new WaveSession();
 		WaveWindow window = new WaveWindow(session);
 		Scene primaryScene = new Scene(window, Wave.DEFAULT_WINDOW_WIDTH, Wave.DEFAULT_WINDOW_HEIGHT);
+		WaveApp.primaryStage.setTitle(Wave.APPLICATION_NAME);
 		WaveApp.primaryStage.setScene(primaryScene);
+		FXThemeLoader.applyDefaultTheme(primaryStage);
 		WaveApp.primaryStage.show();
 	}
 
@@ -76,7 +69,6 @@ public class WaveApp extends Application
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -13,6 +13,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import wave.WaveApp;
 import wave.infrastructure.core.Wave;
+import wave.infrastructure.handlers.FXThemeLoader;
 
 public class AboutWindow extends Stage
 {
@@ -57,5 +58,6 @@ public class AboutWindow extends Stage
 		
 		Scene surveyScene = new Scene(border, WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setScene(surveyScene);
+		FXThemeLoader.applyDefaultTheme(this);
 	}
 }

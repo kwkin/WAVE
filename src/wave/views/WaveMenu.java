@@ -157,6 +157,7 @@ public class WaveMenu extends MenuBar
 		dmMenu.setSelected(PreferencesLoader.preferences().getAngleUnitDisplay() == AngleFormat.DM);
 		viewMenu.getItems().add(new SeparatorMenuItem());
 		CheckMenuItem fullscreenMenu = new CheckMenuItem("Toggle full screen");
+		fullscreenMenu.setAccelerator(new KeyCodeCombination(KeyCode.F11));
 		viewMenu.getItems().add(fullscreenMenu);
 		fullscreenMenu.setOnAction((action) ->
 		{

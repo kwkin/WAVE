@@ -14,8 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import wave.infrastructure.core.AudioListener;
 import wave.infrastructure.preferences.Preferences;
 
@@ -65,11 +63,10 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 		this.masterVolumeSlider.valueProperty().bindBidirectional(preferences.masterVolumeProperty());
 		gridPane.add(this.masterVolumeSlider, 1, 0);
 
-		TextFlow masterVolumeFlow = new TextFlow();
-		Text masterVolumeText1 = new Text("The master volume control adjusts the audio level of all played audio.");
-		Text masterVolumeText2 = new Text("This includes rain, wind, and thunder.");
-		masterVolumeFlow.getChildren().add(masterVolumeText1);
-		masterVolumeFlow.getChildren().add(masterVolumeText2);
+		StringBuilder masterVolumeText = new StringBuilder("The master volume control adjusts the audio level of all played audio.");
+		masterVolumeText.append("This includes rain, wind, and thunder.");
+		Label masterVolumeFlow = new Label(masterVolumeText.toString());
+		masterVolumeFlow.setWrapText(true);
 		gridPane.add(masterVolumeFlow, 1, 1, 2, 1);
 
 		Label rainVolumeLabel = new Label("Rain Volume");
@@ -97,11 +94,10 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 		this.weatherModulatorCheckBox.setAlignment(Pos.CENTER_LEFT);
 		gridPane.add(this.weatherModulatorCheckBox, 1, 5);
 
-		TextFlow modulatorsFlow = new TextFlow();
-		Text modulatorsText1 = new Text("Weather modulators change the intensity and speed of sound for all sounds.");
-		Text modulatorsText2 = new Text("The intensity and speed of sound changes with humidity and temperature.");
-		modulatorsFlow.getChildren().add(modulatorsText1);
-		modulatorsFlow.getChildren().add(modulatorsText2);
+		StringBuilder modulatorsText = new StringBuilder("Weather modulators change the intensity and speed of sound for all sounds.");
+		modulatorsText.append("The intensity and speed of sound changes with humidity and temperature.");
+		Label modulatorsFlow = new Label(modulatorsText.toString());
+		modulatorsFlow.setWrapText(true);
 		gridPane.add(modulatorsFlow, 1, 6, 2, 1);
 
 		Label listenerLabel = new Label("Listener");
@@ -112,12 +108,10 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 		this.listenerComboBox.valueProperty().bindBidirectional(preferences.audioListenerProperty());
 		gridPane.add(this.listenerComboBox, 1, 7);
 
-		TextFlow listenerFlow = new TextFlow();
-		Text listenerText1 = new Text("Audio can be rendered relative to various listeners.");
-		Text listenerText2 = new Text(
-				"The camera setting will render it relative to the view window, while the marker setting renders audio relative to the draggable marker.");
-		listenerFlow.getChildren().add(listenerText1);
-		listenerFlow.getChildren().add(listenerText2);
+		StringBuilder listenerText = new StringBuilder("Audio can be rendered relative to various listeners.");
+		listenerText.append("The camera setting will render it relative to the view window, while the marker setting renders audio relative to the draggable marker.");
+		Label listenerFlow = new Label(listenerText.toString());
+		listenerFlow.setWrapText(true);
 		gridPane.add(listenerFlow, 1, 8, 2, 1);
 	}
 

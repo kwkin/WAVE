@@ -9,10 +9,10 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -54,13 +54,11 @@ public class SurveyPanel extends BorderPane
 
 		// Top content
 		BorderPane titlePane = new BorderPane();
-		TextFlow titleText = new TextFlow();
+		this.questionTextProperty.setValue("Thank you for participating in the WAVE survey!");
+		Label titleText = new Label();
+		titleText.textProperty().bind(this.questionTextProperty);
 		titleText.setTextAlignment(TextAlignment.CENTER);
 		titleText.setPadding(new Insets(10, 10, 10, 10));
-		Text text1 = new Text();
-		text1.textProperty().bind(this.questionTextProperty);
-		this.questionTextProperty.setValue("Thank you for participating in the WAVE survey!");
-		titleText.getChildren().add(text1);
 		titlePane.setCenter(titleText);
 		titlePane.setBottom(new Separator());
 		this.setTop(titlePane);
@@ -82,28 +80,19 @@ public class SurveyPanel extends BorderPane
 		{
 			e.printStackTrace();
 		}
-		TextFlow initialText = new TextFlow();
-		initialText.setTextAlignment(TextAlignment.CENTER);
-		initialText.setPadding(new Insets(10, 10, 10, 10));
 
 		// @formatter:off
-		Text text2 = new Text("In this experiment, you will be asked several questions related to the audio design of WAVE. ");
-		Text text3 = new Text("The questions mainly consist of listening to various weather scenarios, and selecting an answer based upon the perceived audio. ");
-		Text text4 = new Text("You must select an answer before proceeding to the next scenario. ");
-		Text text5 = new Text("The survey will take approximately 15 minutes to complete, but you may leave at any time. \n\n");
-		Text text6 = new Text("Click ");
-		Text text7 = new Text("Start Survey ");
-		Text text8 = new Text("when you are ready to proceed. ");
+		StringBuilder initialText = new StringBuilder("In this experiment, you will be asked several questions related to the audio design of WAVE. ");
+		initialText.append("The questions mainly consist of listening to various weather scenarios, and selecting an answer based upon the perceived audio. ");
+		initialText.append("You must select an answer before proceeding to the next scenario. ");
+		initialText.append("The survey will take approximately 15 minutes to complete, but you may leave at any time. \n\n");
+		initialText.append("Click \"Start Survey\" when you are ready to proceed.");
+		Label initialLabel = new Label(initialText.toString());
+		initialLabel.setTextAlignment(TextAlignment.CENTER);
+		initialLabel.setPadding(new Insets(10, 10, 10, 10));
+		initialLabel.setWrapText(true);
 		// @formatter:on
-		text7.setStyle("-fx-font-weight: bold");
-		initialText.getChildren().add(text2);
-		initialText.getChildren().add(text3);
-		initialText.getChildren().add(text4);
-		initialText.getChildren().add(text5);
-		initialText.getChildren().add(text6);
-		initialText.getChildren().add(text7);
-		initialText.getChildren().add(text8);
-		centerBorder.setBottom(initialText);
+		centerBorder.setBottom(initialLabel);
 		this.setCenter(centerBorder);
 
 		// Bottom Content

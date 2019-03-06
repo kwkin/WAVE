@@ -1,15 +1,9 @@
 package wave.views.survey;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import wave.WaveApp;
 import wave.infrastructure.WaveSession;
-import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ConfirmCloseEventHandler;
 import wave.infrastructure.handlers.FXThemeLoader;
 
@@ -17,22 +11,14 @@ public class SurveyWindow extends Stage
 {
 	protected final static String TITLE = "WAVE Survey";
 	protected final static int WINDOW_WIDTH = 480;
-	protected final static int WINDOW_HEIGHT = 480;
-	
+	protected final static int WINDOW_HEIGHT = 520;
+
 	protected final WaveSession session;
 
 	public SurveyWindow(WaveSession session)
 	{
 		this.session = session;
-		try
-		{
-			FXThemeLoader.setIcon(this, Wave.MAIN_ICON);
-		}
-		catch (IOException e)
-		{
 
-		}
-		
 		SurveyPanel panel = new SurveyPanel(session, this);
 		Scene surveyScene = new Scene(panel, WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setResizable(false);
@@ -46,6 +32,7 @@ public class SurveyWindow extends Stage
 		closeHandler.setConfirmText("Exit");
 		closeHandler.setCancelText("Continue Survey");
 		this.setOnCloseRequest(closeHandler);
+		FXThemeLoader.applyDefaultTheme(this);
 	}
 
 	public void surveyCompleted()

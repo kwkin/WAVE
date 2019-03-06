@@ -65,13 +65,10 @@ public class DisplayPreferencesPanel extends BorderPane implements PreferencesPa
 		this.systemComboBox.setMaxWidth(Double.MAX_VALUE);
 		gridPane.add(this.systemComboBox, 1, 0);
 
-		TextFlow systemTextFlow = new TextFlow();
-		Text systemText1 = new Text(
-				"System display will change the the measurement system used when displaying altitude, elevation, distance, etc.");
-		Text systemText2 = new Text(
-				"The metric system will use meters and kilometers, while the Imerial system will use feet and miles.");
-		systemTextFlow.getChildren().add(systemText1);
-		systemTextFlow.getChildren().add(systemText2);
+		StringBuilder systemText = new StringBuilder("System display will change the the measurement system used when displaying altitude, elevation, distance, etc.");
+		systemText.append("The metric system will use meters and kilometers, while the Imerial system will use feet and miles.");
+		Label systemTextFlow = new Label(systemText.toString());
+		systemTextFlow.setWrapText(true);
 		gridPane.add(systemTextFlow, 1, 1, 2, 1);
 
 		Label angleLabel = new Label("Angle Display");
@@ -82,17 +79,12 @@ public class DisplayPreferencesPanel extends BorderPane implements PreferencesPa
 		this.angleComboBox.setMaxWidth(Double.MAX_VALUE);
 		gridPane.add(this.angleComboBox, 1, 2);
 
-		TextFlow angleTextFlow = new TextFlow();
-		Text angleText1 = new Text(
-				"Angle format will change the display format used when representing latitude and longitude.");
-		Text angleText2 = new Text("The DMS format will display the degree, minutes and seconds.");
-		Text angleText3 = new Text(
-				"The DM format will display the degrees and minutes. Minutes will have a precision of four decimal places.");
-		Text angleText4 = new Text("The DD format will display the degrees with a precision of four decimal places.");
-		angleTextFlow.getChildren().add(angleText1);
-		angleTextFlow.getChildren().add(angleText2);
-		angleTextFlow.getChildren().add(angleText3);
-		angleTextFlow.getChildren().add(angleText4);
+		StringBuilder angleText = new StringBuilder("Angle format will change the display format used when representing latitude and longitude.");
+		angleText.append("The DMS format will display the degree, minutes and seconds.");
+		angleText.append("The DM format will display the degrees and minutes. Minutes will have a precision of four decimal places.");
+		angleText.append("The DD format will display the degrees with a precision of four decimal places.");
+		Label angleTextFlow = new Label(angleText.toString());
+		angleTextFlow.setWrapText(true);
 		gridPane.add(angleTextFlow, 1, 3, 2, 1);
 
 		Label performanceLabel = new Label("Performance Panel");
@@ -102,12 +94,10 @@ public class DisplayPreferencesPanel extends BorderPane implements PreferencesPa
 		this.enablePerformancePanel.setAlignment(Pos.CENTER_LEFT);
 		gridPane.add(this.enablePerformancePanel, 1, 4);
 
-		TextFlow performancePanelFlow = new TextFlow();
-		Text performancePanelText1 = new Text("Toggles the visibility of the performance panel.");
-		Text performancePanelText2 = new Text(
-				"The performance panel displays runtime statistics, such as frames per second and memory usage of indiivdual layers.");
-		performancePanelFlow.getChildren().add(performancePanelText1);
-		performancePanelFlow.getChildren().add(performancePanelText2);
+		StringBuilder performancePanelText = new StringBuilder("Toggles the visibility of the performance panel.");
+		performancePanelText.append("The performance panel displays runtime statistics, such as frames per second and memory usage of indiivdual layers.");
+		Label performancePanelFlow = new Label(performancePanelText.toString());
+		performancePanelFlow.setWrapText(true);
 		gridPane.add(performancePanelFlow, 1, 5, 2, 1);
 
 		Label layerLabel = new Label("Layer Panel");
@@ -117,12 +107,10 @@ public class DisplayPreferencesPanel extends BorderPane implements PreferencesPa
 		this.enableLayerPanel.setAlignment(Pos.CENTER_LEFT);
 		gridPane.add(this.enableLayerPanel, 1, 6);
 
-		TextFlow layerPanelFlow = new TextFlow();
-		Text layerPanelText1 = new Text("Toggles the visibility of the layer panel.");
-		Text layerPanelText2 = new Text(
-				"The layer panel toggles all WW layers, including all weather layers, image layers, and interface control overlays.");
-		layerPanelFlow.getChildren().add(layerPanelText1);
-		layerPanelFlow.getChildren().add(layerPanelText2);
+		StringBuilder layerPanelText = new StringBuilder("Toggles the visibility of the layer panel.");
+		layerPanelText.append("The layer panel toggles all WW layers, including all weather layers, image layers, and interface control overlays.");
+		Label layerPanelFlow = new Label(layerPanelText.toString());
+		layerPanelFlow.setWrapText(true);
 		gridPane.add(layerPanelFlow, 1, 7, 2, 1);
 
 		Label networkLabel = new Label("Network Connection");
@@ -132,12 +120,10 @@ public class DisplayPreferencesPanel extends BorderPane implements PreferencesPa
 		this.enableNetwork.setAlignment(Pos.CENTER_LEFT);
 		gridPane.add(this.enableNetwork, 1, 8);
 
-		TextFlow networkConnectionFlow = new TextFlow();
-		Text networkConnectionText1 = new Text("Toggles the visibility of the performance panel.");
-		Text networkConnectionText2 = new Text(
-				"The performance panel displays runtime statistics, such as frames per second and memory usage of indiivdual layers.");
-		networkConnectionFlow.getChildren().add(networkConnectionText1);
-		networkConnectionFlow.getChildren().add(networkConnectionText2);
+		StringBuilder networkConnectionText = new StringBuilder("Toggles the visibility of the performance panel.");
+		networkConnectionText.append("The performance panel displays runtime statistics, such as frames per second and memory usage of indiivdual layers.");
+		Label networkConnectionFlow = new Label(networkConnectionText.toString());
+		networkConnectionFlow.setWrapText(true);
 		gridPane.add(networkConnectionFlow, 1, 9, 2, 1);
 	}
 

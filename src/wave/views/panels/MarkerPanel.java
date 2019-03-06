@@ -46,7 +46,6 @@ public class MarkerPanel extends BorderPane
 		});
 		buttons.getButtons().add(this.markerToggleButton);
 
-		// TODO change to table view
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5, 5, 5, 5));
 		grid.setHgap(5);
