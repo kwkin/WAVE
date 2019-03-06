@@ -1,6 +1,7 @@
 package wave.views.survey;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,6 +10,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -18,6 +22,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.core.Wave;
 import wave.infrastructure.survey.Survey;
 import wave.infrastructure.survey.SurveyForm;
 import wave.infrastructure.survey.SurveyScenario;
@@ -61,6 +66,22 @@ public class SurveyPanel extends BorderPane
 		this.setTop(titlePane);
 
 		// Center content
+		BorderPane centerBorder = new BorderPane();
+		centerBorder.setPadding(new Insets(10, 10, 20, 10));
+		Image icon;
+		try
+		{
+			icon = new Image(Wave.MAIN_ICON.toUri().toURL().toString());
+			ImageView image = new ImageView(icon);
+			image.setFitWidth(icon.getWidth());
+			image.setFitHeight(icon.getHeight());
+			image.setPreserveRatio(true);
+			centerBorder.setCenter(image);
+		}
+		catch (MalformedURLException e)
+		{
+			e.printStackTrace();
+		}
 		TextFlow initialText = new TextFlow();
 		initialText.setTextAlignment(TextAlignment.CENTER);
 		initialText.setPadding(new Insets(10, 10, 10, 10));
@@ -82,7 +103,8 @@ public class SurveyPanel extends BorderPane
 		initialText.getChildren().add(text6);
 		initialText.getChildren().add(text7);
 		initialText.getChildren().add(text8);
-		this.setCenter(initialText);
+		centerBorder.setBottom(initialText);
+		this.setCenter(centerBorder);
 
 		// Bottom Content
 		this.buttonPanel = new GridPane();

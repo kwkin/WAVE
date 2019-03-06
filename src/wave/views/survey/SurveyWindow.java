@@ -1,8 +1,11 @@
 package wave.views.survey;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import wave.WaveApp;
 import wave.infrastructure.WaveSession;
