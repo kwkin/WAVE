@@ -30,7 +30,6 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 	{
 		this.setPadding(new Insets(10, 10, 10, 10));
 
-		// TODO stylize this with larger labels
 		Label settingsLabel = new Label("Audio Settings");
 		settingsLabel.setPadding(new Insets(10, 10, 10, 10));
 		this.setTop(settingsLabel);

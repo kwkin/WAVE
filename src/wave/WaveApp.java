@@ -53,7 +53,6 @@ public class WaveApp extends Application
 
 	static
 	{
-		WorldWind.setOfflineMode(true);
 		System.setProperty("sun.awt.noerasebackground", "true");
 		Path configFile = Wave.WAVE_CONFIG_FILE;
 		Path wwConfigFile = Wave.WAVE_WW_CONFIG_FILE;

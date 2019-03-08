@@ -12,12 +12,15 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import gov.nasa.worldwind.WorldWind;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import wave.infrastructure.core.AngleFormat;
 import wave.infrastructure.core.AudioListener;
 import wave.infrastructure.core.MeasurementSystem;
@@ -55,6 +58,16 @@ public class Preferences implements Serializable
 		this.enablePerformancePanelProperty = new SimpleBooleanProperty(true);
 		this.enableLayerPanelProperty = new SimpleBooleanProperty(true);
 		this.audioListenerProperty = new SimpleObjectProperty<AudioListener>(AudioListener.MARKER);
+
+		this.enableNetworkProperty.addListener(new ChangeListener<Boolean>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+			{
+				WorldWind.setOfflineMode(!newValue);
+			}
+		});
+		WorldWind.setOfflineMode(true);
 	}
 
 	public static Preferences loadDefault()

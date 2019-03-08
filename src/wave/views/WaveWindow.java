@@ -27,7 +27,6 @@ import wave.views.panels.StatisticsPanel;
 import wave.views.panels.WeatherOverlayPanel;
 
 // TODO fix runtime exception when moving window to another desktop with a different scaling
-// TODO embed fx panels into the wave window
 public class WaveWindow extends BorderPane
 {
 	protected WaveSession session;
