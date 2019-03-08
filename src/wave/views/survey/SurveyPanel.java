@@ -23,6 +23,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
+import wave.infrastructure.handlers.ErrorDialog;
 import wave.infrastructure.survey.Survey;
 import wave.infrastructure.survey.SurveyForm;
 import wave.infrastructure.survey.SurveyScenario;
@@ -78,7 +79,7 @@ public class SurveyPanel extends BorderPane
 		}
 		catch (MalformedURLException e)
 		{
-			e.printStackTrace();
+			
 		}
 
 		// @formatter:off
@@ -141,20 +142,9 @@ public class SurveyPanel extends BorderPane
 		}
 		catch (IOException e)
 		{
-			Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-			errorAlert.setHeaderText("Error");
-			errorAlert.initModality(Modality.APPLICATION_MODAL);
-			errorAlert.initOwner(this.parent);
 			StringBuilder errorMessage = new StringBuilder("Error: Unable to create survey file. \n\n");
 			errorMessage.append(e.getMessage());
-			errorAlert.setContentText(errorMessage.toString());
-
-			double xPosition = this.parent.getX() + this.parent.getWidth() / 2 - errorAlert.getWidth() / 2;
-			errorAlert.setX(xPosition);
-			double yPosition = this.parent.getY() + this.parent.getHeight() / 2 - errorAlert.getHeight() / 2;
-			errorAlert.setY(yPosition);
-
-			errorAlert.show();
+			ErrorDialog.show(this.parent, errorMessage.toString());
 		}
 	}
 

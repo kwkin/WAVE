@@ -11,6 +11,7 @@ import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.handlers.ErrorDialog;
 
 public class Survey
 {
@@ -33,7 +34,9 @@ public class Survey
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			StringBuilder errorMessage = new StringBuilder("Error: Unable to create survey file. \n\n");
+			errorMessage.append(e.getMessage());
+			ErrorDialog.show(null, errorMessage.toString());
 		}
 	}
 
@@ -138,7 +141,9 @@ public class Survey
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			StringBuilder errorMessage = new StringBuilder("Error: Unable to close survey file. \n\n");
+			errorMessage.append(e.getMessage());
+			ErrorDialog.show(null, errorMessage.toString());
 		}
 	}
 

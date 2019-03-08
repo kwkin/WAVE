@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import wave.infrastructure.core.Wave;
+import wave.infrastructure.handlers.ErrorDialog;
 import wave.infrastructure.handlers.FXThemeLoader;
 import wave.infrastructure.preferences.Preferences;
 import wave.infrastructure.preferences.PreferencesLoader;
@@ -147,7 +148,9 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 		}
 		catch (JAXBException e)
 		{
-			e.printStackTrace();
+			StringBuilder errorMessage = new StringBuilder("Error: Unable to write preferences file. \n\n");
+			errorMessage.append(e.getMessage());
+			ErrorDialog.show(null, errorMessage.toString());
 		}
 	}
 

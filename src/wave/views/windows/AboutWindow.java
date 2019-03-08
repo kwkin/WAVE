@@ -42,7 +42,7 @@ public class AboutWindow extends Stage
 		}
 		catch (MalformedURLException e)
 		{
-			e.printStackTrace();
+
 		}
 
 		TextFlow waveTextFlow = new TextFlow();
