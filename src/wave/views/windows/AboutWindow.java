@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -45,15 +46,15 @@ public class AboutWindow extends Stage
 
 		}
 
-		TextFlow waveTextFlow = new TextFlow();
+		StringBuilder waveText = new StringBuilder("Weather Auditory and Visual Environment Version ");
+		waveText.append(Wave.VERSION);
+		waveText.append("\n\n");
+		waveText.append("WAVE is an educational tool which integrates 3D audio and visuals on a virtual Earth.\n\n");
+		waveText.append("WAVE is developed by Eric Goicochea, Bridget Homer, and Kenneth King for COP4930/6930, 3D Audio Interfaces at UF.");
+		Label waveTextFlow = new Label(waveText.toString());
 		waveTextFlow.setTextAlignment(TextAlignment.CENTER);
 		waveTextFlow.setPadding(new Insets(10, 10, 10, 10));
-		Text waveText1 = new Text("Weather Auditory and Visual Environment Version " + Wave.VERSION + "\n\n");
-		Text waveText2 = new Text("WAVE is an educational tool which integrates 3D audio and visuals on a virtual Earth.\n\n");
-		Text waveText3 = new Text("WAVE is developed by Eric Goicochea, Bridget Homer, and Kenneth King for COP4930/6930, 3D Audio Interfaces at UF.");
-		waveTextFlow.getChildren().add(waveText1);
-		waveTextFlow.getChildren().add(waveText2);
-		waveTextFlow.getChildren().add(waveText3);
+		waveTextFlow.setWrapText(true);
 		border.setBottom(waveTextFlow);
 		
 		Scene surveyScene = new Scene(border, WINDOW_WIDTH, WINDOW_HEIGHT);
