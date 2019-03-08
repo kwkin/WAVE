@@ -36,9 +36,9 @@ import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.LatLonGraticule;
 import wave.infrastructure.preferences.PreferencesLoader;
-import wave.views.survey.SurveyWindow;
 import wave.views.windows.AboutWindow;
 import wave.views.windows.preferences.PreferencesWindow;
+import wave.views.windows.survey.SurveyWindow;
 
 // TODO add setting to enable/disable network connection
 // TODO add settings to enable/disable developer panels

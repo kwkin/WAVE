@@ -1,5 +1,7 @@
 package wave.views.windows.survey;
 
+import java.net.MalformedURLException;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -8,18 +10,22 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
+import wave.infrastructure.core.Wave;
 import wave.infrastructure.survey.SurveyScenario;
 
-//TODO add circle graph that changes based upon the slider degree
 public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
@@ -40,10 +46,37 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
 		this.setTop(this.questionLabel);
 
+		BorderPane interfaceBorder = new BorderPane();
+		BorderPane compassBorder = new BorderPane();
+		interfaceBorder.setCenter(compassBorder);
+		Label degree0 = new Label("0");
+		degree0.setTextAlignment(TextAlignment.CENTER);
+		degree0.setAlignment(Pos.CENTER);
+		degree0.setMaxWidth(Double.MAX_VALUE);
+		compassBorder.setTop(degree0);
+		Label degree90 = new Label("90");
+		degree0.setTextAlignment(TextAlignment.LEFT);
+		degree90.setAlignment(Pos.CENTER_LEFT);
+		degree90.setMaxWidth(Double.MAX_VALUE);
+		degree90.setMaxHeight(Double.MAX_VALUE);
+		compassBorder.setRight(degree90);
+		Label degree180 = new Label("180");
+		degree0.setTextAlignment(TextAlignment.CENTER);
+		degree180.setAlignment(Pos.CENTER);
+		degree180.setMaxWidth(Double.MAX_VALUE);
+		compassBorder.setBottom(degree180);
+		Label degree270 = new Label("270");
+		degree0.setTextAlignment(TextAlignment.RIGHT);
+		degree270.setAlignment(Pos.CENTER_RIGHT);
+		degree270.setMaxWidth(Double.MAX_VALUE);
+		degree270.setMaxHeight(Double.MAX_VALUE);
+		compassBorder.setLeft(degree270);
+		this.setCenter(interfaceBorder);
+		
 		GridPane scenarioPane = new GridPane();
+		interfaceBorder.setBottom(scenarioPane);
 		scenarioPane.setPadding(new Insets(5, 5, 5, 5));
-		this.setCenter(scenarioPane);
-
+		
 		Label degreeLabel = new Label("Degree: ");
 		scenarioPane.add(degreeLabel, 0, 0);
 
@@ -95,6 +128,18 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 				isAnswerSelectedProperty.setValue(true);
 			}
 		});
+
+		try
+		{
+			Image image = new Image(Wave.COMPASS_ICON.toUri().toURL().toString());
+			ImageView compass = new ImageView(image);
+			compass.rotateProperty().bindBidirectional(this.degreeSlider.valueProperty());
+			compassBorder.setCenter(compass);
+		}
+		catch (MalformedURLException e)
+		{
+			
+		}
 	}
 
 	@Override
