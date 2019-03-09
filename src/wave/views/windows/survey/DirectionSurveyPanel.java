@@ -45,11 +45,12 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
-		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
 		this.setTop(this.questionLabel);
 
-		BorderPane interfaceBorder = new BorderPane();
 		GridPane compassGrid = new GridPane();
+		compassGrid.setPadding(new Insets(5, 5, 5, 5));
+		compassGrid.setHgap(5);
+		compassGrid.setVgap(5);
 		try
 		{
 			BorderPane computerBorder = new BorderPane();
@@ -65,9 +66,9 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		}
 		catch (MalformedURLException e1)
 		{
-			
+
 		}
-		interfaceBorder.setCenter(compassGrid);
+		this.setCenter(compassGrid);
 		compassGrid.setAlignment(Pos.CENTER);
 		Label degree0 = new Label("0");
 		degree0.setTextAlignment(TextAlignment.CENTER);
@@ -92,14 +93,14 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		degree270.setMaxWidth(Double.MAX_VALUE);
 		degree270.setMaxHeight(Double.MAX_VALUE);
 		compassGrid.add(degree270, 0, 2);
-		this.setCenter(interfaceBorder);
-		
-		GridPane scenarioPane = new GridPane();
-		interfaceBorder.setBottom(scenarioPane);
-		scenarioPane.setPadding(new Insets(5, 5, 5, 5));
-		
-		Label degreeLabel = new Label("Degree: ");
-		scenarioPane.add(degreeLabel, 0, 0);
+
+		GridPane controlsGrid = new GridPane();
+		controlsGrid.setAlignment(Pos.CENTER);
+		controlsGrid.setMinWidth(196);
+		this.setBottom(controlsGrid);
+		Label degreeLabel = new Label("Degree");
+		degreeLabel.setTextAlignment(TextAlignment.RIGHT);
+		controlsGrid.add(degreeLabel, 0, 0);
 
 		this.degreeSlider = new Slider();
 		this.degreeSlider.setMin(DirectionSurveyPanel.MIN_DEGREE);
@@ -108,13 +109,15 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		this.degreeSlider.setMajorTickUnit(1);
 		this.degreeSlider.setMinorTickCount(0);
 		this.degreeSlider.setSnapToTicks(true);
+		this.degreeSlider.setMaxWidth(Double.MAX_VALUE);
 		Bindings.bindBidirectional(this.degreeProperty, this.degreeSlider.valueProperty(), new NumberStringConverter());
-		scenarioPane.add(degreeSlider, 1, 0);
+		controlsGrid.add(this.degreeSlider, 1, 0);
 
 		Spinner<Integer> spinner = new Spinner<Integer>();
 		spinner.setEditable(true);
 		SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(
 				DirectionSurveyPanel.MIN_DEGREE, DirectionSurveyPanel.MAX_DEGREE, (int) this.degreeSlider.getValue());
+		spinner.setMaxWidth(Double.MAX_VALUE);
 		Bindings.bindBidirectional(this.degreeProperty, valueFactory.valueProperty(), new StringConverter<Integer>()
 		{
 			@Override
@@ -139,7 +142,7 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 			}
 		});
 		spinner.setValueFactory(valueFactory);
-		scenarioPane.add(spinner, 2, 0);
+		controlsGrid.add(spinner, 1, 1);
 
 		this.degreeProperty.addListener(new ChangeListener<String>()
 		{
@@ -160,7 +163,7 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		}
 		catch (MalformedURLException e)
 		{
-			
+
 		}
 	}
 

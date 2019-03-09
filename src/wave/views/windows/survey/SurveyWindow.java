@@ -10,8 +10,8 @@ import wave.infrastructure.handlers.FXThemeLoader;
 public class SurveyWindow extends Stage
 {
 	protected final static String TITLE = "WAVE Survey";
-	protected final static int WINDOW_WIDTH = 520;
-	protected final static int WINDOW_HEIGHT = 680;
+	protected final static int WINDOW_WIDTH = 720;
+	protected final static int WINDOW_HEIGHT = 740;
 
 	protected final WaveSession session;
 
