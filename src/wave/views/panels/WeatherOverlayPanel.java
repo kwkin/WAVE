@@ -2,8 +2,10 @@ package wave.views.panels;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import gov.nasa.worldwind.layers.Layer;
 import javafx.geometry.HPos;
@@ -12,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -43,7 +47,23 @@ public class WeatherOverlayPanel extends BorderPane
 		displayColumn.setHgrow(Priority.NEVER);
 		displayColumn.setHalignment(HPos.CENTER);
 
-		int layerIndex = 0;
+
+		Path percipitationPath = Paths.get("data", "icons", "rain_light.png");
+		try
+		{
+			Image percipitationImage = new Image(percipitationPath.toUri().toURL().toString());
+			ImageView precipitationImageView = new ImageView(percipitationImage);
+			precipitationImageView.setFitHeight(64);
+			precipitationImageView.setFitWidth(64);
+			ToggleButton percipitationButton = new ToggleButton("Rain");
+			percipitationButton.setGraphic(precipitationImageView);
+			layerPane.add(percipitationButton, 0, 0, 2, 1);
+		}
+		catch (MalformedURLException e)
+		{
+		}
+		
+		int layerIndex = 1;
 		for (KMLLayer layer : session.getWeatherLayers())
 		{
 			String layerName = layer.getName();
@@ -54,7 +74,7 @@ public class WeatherOverlayPanel extends BorderPane
 			layerIndex = layerIndex + 1;
 		}
 		this.setCenter(layerPane);
-
+		
 		Button resetThemeButton = new Button("Reset");
 		resetThemeButton.setOnAction((event) ->
 		{

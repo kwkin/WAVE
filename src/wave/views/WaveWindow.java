@@ -127,6 +127,7 @@ public class WaveWindow extends BorderPane
 	
 	protected void createInformationPanel()
 	{
+		// TODO toggle visibility of accordion 
 		Accordion accordian = new Accordion();
 		accordian.setMaxHeight(Double.MAX_VALUE);
 		StackPane.setAlignment(accordian, Pos.CENTER_LEFT);
