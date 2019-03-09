@@ -1,6 +1,8 @@
 package wave.views.windows.survey;
 
 import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -47,30 +49,49 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		this.setTop(this.questionLabel);
 
 		BorderPane interfaceBorder = new BorderPane();
-		BorderPane compassBorder = new BorderPane();
-		interfaceBorder.setCenter(compassBorder);
+		GridPane compassGrid = new GridPane();
+		try
+		{
+			BorderPane computerBorder = new BorderPane();
+			Path computerIcon = Paths.get("data", "icons", "computer.png");
+			Image computerImage = new Image(computerIcon.toUri().toURL().toString());
+			ImageView computerImageView = new ImageView(computerImage);
+			computerImageView.maxWidth(32);
+			computerImageView.maxHeight(32);
+			computerImageView.setPreserveRatio(true);
+			compassGrid.setAlignment(Pos.BOTTOM_CENTER);
+			computerBorder.setCenter(computerImageView);
+			compassGrid.add(computerBorder, 1, 0);
+		}
+		catch (MalformedURLException e1)
+		{
+			
+		}
+		interfaceBorder.setCenter(compassGrid);
+		compassGrid.setAlignment(Pos.CENTER);
 		Label degree0 = new Label("0");
 		degree0.setTextAlignment(TextAlignment.CENTER);
-		degree0.setAlignment(Pos.CENTER);
+		degree0.setAlignment(Pos.BOTTOM_CENTER);
 		degree0.setMaxWidth(Double.MAX_VALUE);
-		compassBorder.setTop(degree0);
+		compassGrid.add(degree0, 1, 1);
+		BorderPane.setAlignment(degree0, Pos.BOTTOM_LEFT);
 		Label degree90 = new Label("90");
-		degree0.setTextAlignment(TextAlignment.LEFT);
+		degree90.setTextAlignment(TextAlignment.LEFT);
 		degree90.setAlignment(Pos.CENTER_LEFT);
 		degree90.setMaxWidth(Double.MAX_VALUE);
 		degree90.setMaxHeight(Double.MAX_VALUE);
-		compassBorder.setRight(degree90);
+		compassGrid.add(degree90, 2, 2);
 		Label degree180 = new Label("180");
-		degree0.setTextAlignment(TextAlignment.CENTER);
+		degree180.setTextAlignment(TextAlignment.CENTER);
 		degree180.setAlignment(Pos.CENTER);
 		degree180.setMaxWidth(Double.MAX_VALUE);
-		compassBorder.setBottom(degree180);
+		compassGrid.add(degree180, 1, 3);
 		Label degree270 = new Label("270");
-		degree0.setTextAlignment(TextAlignment.RIGHT);
+		degree270.setTextAlignment(TextAlignment.RIGHT);
 		degree270.setAlignment(Pos.CENTER_RIGHT);
 		degree270.setMaxWidth(Double.MAX_VALUE);
 		degree270.setMaxHeight(Double.MAX_VALUE);
-		compassBorder.setLeft(degree270);
+		compassGrid.add(degree270, 0, 2);
 		this.setCenter(interfaceBorder);
 		
 		GridPane scenarioPane = new GridPane();
@@ -131,10 +152,11 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 
 		try
 		{
-			Image image = new Image(Wave.COMPASS_ICON.toUri().toURL().toString());
-			ImageView compass = new ImageView(image);
-			compass.rotateProperty().bindBidirectional(this.degreeSlider.valueProperty());
-			compassBorder.setCenter(compass);
+			Image compassImage = new Image(Wave.COMPASS_ICON.toUri().toURL().toString());
+			ImageView compassImageView = new ImageView(compassImage);
+			compassImageView.setPreserveRatio(true);
+			compassImageView.rotateProperty().bindBidirectional(this.degreeSlider.valueProperty());
+			compassGrid.add(compassImageView, 1, 2);
 		}
 		catch (MalformedURLException e)
 		{

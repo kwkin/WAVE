@@ -21,10 +21,13 @@ import wave.WaveApp;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ConfirmCloseEventHandler;
+import wave.infrastructure.survey.ScenarioType;
+import wave.infrastructure.survey.SurveyScenario;
 import wave.views.panels.LayersPanel;
 import wave.views.panels.MarkerPanel;
 import wave.views.panels.StatisticsPanel;
 import wave.views.panels.WeatherOverlayPanel;
+import wave.views.windows.survey.DirectionSurveyPanel;
 
 // TODO fix runtime exception when moving window to another desktop with a different scaling
 public class WaveWindow extends BorderPane
@@ -54,7 +57,7 @@ public class WaveWindow extends BorderPane
 		WaveStatusBar statusBar = new WaveStatusBar(session);
 		statusBar.setEventSource(session.getWorldWindow());
 		waveBorderPane.setBottom(statusBar);
-		
+
 		waveBorderPane.setPickOnBounds(false);
 		TabPane tabPane = new TabPane();
 		waveBorderPane.setLeft(tabPane);
@@ -71,10 +74,15 @@ public class WaveWindow extends BorderPane
 		Tab statisticsTab = new Tab("Performance", statisticsPanel);
 		tabPane.getTabs().add(statisticsTab);
 
+		SurveyScenario scenario = new SurveyScenario(ScenarioType.DIRECTION, "This is question 2");
+		DirectionSurveyPanel directionPanel = new DirectionSurveyPanel(scenario);
+		Tab test = new Tab("Dir", directionPanel);
+		tabPane.getTabs().add(test);
+
 		MarkerPanel markerPanel = new MarkerPanel(session);
 		waveBorderPane.setRight(markerPanel);
 		centerPane.getChildren().add(waveBorderPane);
-		
+
 		for (Layer layer : session.getLayers())
 		{
 			if (layer instanceof CompassLayer)
@@ -87,7 +95,7 @@ public class WaveWindow extends BorderPane
 				Vec4 locationOffset = new Vec4(-300, 0);
 				compassLayer.setLocationOffset(locationOffset);
 			}
-			else if(layer instanceof WorldMapLayer)
+			else if (layer instanceof WorldMapLayer)
 			{
 				WorldMapLayer worldMapLayer = (WorldMapLayer) layer;
 				worldMapLayer.setIconScale(0.35);
@@ -95,7 +103,7 @@ public class WaveWindow extends BorderPane
 				Vec4 locationOffset = new Vec4(350, 0);
 				worldMapLayer.setLocationOffset(locationOffset);
 			}
-			else if(layer instanceof ScalebarLayer)
+			else if (layer instanceof ScalebarLayer)
 			{
 				ScalebarLayer scaleMapLayer = (ScalebarLayer) layer;
 				scaleMapLayer.setPosition(AVKey.SOUTHEAST);
