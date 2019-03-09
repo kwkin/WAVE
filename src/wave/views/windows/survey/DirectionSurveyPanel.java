@@ -57,6 +57,7 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 			Path computerIcon = Paths.get("data", "icons", "computer.png");
 			Image computerImage = new Image(computerIcon.toUri().toURL().toString());
 			ImageView computerImageView = new ImageView(computerImage);
+			computerImageView.setSmooth(true);
 			computerImageView.maxWidth(32);
 			computerImageView.maxHeight(32);
 			computerImageView.setPreserveRatio(true);

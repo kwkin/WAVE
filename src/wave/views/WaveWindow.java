@@ -13,10 +13,13 @@ import gov.nasa.worldwind.util.PerformanceStatistic;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.TextAlignment;
 import wave.WaveApp;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
@@ -32,7 +35,9 @@ import wave.views.windows.survey.DirectionSurveyPanel;
 // TODO fix runtime exception when moving window to another desktop with a different scaling
 public class WaveWindow extends BorderPane
 {
+	protected String BACKGROUND_STYLE = "-fx-background-color: rgba(2, 3, 6, 0.62);";
 	protected WaveSession session;
+	protected BorderPane waveBorderPane;
 
 	public WaveWindow(WaveSession session)
 	{
@@ -52,36 +57,20 @@ public class WaveWindow extends BorderPane
 		WaveMenu menu = new WaveMenu(session);
 		this.setTop(menu);
 
-		BorderPane waveBorderPane = new BorderPane();
+		this.waveBorderPane = new BorderPane();
 
 		WaveStatusBar statusBar = new WaveStatusBar(session);
 		statusBar.setEventSource(session.getWorldWindow());
 		waveBorderPane.setBottom(statusBar);
 
 		waveBorderPane.setPickOnBounds(false);
-		TabPane tabPane = new TabPane();
-		waveBorderPane.setLeft(tabPane);
-		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
-		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
-		Tab weatherOverlayTab = new Tab("Weather Layers", weatherOverlayPanel);
-		tabPane.getTabs().add(weatherOverlayTab);
-
-		LayersPanel layersPanel = new LayersPanel(session);
-		Tab layersTab = new Tab("Layers", layersPanel);
-		tabPane.getTabs().add(layersTab);
-
-		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
-		Tab statisticsTab = new Tab("Performance", statisticsPanel);
-		tabPane.getTabs().add(statisticsTab);
-
-		SurveyScenario scenario = new SurveyScenario(ScenarioType.DIRECTION, "This is question 2");
-		DirectionSurveyPanel directionPanel = new DirectionSurveyPanel(scenario);
-		Tab test = new Tab("Dir", directionPanel);
-		tabPane.getTabs().add(test);
+		createInformationPanel();
+//		createInformationPanelTabs();
 
 		MarkerPanel markerPanel = new MarkerPanel(session);
 		waveBorderPane.setRight(markerPanel);
 		centerPane.getChildren().add(waveBorderPane);
+
 
 		for (Layer layer : session.getLayers())
 		{
@@ -111,11 +100,10 @@ public class WaveWindow extends BorderPane
 				scaleMapLayer.setLocationOffset(locationOffset);
 			}
 		}
-		statusBar.setStyle("-fx-background-color: rgba(2, 3, 6, 0.62);");
-		tabPane.setStyle("-fx-background-color: rgba(2, 3, 6, 0.62);");
-		markerPanel.setStyle("-fx-background-color: rgba(2, 3, 6, 0.62);");
+		statusBar.setStyle(BACKGROUND_STYLE);
+		markerPanel.setStyle(BACKGROUND_STYLE);
 	}
-
+	
 	public void setIsTakingSurvey(boolean isTakingSurvey)
 	{
 		if (isTakingSurvey)
@@ -135,5 +123,56 @@ public class WaveWindow extends BorderPane
 				Platform.exit();
 			});
 		}
+	}
+	
+	protected void createInformationPanel()
+	{
+		Accordion accordian = new Accordion();
+		accordian.setMaxHeight(Double.MAX_VALUE);
+		StackPane.setAlignment(accordian, Pos.CENTER_LEFT);
+		this.waveBorderPane.setLeft(accordian);
+				
+		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
+		TitledPane weatherOverlayPane = new TitledPane("Weather Layers", weatherOverlayPanel);
+		accordian.getPanes().add(weatherOverlayPane);
+		accordian.setExpandedPane(weatherOverlayPane);
+
+		LayersPanel layersPanel = new LayersPanel(session);
+		TitledPane layersPane = new TitledPane("Layers", layersPanel);
+		accordian.getPanes().add(layersPane);
+
+		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
+		TitledPane statisticsPane = new TitledPane("Performance", statisticsPanel);
+		accordian.getPanes().add(statisticsPane);
+
+		SurveyScenario scenario = new SurveyScenario(ScenarioType.DIRECTION, "This is question 2");
+		DirectionSurveyPanel directionPanel = new DirectionSurveyPanel(scenario);
+		TitledPane test = new TitledPane("Dir", directionPanel);
+		accordian.getPanes().add(test);
+	}
+	
+	protected void createInformationPanelTabs()
+	{
+		TitledPane titledPane = new TitledPane();
+		titledPane.setMaxHeight(Double.MAX_VALUE);
+		titledPane.setText("Information Panels");
+		titledPane.setTextAlignment(TextAlignment.CENTER);
+		this.waveBorderPane.setLeft(titledPane);
+		TabPane tabPane = new TabPane();
+		titledPane.setContent(tabPane);
+		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
+		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
+		Tab weatherOverlayTab = new Tab("Weather Layers", weatherOverlayPanel);
+		tabPane.getTabs().add(weatherOverlayTab);
+
+		LayersPanel layersPanel = new LayersPanel(session);
+		Tab layersTab = new Tab("Layers", layersPanel);
+		tabPane.getTabs().add(layersTab);
+
+		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
+		Tab statisticsTab = new Tab("Performance", statisticsPanel);
+		tabPane.getTabs().add(statisticsTab);
+
+		tabPane.setStyle(BACKGROUND_STYLE);
 	}
 }
