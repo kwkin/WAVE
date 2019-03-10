@@ -32,7 +32,6 @@ import wave.views.panels.StatisticsPanel;
 import wave.views.panels.WeatherOverlayPanel;
 import wave.views.windows.survey.DirectionSurveyPanel;
 
-// TODO fix runtime exception when moving window to another desktop with a different scaling
 public class WaveWindow extends BorderPane
 {
 	protected String BACKGROUND_STYLE = "-fx-background-color: rgba(2, 3, 6, 0.62);";
