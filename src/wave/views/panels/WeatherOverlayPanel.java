@@ -46,24 +46,8 @@ public class WeatherOverlayPanel extends BorderPane
 		ColumnConstraints displayColumn = new ColumnConstraints();
 		displayColumn.setHgrow(Priority.NEVER);
 		displayColumn.setHalignment(HPos.CENTER);
-
-
-		Path percipitationPath = Paths.get("data", "icons", "rain_light.png");
-		try
-		{
-			Image percipitationImage = new Image(percipitationPath.toUri().toURL().toString());
-			ImageView precipitationImageView = new ImageView(percipitationImage);
-			precipitationImageView.setFitHeight(64);
-			precipitationImageView.setFitWidth(64);
-			ToggleButton percipitationButton = new ToggleButton("Rain");
-			percipitationButton.setGraphic(precipitationImageView);
-			layerPane.add(percipitationButton, 0, 0, 2, 1);
-		}
-		catch (MalformedURLException e)
-		{
-		}
 		
-		int layerIndex = 1;
+		int layerIndex = 0;
 		for (KMLLayer layer : session.getWeatherLayers())
 		{
 			String layerName = layer.getName();
@@ -74,6 +58,40 @@ public class WeatherOverlayPanel extends BorderPane
 			layerIndex = layerIndex + 1;
 		}
 		this.setCenter(layerPane);
+
+		// TODO add icon style
+		Path percipitationPath = Paths.get("data", "icons", "rain_light.png");
+		Path temperaturePath = Paths.get("data", "icons", "temperature_light.png");
+		Path humidityPath = Paths.get("data", "icons", "humidity_light.png");
+		try
+		{
+			Image percipitationImage = new Image(percipitationPath.toUri().toURL().toString());
+			ImageView percipitationImageView = new ImageView(percipitationImage);
+			percipitationImageView.setFitHeight(128);
+			percipitationImageView.setFitWidth(128);
+			ToggleButton percipitationButton = new ToggleButton("Rain");
+			percipitationButton.setGraphic(percipitationImageView);
+			layerPane.add(percipitationButton, 0, layerIndex, 2, 1);
+
+			Image temperatureImage = new Image(temperaturePath.toUri().toURL().toString());
+			ImageView temperatureImageView = new ImageView(temperatureImage);
+			temperatureImageView.setFitHeight(128);
+			temperatureImageView.setFitWidth(128);
+			ToggleButton temperatureButton = new ToggleButton("Temperature");
+			temperatureButton.setGraphic(temperatureImageView);
+			layerPane.add(temperatureButton, 0, layerIndex + 1, 2, 1);
+
+			Image humidityImage = new Image(humidityPath.toUri().toURL().toString());
+			ImageView humidityImageView = new ImageView(humidityImage);
+			humidityImageView.setFitHeight(128);
+			humidityImageView.setFitWidth(128);
+			ToggleButton humidityButton = new ToggleButton("Humidity");
+			humidityButton.setGraphic(humidityImageView);
+			layerPane.add(humidityButton, 0, layerIndex + 2, 2, 1);
+		}
+		catch (MalformedURLException e)
+		{
+		}
 		
 		Button resetThemeButton = new Button("Reset");
 		resetThemeButton.setOnAction((event) ->
