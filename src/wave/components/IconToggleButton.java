@@ -47,7 +47,7 @@ public class IconToggleButton extends ToggleButton
 		this.selectedImage.setPreserveRatio(true);
 		this.selectedImage.setOpacity(0);
 		this.images.getChildren().add(this.selectedImage);
-		this.setIconSize(128, 128);
+		this.setIconSize(64, 64);
 		this.setGraphic(this.images);
 		this.selectedProperty().addListener(new IconChangeListener());
 		getStyleClass().add(IconToggleButton.DEFAULT_STYLE_CLASS);

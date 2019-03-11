@@ -175,5 +175,6 @@ public class MarkerPanel extends BorderPane
 
 		this.setTop(buttons);
 		this.setCenter(grid);
+		this.getStyleClass().add("weather-panel");
 	}
 }

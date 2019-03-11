@@ -72,6 +72,8 @@ public class WaveStatusBar extends GridPane implements PositionListener, Renderi
 
 		PreferencesLoader.preferences().lengthUnitDisplayProperty().addListener(this);
 		PreferencesLoader.preferences().angleUnitDisplayProperty().addListener(this);
+
+		this.getStyleClass().add("weather-panel");
 	}
 
 	@Override

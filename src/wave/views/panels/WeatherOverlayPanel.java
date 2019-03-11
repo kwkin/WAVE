@@ -51,8 +51,6 @@ public class WeatherOverlayPanel extends BorderPane
 		displayColumn.setHalignment(HPos.CENTER);
 
 		int layerIndex = 0;
-
-		// TODO add icon style
 		try
 		{
 			Path percipitationPath1 = Paths.get("data", "icons", "rain_selected.png");
@@ -61,6 +59,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image percipitationImage2 = new Image(percipitationPath2.toUri().toURL().toString());
 			IconToggleButton percipitationButton = new IconToggleButton("Rain", percipitationImage1,
 					percipitationImage2);
+			percipitationButton.setGraphicTextGap(12);
 			linkLayerWithButton(session.getWeatherLayers().get(0), percipitationButton);
 			layerPane.add(percipitationButton, 0, layerIndex, 2, 1);
 			layerIndex++;
@@ -70,6 +69,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Path windPath2 = Paths.get("data", "icons", "wind_unselected.png");
 			Image windImage2 = new Image(windPath2.toUri().toURL().toString());
 			IconToggleButton windButton = new IconToggleButton("Wind", windImage1, windImage2);
+			windButton.setGraphicTextGap(12);
 			linkLayerWithButton(session.getWeatherLayers().get(1), windButton);
 			layerPane.add(windButton, 0, layerIndex, 2, 1);
 			layerIndex++;
@@ -79,6 +79,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Path lightningPath2 = Paths.get("data", "icons", "lightning_unselected.png");
 			Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
 			IconToggleButton lightningButton = new IconToggleButton("Lightning", lightningImage1, lightningImage2);
+			lightningButton.setGraphicTextGap(12);
 			linkLayerWithButton(session.getWeatherLayers().get(2), lightningButton);
 			layerPane.add(lightningButton, 0, layerIndex, 2, 1);
 			layerIndex++;
@@ -89,6 +90,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image temperatureImage2 = new Image(temperaturePath2.toUri().toURL().toString());
 			IconToggleButton temperatureButton = new IconToggleButton("Temperature", temperatureImage1,
 					temperatureImage2);
+			temperatureButton.setGraphicTextGap(12);
 			layerPane.add(temperatureButton, 0, layerIndex, 2, 1);
 			layerIndex++;
 
@@ -97,6 +99,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Path humidityPath2 = Paths.get("data", "icons", "humidity_unselected.png");
 			Image humidityImage2 = new Image(humidityPath2.toUri().toURL().toString());
 			IconToggleButton humidityButton = new IconToggleButton("Humidity", humidityImage1, humidityImage2);
+			humidityButton.setGraphicTextGap(12);
 			layerPane.add(humidityButton, 0, layerIndex, 2, 1);
 			layerIndex++;
 		}

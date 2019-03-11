@@ -13,7 +13,9 @@ import gov.nasa.worldwind.util.PerformanceStatistic;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
@@ -24,17 +26,13 @@ import wave.WaveApp;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ConfirmCloseEventHandler;
-import wave.infrastructure.survey.ScenarioType;
-import wave.infrastructure.survey.SurveyScenario;
 import wave.views.panels.LayersPanel;
 import wave.views.panels.MarkerPanel;
 import wave.views.panels.StatisticsPanel;
 import wave.views.panels.WeatherOverlayPanel;
-import wave.views.windows.survey.DirectionSurveyPanel;
 
 public class WaveWindow extends BorderPane
 {
-	protected String BACKGROUND_STYLE = "-fx-background-color: rgba(2, 3, 6, 0.62);";
 	protected WaveSession session;
 	protected BorderPane waveBorderPane;
 
@@ -99,8 +97,6 @@ public class WaveWindow extends BorderPane
 				scaleMapLayer.setLocationOffset(locationOffset);
 			}
 		}
-		statusBar.setStyle(BACKGROUND_STYLE);
-		markerPanel.setStyle(BACKGROUND_STYLE);
 	}
 	
 	public void setIsTakingSurvey(boolean isTakingSurvey)
@@ -133,22 +129,26 @@ public class WaveWindow extends BorderPane
 		this.waveBorderPane.setLeft(accordian);
 				
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
-		TitledPane weatherOverlayPane = new TitledPane("Weather Layers", weatherOverlayPanel);
+		ScrollPane weatherScrollPane = new ScrollPane();
+		weatherScrollPane.setContent(weatherOverlayPanel);
+		TitledPane weatherOverlayPane = new TitledPane("Weather Layers", weatherScrollPane);
 		accordian.getPanes().add(weatherOverlayPane);
 		accordian.setExpandedPane(weatherOverlayPane);
+		weatherScrollPane.setStyle("-fx-background: transparent;");
 
 		LayersPanel layersPanel = new LayersPanel(session);
-		TitledPane layersPane = new TitledPane("Layers", layersPanel);
+		ScrollPane layersScrollPane = new ScrollPane();
+		layersScrollPane.setContent(layersPanel);
+		TitledPane layersPane = new TitledPane("Layers", layersScrollPane);
 		accordian.getPanes().add(layersPane);
+		layersScrollPane.setStyle("-fx-background: transparent;");
 
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
-		TitledPane statisticsPane = new TitledPane("Performance", statisticsPanel);
+		ScrollPane statisticsScrollPane = new ScrollPane();
+		statisticsScrollPane.setContent(statisticsPanel);
+		TitledPane statisticsPane = new TitledPane("Performance", statisticsScrollPane);
 		accordian.getPanes().add(statisticsPane);
-
-		SurveyScenario scenario = new SurveyScenario(ScenarioType.DIRECTION, "This is question 2");
-		DirectionSurveyPanel directionPanel = new DirectionSurveyPanel(scenario);
-		TitledPane test = new TitledPane("Dir", directionPanel);
-		accordian.getPanes().add(test);
+		statisticsScrollPane.setStyle("-fx-background: transparent;");
 	}
 	
 	protected void createInformationPanelTabs()
@@ -158,7 +158,9 @@ public class WaveWindow extends BorderPane
 		titledPane.setText("Information Panels");
 		titledPane.setTextAlignment(TextAlignment.CENTER);
 		this.waveBorderPane.setLeft(titledPane);
+		
 		TabPane tabPane = new TabPane();
+		tabPane.setSide(Side.LEFT);
 		titledPane.setContent(tabPane);
 		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
@@ -172,7 +174,6 @@ public class WaveWindow extends BorderPane
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
 		Tab statisticsTab = new Tab("Performance", statisticsPanel);
 		tabPane.getTabs().add(statisticsTab);
-
-		tabPane.setStyle(BACKGROUND_STYLE);
+		titledPane.getStyleClass().add("weather-panel");
 	}
 }

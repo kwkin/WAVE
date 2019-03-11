@@ -4,7 +4,9 @@
 
     -fx-test-base: #1c1e2367;
     -fx-base-component: derive(-fx-color,8%);
-    -fx-base-light-component: rgb(240, 240, 240);
+	-fx-base-light-component: rgb(240, 240, 240);
+	-panel-color: rgba(28, 30, 35, 0.72);
+	/* -panel-color: rgba(2, 3, 6, 0.62); */
 
     -fx-control-inner-background: rgb(20, 20, 20);
     -fx-control-inner-background-alt: derive(-fx-control-inner-background, 2.5%);
@@ -16,7 +18,8 @@
     -fx-accent-dark: rgb(0, 87, 109);
     -fx-accent: rgb(0, 128, 160);
 
-    -fx-selection-bar-non-focused: rgb(32, 32, 32);
+	-fx-selection-bar-non-focused: rgb(32, 32, 32);
+	
 }
 
 .text-input {
@@ -295,7 +298,7 @@
  *                                                                             *
  ******************************************************************************/
 .titled-pane > *.content {
-    -fx-background-color: rgba(2, 3, 6, 0.62)
+    -fx-background-color: -panel-color;
 }
 
 /*******************************************************************************
@@ -304,13 +307,27 @@
  *                                                                             *
  ******************************************************************************/
 .accordion {
-    -fx-background-color: rgba(2, 3, 6, 0.62)
+    -fx-background-color: -panel-color;
+    -fx-border-width: 0 0 0 0;
 }
 
 .accordion *.content {
-    -fx-background-color: rgba(2, 3, 6, 0.62)
+    -fx-background-color: -panel-color;
+    -fx-border-width: 0 0 0 0;
 }
 
  .accordion > .titled-pane > *.content {
-    -fx-background-color: rgba(2, 3, 6, 0.62)
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 0 0;
+}
+
+
+/*******************************************************************************
+ *                                                                             *
+ * Weather Panel                                                               *
+ *                                                                             *
+ ******************************************************************************/
+.weather-panel {
+	-fx-background-color: -panel-color;
+    -fx-border-width: 0 0 0 0;
 }
