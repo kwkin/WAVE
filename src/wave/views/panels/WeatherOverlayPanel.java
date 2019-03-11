@@ -12,7 +12,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -23,7 +22,6 @@ import wave.WaveApp;
 import wave.components.IconToggleButton;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
-import wave.infrastructure.layers.KMLLayer;
 
 // TODO Change weather overlay text to icon images
 public class WeatherOverlayPanel extends BorderPane
@@ -48,55 +46,48 @@ public class WeatherOverlayPanel extends BorderPane
 		displayColumn.setHalignment(HPos.CENTER);
 		
 		int layerIndex = 0;
-		for (KMLLayer layer : session.getWeatherLayers())
-		{
-			String layerName = layer.getName();
-			Label layerLabel = new Label(layerName);
-			layerPane.add(layerLabel, 0, layerIndex);
-			ToggleButton layerToggleButton = createLayerToggleButton(layerName);
-			layerPane.add(layerToggleButton, 1, layerIndex);
-			layerIndex = layerIndex + 1;
-		}
-		this.setCenter(layerPane);
 
 		// TODO add icon style
 		try
 		{
-			Path percipitationPath1 = Paths.get("data", "icons", "rain_light.png");
+			Path percipitationPath1 = Paths.get("data", "icons", "rain_selected.png");
 			Image percipitationImage1 = new Image(percipitationPath1.toUri().toURL().toString());
-			Path percipitationPath2 = Paths.get("data", "icons", "rain_dark.png");
+			Path percipitationPath2 = Paths.get("data", "icons", "rain_unselected.png");
 			Image percipitationImage2 = new Image(percipitationPath2.toUri().toURL().toString());
 			IconToggleButton percipitationButton = new IconToggleButton("Rain", percipitationImage1, percipitationImage2);
+			linkLayerWithButton(session.getWeatherLayers().get(0), percipitationButton);
 			layerPane.add(percipitationButton, 0, layerIndex, 2, 1);
 			layerIndex++;
 			
-			Path windPath1 = Paths.get("data", "icons", "wind_light.png");
+			Path windPath1 = Paths.get("data", "icons", "wind_selected.png");
 			Image windImage1 = new Image(windPath1.toUri().toURL().toString());
-			Path windPath2 = Paths.get("data", "icons", "wind_dark.png");
+			Path windPath2 = Paths.get("data", "icons", "wind_unselected.png");
 			Image windImage2 = new Image(windPath2.toUri().toURL().toString());
 			IconToggleButton windButton = new IconToggleButton("Wind", windImage1, windImage2);
+			linkLayerWithButton(session.getWeatherLayers().get(1), windButton);
 			layerPane.add(windButton, 0, layerIndex, 2, 1);
 			layerIndex++;
 			
-			Path lightningPath1 = Paths.get("data", "icons", "lightning_light.png");
+			Path lightningPath1 = Paths.get("data", "icons", "lightning_selected.png");
 			Image lightningImage1 = new Image(lightningPath1.toUri().toURL().toString());
-			Path lightningPath2 = Paths.get("data", "icons", "lightning_dark.png");
+			Path lightningPath2 = Paths.get("data", "icons", "lightning_unselected.png");
 			Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
 			IconToggleButton lightningButton = new IconToggleButton("Lightning", lightningImage1, lightningImage2);
+			linkLayerWithButton(session.getWeatherLayers().get(2), lightningButton);
 			layerPane.add(lightningButton, 0, layerIndex, 2, 1);
 			layerIndex++;
 			
-			Path temperaturePath1 = Paths.get("data", "icons", "temperature_light.png");
+			Path temperaturePath1 = Paths.get("data", "icons", "temperature_selected.png");
 			Image temperatureImage1 = new Image(temperaturePath1.toUri().toURL().toString());
-			Path temperaturePath2 = Paths.get("data", "icons", "temperature_dark.png");
+			Path temperaturePath2 = Paths.get("data", "icons", "temperature_unselected.png");
 			Image temperatureImage2 = new Image(temperaturePath2.toUri().toURL().toString());
 			IconToggleButton temperatureButton = new IconToggleButton("Temperature", temperatureImage1, temperatureImage2);
 			layerPane.add(temperatureButton, 0, layerIndex, 2, 1);
 			layerIndex++;
 			
-			Path humidityPath1 = Paths.get("data", "icons", "humidity_light.png");
+			Path humidityPath1 = Paths.get("data", "icons", "humidity_selected.png");
 			Image humidityImage1 = new Image(humidityPath1.toUri().toURL().toString());
-			Path humidityPath2 = Paths.get("data", "icons", "humidity_dark.png");
+			Path humidityPath2 = Paths.get("data", "icons", "humidity_unselected.png");
 			Image humidityImage2 = new Image(humidityPath2.toUri().toURL().toString());
 			IconToggleButton humidityButton = new IconToggleButton("Humidity", humidityImage1, humidityImage2);
 			layerPane.add(humidityButton, 0, layerIndex, 2, 1);
@@ -105,6 +96,7 @@ public class WeatherOverlayPanel extends BorderPane
 		catch (MalformedURLException e)
 		{
 		}
+		this.setCenter(layerPane);
 		
 		Button resetThemeButton = new Button("Reset");
 		resetThemeButton.setOnAction((event) ->
@@ -122,16 +114,13 @@ public class WeatherOverlayPanel extends BorderPane
 		this.setBottom(resetThemeButton);
 	}
 
-	private ToggleButton createLayerToggleButton(String layerName)
+	private void linkLayerWithButton(Layer layer, ToggleButton toggleButton)
 	{
-		ToggleButton toggleButton = null;
-		Layer layer = this.session.getLayers().getLayerByName(layerName);
 		if (layer != null)
 		{
-			ToggleButton layerToggleButton = new ToggleButton("Toggle");
-			layerToggleButton.setOnAction((action) ->
+			toggleButton.setOnAction((action) ->
 			{
-				layer.setEnabled(layerToggleButton.isSelected());
+				layer.setEnabled(toggleButton.isSelected());
 			});
 			layer.addPropertyChangeListener(new PropertyChangeListener()
 			{
@@ -140,13 +129,11 @@ public class WeatherOverlayPanel extends BorderPane
 				{
 					if (event.getPropertyName() == "Enabled")
 					{
-						layerToggleButton.setSelected((boolean) event.getNewValue());
+						toggleButton.setSelected((boolean) event.getNewValue());
 					}
 				}
 			});
-			layerToggleButton.setSelected(layer.isEnabled());
-			toggleButton = layerToggleButton;
+			toggleButton.setSelected(layer.isEnabled());
 		}
-		return toggleButton;
 	}
 }
