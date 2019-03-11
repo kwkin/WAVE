@@ -60,11 +60,9 @@ public class WeatherOverlayPanel extends BorderPane
 		this.setCenter(layerPane);
 
 		// TODO add icon style
-		Path percipitationPath = Paths.get("data", "icons", "rain_light.png");
-		Path temperaturePath = Paths.get("data", "icons", "temperature_light.png");
-		Path humidityPath = Paths.get("data", "icons", "humidity_light.png");
 		try
 		{
+			Path percipitationPath = Paths.get("data", "icons", "rain_light.png");
 			Image percipitationImage = new Image(percipitationPath.toUri().toURL().toString());
 			ImageView percipitationImageView = new ImageView(percipitationImage);
 			percipitationImageView.setFitHeight(128);
@@ -73,6 +71,7 @@ public class WeatherOverlayPanel extends BorderPane
 			percipitationButton.setGraphic(percipitationImageView);
 			layerPane.add(percipitationButton, 0, layerIndex, 2, 1);
 
+			Path temperaturePath = Paths.get("data", "icons", "temperature_light.png");
 			Image temperatureImage = new Image(temperaturePath.toUri().toURL().toString());
 			ImageView temperatureImageView = new ImageView(temperatureImage);
 			temperatureImageView.setFitHeight(128);
@@ -81,6 +80,7 @@ public class WeatherOverlayPanel extends BorderPane
 			temperatureButton.setGraphic(temperatureImageView);
 			layerPane.add(temperatureButton, 0, layerIndex + 1, 2, 1);
 
+			Path humidityPath = Paths.get("data", "icons", "humidity_light.png");
 			Image humidityImage = new Image(humidityPath.toUri().toURL().toString());
 			ImageView humidityImageView = new ImageView(humidityImage);
 			humidityImageView.setFitHeight(128);
@@ -88,6 +88,24 @@ public class WeatherOverlayPanel extends BorderPane
 			ToggleButton humidityButton = new ToggleButton("Humidity");
 			humidityButton.setGraphic(humidityImageView);
 			layerPane.add(humidityButton, 0, layerIndex + 2, 2, 1);
+
+			Path windPath = Paths.get("data", "icons", "wind_light.png");
+			Image windImage = new Image(windPath.toUri().toURL().toString());
+			ImageView windImageView = new ImageView(windImage);
+			windImageView.setFitHeight(128);
+			windImageView.setFitWidth(128);
+			ToggleButton windButton = new ToggleButton("Wind");
+			windButton.setGraphic(windImageView);
+			layerPane.add(windButton, 0, layerIndex + 3, 2, 1);
+
+			Path lightningPath = Paths.get("data", "icons", "lightning_light.png");
+			Image lightningImage = new Image(lightningPath.toUri().toURL().toString());
+			ImageView lightningImageView = new ImageView(lightningImage);
+			lightningImageView.setFitHeight(128);
+			lightningImageView.setFitWidth(128);
+			ToggleButton lightningButton = new ToggleButton("Lightning");
+			lightningButton.setGraphic(lightningImageView);
+			layerPane.add(lightningButton, 0, layerIndex + 4, 2, 1);
 		}
 		catch (MalformedURLException e)
 		{
