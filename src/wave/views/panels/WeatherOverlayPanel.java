@@ -15,12 +15,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import wave.WaveApp;
+import wave.components.IconToggleButton;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.layers.KMLLayer;
@@ -62,50 +62,45 @@ public class WeatherOverlayPanel extends BorderPane
 		// TODO add icon style
 		try
 		{
-			Path percipitationPath = Paths.get("data", "icons", "rain_light.png");
-			Image percipitationImage = new Image(percipitationPath.toUri().toURL().toString());
-			ImageView percipitationImageView = new ImageView(percipitationImage);
-			percipitationImageView.setFitHeight(128);
-			percipitationImageView.setFitWidth(128);
-			ToggleButton percipitationButton = new ToggleButton("Rain");
-			percipitationButton.setGraphic(percipitationImageView);
+			Path percipitationPath1 = Paths.get("data", "icons", "rain_light.png");
+			Image percipitationImage1 = new Image(percipitationPath1.toUri().toURL().toString());
+			Path percipitationPath2 = Paths.get("data", "icons", "rain_dark.png");
+			Image percipitationImage2 = new Image(percipitationPath2.toUri().toURL().toString());
+			IconToggleButton percipitationButton = new IconToggleButton("Rain", percipitationImage1, percipitationImage2);
 			layerPane.add(percipitationButton, 0, layerIndex, 2, 1);
-
-			Path temperaturePath = Paths.get("data", "icons", "temperature_light.png");
-			Image temperatureImage = new Image(temperaturePath.toUri().toURL().toString());
-			ImageView temperatureImageView = new ImageView(temperatureImage);
-			temperatureImageView.setFitHeight(128);
-			temperatureImageView.setFitWidth(128);
-			ToggleButton temperatureButton = new ToggleButton("Temperature");
-			temperatureButton.setGraphic(temperatureImageView);
-			layerPane.add(temperatureButton, 0, layerIndex + 1, 2, 1);
-
-			Path humidityPath = Paths.get("data", "icons", "humidity_light.png");
-			Image humidityImage = new Image(humidityPath.toUri().toURL().toString());
-			ImageView humidityImageView = new ImageView(humidityImage);
-			humidityImageView.setFitHeight(128);
-			humidityImageView.setFitWidth(128);
-			ToggleButton humidityButton = new ToggleButton("Humidity");
-			humidityButton.setGraphic(humidityImageView);
-			layerPane.add(humidityButton, 0, layerIndex + 2, 2, 1);
-
-			Path windPath = Paths.get("data", "icons", "wind_light.png");
-			Image windImage = new Image(windPath.toUri().toURL().toString());
-			ImageView windImageView = new ImageView(windImage);
-			windImageView.setFitHeight(128);
-			windImageView.setFitWidth(128);
-			ToggleButton windButton = new ToggleButton("Wind");
-			windButton.setGraphic(windImageView);
-			layerPane.add(windButton, 0, layerIndex + 3, 2, 1);
-
-			Path lightningPath = Paths.get("data", "icons", "lightning_light.png");
-			Image lightningImage = new Image(lightningPath.toUri().toURL().toString());
-			ImageView lightningImageView = new ImageView(lightningImage);
-			lightningImageView.setFitHeight(128);
-			lightningImageView.setFitWidth(128);
-			ToggleButton lightningButton = new ToggleButton("Lightning");
-			lightningButton.setGraphic(lightningImageView);
-			layerPane.add(lightningButton, 0, layerIndex + 4, 2, 1);
+			layerIndex++;
+			
+			Path windPath1 = Paths.get("data", "icons", "wind_light.png");
+			Image windImage1 = new Image(windPath1.toUri().toURL().toString());
+			Path windPath2 = Paths.get("data", "icons", "wind_dark.png");
+			Image windImage2 = new Image(windPath2.toUri().toURL().toString());
+			IconToggleButton windButton = new IconToggleButton("Wind", windImage1, windImage2);
+			layerPane.add(windButton, 0, layerIndex, 2, 1);
+			layerIndex++;
+			
+			Path lightningPath1 = Paths.get("data", "icons", "lightning_light.png");
+			Image lightningImage1 = new Image(lightningPath1.toUri().toURL().toString());
+			Path lightningPath2 = Paths.get("data", "icons", "lightning_dark.png");
+			Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
+			IconToggleButton lightningButton = new IconToggleButton("Lightning", lightningImage1, lightningImage2);
+			layerPane.add(lightningButton, 0, layerIndex, 2, 1);
+			layerIndex++;
+			
+			Path temperaturePath1 = Paths.get("data", "icons", "temperature_light.png");
+			Image temperatureImage1 = new Image(temperaturePath1.toUri().toURL().toString());
+			Path temperaturePath2 = Paths.get("data", "icons", "temperature_dark.png");
+			Image temperatureImage2 = new Image(temperaturePath2.toUri().toURL().toString());
+			IconToggleButton temperatureButton = new IconToggleButton("Temperature", temperatureImage1, temperatureImage2);
+			layerPane.add(temperatureButton, 0, layerIndex, 2, 1);
+			layerIndex++;
+			
+			Path humidityPath1 = Paths.get("data", "icons", "humidity_light.png");
+			Image humidityImage1 = new Image(humidityPath1.toUri().toURL().toString());
+			Path humidityPath2 = Paths.get("data", "icons", "humidity_dark.png");
+			Image humidityImage2 = new Image(humidityPath2.toUri().toURL().toString());
+			IconToggleButton humidityButton = new IconToggleButton("Humidity", humidityImage1, humidityImage2);
+			layerPane.add(humidityButton, 0, layerIndex, 2, 1);
+			layerIndex++;
 		}
 		catch (MalformedURLException e)
 		{
