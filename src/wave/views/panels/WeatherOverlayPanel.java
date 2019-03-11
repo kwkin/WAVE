@@ -9,12 +9,14 @@ import java.nio.file.Paths;
 
 import gov.nasa.worldwind.layers.Layer;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -28,10 +30,15 @@ import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.LayerFadeTransition;
 
-// TODO Change weather overlay text to icon images
 public class WeatherOverlayPanel extends BorderPane
 {
 	protected WaveSession session;
+
+	protected IconToggleButton percipitationButton;
+	protected IconToggleButton windButton;
+	protected IconToggleButton lightningButton;
+	protected IconToggleButton temperatureButton;
+	protected IconToggleButton humidityButton;
 
 	public WeatherOverlayPanel(WaveSession session)
 	{
@@ -53,54 +60,68 @@ public class WeatherOverlayPanel extends BorderPane
 		int layerIndex = 0;
 		try
 		{
+			Layer precipitationLayer = session.getWeatherLayers().get(0);
+			Slider percipitationSlider = new Slider(0, 1, 1);
+			layerPane.add(percipitationSlider, 1, layerIndex);
+			this.linkLayerWithSlider(precipitationLayer, percipitationSlider);
 			Path percipitationPath1 = Paths.get("data", "icons", "rain_selected.png");
 			Image percipitationImage1 = new Image(percipitationPath1.toUri().toURL().toString());
 			Path percipitationPath2 = Paths.get("data", "icons", "rain_unselected.png");
 			Image percipitationImage2 = new Image(percipitationPath2.toUri().toURL().toString());
-			IconToggleButton percipitationButton = new IconToggleButton("Rain", percipitationImage1,
-					percipitationImage2);
-			percipitationButton.setGraphicTextGap(12);
-			linkLayerWithButton(session.getWeatherLayers().get(0), percipitationButton);
-			layerPane.add(percipitationButton, 0, layerIndex, 2, 1);
+			this.percipitationButton = new IconToggleButton("Rain", percipitationImage1, percipitationImage2);
+			this.percipitationButton.setGraphicTextGap(12);
+			this.linkLayerWithButton(precipitationLayer, this.percipitationButton, percipitationSlider.valueProperty());
+			layerPane.add(this.percipitationButton, 0, layerIndex);
 			layerIndex++;
 
+			Slider windSlider = new Slider(0, 1, 1);
+			layerPane.add(windSlider, 1, layerIndex);
 			Path windPath1 = Paths.get("data", "icons", "wind_selected.png");
 			Image windImage1 = new Image(windPath1.toUri().toURL().toString());
 			Path windPath2 = Paths.get("data", "icons", "wind_unselected.png");
 			Image windImage2 = new Image(windPath2.toUri().toURL().toString());
-			IconToggleButton windButton = new IconToggleButton("Wind", windImage1, windImage2);
+			this.windButton = new IconToggleButton("Wind", windImage1, windImage2);
 			windButton.setGraphicTextGap(12);
-			linkLayerWithButton(session.getWeatherLayers().get(1), windButton);
-			layerPane.add(windButton, 0, layerIndex, 2, 1);
+			layerPane.add(windButton, 0, layerIndex);
 			layerIndex++;
 
+			Slider lightningSlider = new Slider(0, 1, 1);
+			layerPane.add(lightningSlider, 1, layerIndex);
 			Path lightningPath1 = Paths.get("data", "icons", "lightning_selected.png");
 			Image lightningImage1 = new Image(lightningPath1.toUri().toURL().toString());
 			Path lightningPath2 = Paths.get("data", "icons", "lightning_unselected.png");
 			Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
-			IconToggleButton lightningButton = new IconToggleButton("Lightning", lightningImage1, lightningImage2);
-			lightningButton.setGraphicTextGap(12);
-			linkLayerWithButton(session.getWeatherLayers().get(2), lightningButton);
-			layerPane.add(lightningButton, 0, layerIndex, 2, 1);
+			this.lightningButton = new IconToggleButton("Lightning", lightningImage1, lightningImage2);
+			this.lightningButton.setGraphicTextGap(12);
+			layerPane.add(this.lightningButton, 0, layerIndex);
 			layerIndex++;
 
+			Layer temperatureLayer = session.getWeatherLayers().get(2);
+			Slider temperatureSlider = new Slider(0, 1, 1);
+			layerPane.add(temperatureSlider, 1, layerIndex);
+			this.linkLayerWithSlider(temperatureLayer, temperatureSlider);
 			Path temperaturePath1 = Paths.get("data", "icons", "temperature_selected.png");
 			Image temperatureImage1 = new Image(temperaturePath1.toUri().toURL().toString());
 			Path temperaturePath2 = Paths.get("data", "icons", "temperature_unselected.png");
 			Image temperatureImage2 = new Image(temperaturePath2.toUri().toURL().toString());
-			IconToggleButton temperatureButton = new IconToggleButton("Temperature", temperatureImage1,
-					temperatureImage2);
-			temperatureButton.setGraphicTextGap(12);
-			layerPane.add(temperatureButton, 0, layerIndex, 2, 1);
+			this.temperatureButton = new IconToggleButton("Temperature", temperatureImage1, temperatureImage2);
+			this.temperatureButton.setGraphicTextGap(12);
+			this.linkLayerWithButton(temperatureLayer, this.temperatureButton, temperatureSlider.valueProperty());
+			layerPane.add(this.temperatureButton, 0, layerIndex);
 			layerIndex++;
 
+			Layer humidityLayer = session.getWeatherLayers().get(1);
+			Slider humiditySlider = new Slider(0, 1, 1);
+			layerPane.add(humiditySlider, 1, layerIndex);
+			this.linkLayerWithSlider(humidityLayer, humiditySlider);
 			Path humidityPath1 = Paths.get("data", "icons", "humidity_selected.png");
 			Image humidityImage1 = new Image(humidityPath1.toUri().toURL().toString());
 			Path humidityPath2 = Paths.get("data", "icons", "humidity_unselected.png");
 			Image humidityImage2 = new Image(humidityPath2.toUri().toURL().toString());
-			IconToggleButton humidityButton = new IconToggleButton("Humidity", humidityImage1, humidityImage2);
-			humidityButton.setGraphicTextGap(12);
-			layerPane.add(humidityButton, 0, layerIndex, 2, 1);
+			this.humidityButton = new IconToggleButton("Humidity", humidityImage1, humidityImage2);
+			this.humidityButton.setGraphicTextGap(12);
+			this.linkLayerWithButton(humidityLayer, this.humidityButton, lightningSlider.valueProperty());
+			layerPane.add(this.humidityButton, 0, layerIndex);
 			layerIndex++;
 		}
 		catch (MalformedURLException e)
@@ -124,7 +145,7 @@ public class WeatherOverlayPanel extends BorderPane
 		this.setBottom(resetThemeButton);
 	}
 
-	private void linkLayerWithButton(Layer layer, ToggleButton toggleButton)
+	private void linkLayerWithButton(Layer layer, ToggleButton toggleButton, DoubleProperty opacityProperty)
 	{
 		if (layer != null)
 		{
@@ -140,13 +161,13 @@ public class WeatherOverlayPanel extends BorderPane
 						layer.setEnabled(true);
 						duration = 1000;
 						fromOpacity = 0;
-						toOpacity = 1;
+						toOpacity = opacityProperty.getValue().doubleValue();
 					}
 					else
 					{
 						duration = 300;
 						fromOpacity = 1;
-						toOpacity = 0;
+						toOpacity = opacityProperty.getValue().doubleValue();
 					}
 					LayerFadeTransition fade = new LayerFadeTransition(this.session.getWorldWindow(),
 							Duration.millis(duration), layer);
@@ -177,5 +198,21 @@ public class WeatherOverlayPanel extends BorderPane
 			});
 			toggleButton.setSelected(layer.isEnabled());
 		}
+	}
+
+	private void linkLayerWithSlider(Layer layer, Slider slider)
+	{
+		slider.valueProperty().addListener(new ChangeListener<Number>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+			{
+				Platform.runLater(() ->
+				{
+					layer.setOpacity(newValue.doubleValue());
+					session.getWorldWindow().redraw();
+				});
+			}
+		});
 	}
 }
