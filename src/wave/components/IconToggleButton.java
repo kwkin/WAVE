@@ -12,7 +12,7 @@ import javafx.util.Duration;
 public class IconToggleButton extends ToggleButton
 {
 	protected static final String DEFAULT_STYLE_CLASS = "icon-button";
-	
+
 	protected StackPane images;
 	protected ImageView selectedImage;
 	protected ImageView unSelectedImage;
@@ -36,7 +36,7 @@ public class IconToggleButton extends ToggleButton
 		this.unSelectedImage.setFitHeight(width);
 		this.unSelectedImage.setFitHeight(height);
 	}
-	
+
 	protected void initialize(Image selectedImage, Image unSelectedImage)
 	{
 		this.images = new StackPane();
@@ -57,7 +57,7 @@ public class IconToggleButton extends ToggleButton
 	{
 		protected final FadeTransition toSelected;
 		protected final FadeTransition fromSelected;
-		
+
 		public IconChangeListener()
 		{
 			this.toSelected = new FadeTransition(Duration.millis(250), selectedImage);
@@ -70,7 +70,7 @@ public class IconToggleButton extends ToggleButton
 			this.fromSelected.setToValue(0);
 			this.fromSelected.setAutoReverse(true);
 		}
-		
+
 		@Override
 		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 		{
