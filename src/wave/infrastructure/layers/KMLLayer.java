@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
 import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.Sector;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.ogc.kml.KMLAbstractContainer;
@@ -99,6 +100,11 @@ public class KMLLayer extends RenderableLayer
 		return this.valueProperty;
 	}
 
+	public int getLayerValue(Position position)
+	{
+		return this.getLayerValue(position.latitude, position.longitude, position.elevation);
+	}
+
 	public int getLayerValue(Angle latitude, Angle longitude, double elevation)
 	{
 		if (this.dc == null)
@@ -145,7 +151,7 @@ public class KMLLayer extends RenderableLayer
 		int pixelY = (int) PointUtil.map(latitude.degrees, inMaxY, inMinY, outMinY, outMaxY);
 		return this.bufferedImage.getRGB(pixelX, pixelY);
 	}
-
+	
 	public void getColor()
 	{
 		if (this.dc == null)

@@ -18,9 +18,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import wave.infrastructure.WaveSession;
+import wave.infrastructure.handlers.WeatherConverter;
 import wave.infrastructure.layers.KMLLayer;
 
-// TODO add precipitation, temperature, and air pressure labels.
 // TODO enabled/disable marker visibility
 // TODO add reset button
 public class MarkerPanel extends BorderPane
@@ -28,12 +28,20 @@ public class MarkerPanel extends BorderPane
 	private final ToggleButton markerToggleButton;
 
 	private final Label latitudeLabel;
-	private final Label longitudeLabel;
-	private final Label elevationLabel;
-	private final Label humidityLabel;
 	private final TextField latitudeTextfield;
+	private final Label longitudeLabel;
 	private final TextField longitudetextfield;
+	private final Label elevationLabel;
 	private final TextField elevationTextfield;
+//	private final Label rainLabel;
+//	private final TextField rainTextfield;
+//	private final Label windSpeedLabel;
+//	private final TextField windSpeedTextField;
+//	private final Label windDirectionLabel;
+//	private final TextField windDirectionTextField;
+//	private final Label tempuratureLabel;
+//	private final TextField tempuratureTextfield;
+	private final Label humidityLabel;
 	private final TextField humidityTextfield;
 
 	public MarkerPanel(WaveSession session)
@@ -79,8 +87,11 @@ public class MarkerPanel extends BorderPane
 		this.elevationTextfield = new TextField();
 		grid.add(this.elevationTextfield, 1, 2);
 
+		KMLLayer rainLayer = session.getWeatherLayers().get(0);
 		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
 		{
+			private int lastRain;
+			
 			@Override
 			public void changed(ObservableValue<? extends Position> observable, Position oldValue, Position newValue)
 			{
@@ -89,9 +100,16 @@ public class MarkerPanel extends BorderPane
 					double latitude = newValue.latitude.degrees;
 					double longitude = newValue.longitude.degrees;
 					double elevation = newValue.elevation;
+					int rain = rainLayer.getLayerValue(newValue.latitude, newValue.longitude, elevation);
 					latitudeTextfield.setText(Double.toString(latitude));
 					longitudetextfield.setText(Double.toString(longitude));
 					elevationTextfield.setText(Double.toString(elevation));
+					if (rainLayer.isEnabled() && (lastRain != rain))
+					{
+						humidityTextfield.setText(Integer.toString(rain));
+						WeatherConverter.convertRainToValue(rain);
+						lastRain = rain;
+					}
 				});
 			}
 		});
@@ -156,12 +174,25 @@ public class MarkerPanel extends BorderPane
 			}
 		});
 
-		KMLLayer humidityLayer = session.getWeatherLayers().get(1);
-		this.humidityLabel = new Label("Humidity: ");
+		this.humidityLabel = new Label("Rain: ");
 		grid.add(this.humidityLabel, 0, 3);
 		this.humidityTextfield = new TextField();
-		this.humidityTextfield.textProperty().bindBidirectional(humidityLayer.valueProperty());
 		grid.add(this.humidityTextfield, 1, 3);
+//		this.humidityTextfield.textProperty().addListener(new ChangeListener<String>()
+//		{
+//			@Override
+//			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+//			{
+//				Platform.runLater(() ->
+//				{
+//					if (oldValue == newValue)
+//					{
+//						return;
+//					}
+//					rainLayer.getLayerValue(session.getSoundMarker().getPosition());
+//				});
+//			}
+//		});
 
 		Button updateButton = new Button("Update");
 		updateButton.setOnAction((event) ->
@@ -169,7 +200,7 @@ public class MarkerPanel extends BorderPane
 			Angle latitudeAngle = soundPosition.getValue().latitude;
 			Angle longitude = soundPosition.getValue().longitude;
 			double elevation = soundPosition.getValue().elevation;
-			humidityLayer.getLayerValue(latitudeAngle, longitude, elevation);
+			rainLayer.getLayerValue(latitudeAngle, longitude, elevation);
 		});
 		grid.add(updateButton, 0, 4, 2, 1);
 

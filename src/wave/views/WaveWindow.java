@@ -61,8 +61,8 @@ public class WaveWindow extends BorderPane
 		waveBorderPane.setBottom(statusBar);
 
 		waveBorderPane.setPickOnBounds(false);
-		createInformationPanel();
-//		createInformationPanelTabs();
+//		createInformationPanel();
+		createInformationPanelTabs();
 
 		MarkerPanel markerPanel = new MarkerPanel(session);
 		waveBorderPane.setRight(markerPanel);
@@ -160,7 +160,7 @@ public class WaveWindow extends BorderPane
 		this.waveBorderPane.setLeft(titledPane);
 		
 		TabPane tabPane = new TabPane();
-		tabPane.setSide(Side.LEFT);
+//		tabPane.setSide(Side.LEFT);
 		titledPane.setContent(tabPane);
 		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);

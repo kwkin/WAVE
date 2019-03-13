@@ -61,7 +61,7 @@ public class WeatherOverlayPanel extends BorderPane
 		try
 		{
 			Layer precipitationLayer = session.getWeatherLayers().get(0);
-			Slider percipitationSlider = new Slider(0, 1, 1);
+			Slider percipitationSlider = new Slider(0, 1, precipitationLayer.getOpacity());
 			layerPane.add(percipitationSlider, 1, layerIndex);
 			this.linkLayerWithSlider(precipitationLayer, percipitationSlider);
 			Path percipitationPath1 = Paths.get("data", "icons", "rain_selected.png");
@@ -97,7 +97,7 @@ public class WeatherOverlayPanel extends BorderPane
 			layerIndex++;
 
 			Layer temperatureLayer = session.getWeatherLayers().get(2);
-			Slider temperatureSlider = new Slider(0, 1, 1);
+			Slider temperatureSlider = new Slider(0, 1, temperatureLayer.getOpacity());
 			layerPane.add(temperatureSlider, 1, layerIndex);
 			this.linkLayerWithSlider(temperatureLayer, temperatureSlider);
 			Path temperaturePath1 = Paths.get("data", "icons", "temperature_selected.png");
@@ -111,7 +111,7 @@ public class WeatherOverlayPanel extends BorderPane
 			layerIndex++;
 
 			Layer humidityLayer = session.getWeatherLayers().get(1);
-			Slider humiditySlider = new Slider(0, 1, 1);
+			Slider humiditySlider = new Slider(0, 1, humidityLayer.getOpacity());
 			layerPane.add(humiditySlider, 1, layerIndex);
 			this.linkLayerWithSlider(humidityLayer, humiditySlider);
 			Path humidityPath1 = Paths.get("data", "icons", "humidity_selected.png");
@@ -166,8 +166,8 @@ public class WeatherOverlayPanel extends BorderPane
 					else
 					{
 						duration = 300;
-						fromOpacity = 1;
-						toOpacity = opacityProperty.getValue().doubleValue();
+						fromOpacity = opacityProperty.getValue().doubleValue();
+						toOpacity = 0;
 					}
 					LayerFadeTransition fade = new LayerFadeTransition(this.session.getWorldWindow(),
 							Duration.millis(duration), layer);

@@ -13,6 +13,7 @@ import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.ogc.kml.KMLRoot;
@@ -108,9 +109,6 @@ public class WaveSession
 		KMLLayer layer = new KMLLayer();
 		layer.setName((String) kmlRoot.getField(AVKey.DISPLAY_NAME));
 		layer.addRenderable(kmlController);
-
-		// TODO add configurable opacity
-		layer.setOpacity(0.5);
 		this.getModel().getLayers().add(layer);
 		this.weatherOverlays.add(layer);
 	}
@@ -128,7 +126,7 @@ public class WaveSession
 	private void loadWeatherOverlays()
 	{
 		// TODO refactor this code
-		Path precipitationLayer = Paths.get("data", "layer", "QPF24hr_Day1_latest.kml");
+		Path precipitationLayer = Paths.get("data", "layer", "1day_mid.kmz");
 		if (Files.exists(precipitationLayer))
 		{
 			new KMLLayerLoader(precipitationLayer, this, true, "Rain Forcast March 1. (Jan 2019)");
@@ -149,6 +147,10 @@ public class WaveSession
 			layer.setIsEnabled(false);
 		}
 		weatherLayers.get(0).setIsEnabled(true);
+		for (Layer weatherLayer : this.getWeatherLayers())
+		{
+			weatherLayer.setOpacity(0.5);
+		}
 	}
 
 	private void initializeMarker()
