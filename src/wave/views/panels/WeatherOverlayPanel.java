@@ -25,7 +25,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.util.Duration;
 import wave.WaveApp;
-import wave.components.IconToggleButton;
+import wave.components.IconWeatherButton;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.LayerFadeTransition;
@@ -34,11 +34,11 @@ public class WeatherOverlayPanel extends BorderPane
 {
 	protected WaveSession session;
 
-	protected IconToggleButton percipitationButton;
-	protected IconToggleButton windButton;
-	protected IconToggleButton lightningButton;
-	protected IconToggleButton temperatureButton;
-	protected IconToggleButton humidityButton;
+	protected IconWeatherButton percipitationButton;
+	protected IconWeatherButton windButton;
+	protected IconWeatherButton lightningButton;
+	protected IconWeatherButton temperatureButton;
+	protected IconWeatherButton humidityButton;
 
 	public WeatherOverlayPanel(WaveSession session)
 	{
@@ -68,7 +68,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image percipitationImage1 = new Image(percipitationPath1.toUri().toURL().toString());
 			Path percipitationPath2 = Paths.get("data", "icons", "rain_unselected.png");
 			Image percipitationImage2 = new Image(percipitationPath2.toUri().toURL().toString());
-			this.percipitationButton = new IconToggleButton("Rain", percipitationImage1, percipitationImage2);
+			this.percipitationButton = new IconWeatherButton("Rain", percipitationImage1, percipitationImage2);
 			this.percipitationButton.setGraphicTextGap(12);
 			this.linkLayerWithButton(precipitationLayer, this.percipitationButton, percipitationSlider.valueProperty());
 			layerPane.add(this.percipitationButton, 0, layerIndex);
@@ -80,7 +80,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image windImage1 = new Image(windPath1.toUri().toURL().toString());
 			Path windPath2 = Paths.get("data", "icons", "wind_unselected.png");
 			Image windImage2 = new Image(windPath2.toUri().toURL().toString());
-			this.windButton = new IconToggleButton("Wind", windImage1, windImage2);
+			this.windButton = new IconWeatherButton("Wind", windImage1, windImage2);
 			windButton.setGraphicTextGap(12);
 			layerPane.add(windButton, 0, layerIndex);
 			layerIndex++;
@@ -91,7 +91,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image lightningImage1 = new Image(lightningPath1.toUri().toURL().toString());
 			Path lightningPath2 = Paths.get("data", "icons", "lightning_unselected.png");
 			Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
-			this.lightningButton = new IconToggleButton("Lightning", lightningImage1, lightningImage2);
+			this.lightningButton = new IconWeatherButton("Lightning", lightningImage1, lightningImage2);
 			this.lightningButton.setGraphicTextGap(12);
 			layerPane.add(this.lightningButton, 0, layerIndex);
 			layerIndex++;
@@ -104,7 +104,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image temperatureImage1 = new Image(temperaturePath1.toUri().toURL().toString());
 			Path temperaturePath2 = Paths.get("data", "icons", "temperature_unselected.png");
 			Image temperatureImage2 = new Image(temperaturePath2.toUri().toURL().toString());
-			this.temperatureButton = new IconToggleButton("Temperature", temperatureImage1, temperatureImage2);
+			this.temperatureButton = new IconWeatherButton("Temperature", temperatureImage1, temperatureImage2);
 			this.temperatureButton.setGraphicTextGap(12);
 			this.linkLayerWithButton(temperatureLayer, this.temperatureButton, temperatureSlider.valueProperty());
 			layerPane.add(this.temperatureButton, 0, layerIndex);
@@ -118,7 +118,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image humidityImage1 = new Image(humidityPath1.toUri().toURL().toString());
 			Path humidityPath2 = Paths.get("data", "icons", "humidity_unselected.png");
 			Image humidityImage2 = new Image(humidityPath2.toUri().toURL().toString());
-			this.humidityButton = new IconToggleButton("Humidity", humidityImage1, humidityImage2);
+			this.humidityButton = new IconWeatherButton("Humidity", humidityImage1, humidityImage2);
 			this.humidityButton.setGraphicTextGap(12);
 			this.linkLayerWithButton(humidityLayer, this.humidityButton, lightningSlider.valueProperty());
 			layerPane.add(this.humidityButton, 0, layerIndex);

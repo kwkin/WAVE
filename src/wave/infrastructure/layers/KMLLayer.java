@@ -112,7 +112,6 @@ public class KMLLayer extends RenderableLayer
 			return 0;
 		}
 
-		// TODO there has to be better way, right? ... right?? C'mon WWJ...
 		if (this.bufferedImage == null)
 		{
 			for (Renderable render : this.getRenderables())
