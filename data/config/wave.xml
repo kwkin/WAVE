@@ -2,9 +2,9 @@
 <preferences>
     <angleUnitDisplay>DMS</angleUnitDisplay>
     <audioListener>MARKER</audioListener>
-    <enableLayerPanel>false</enableLayerPanel>
+    <enableLayerPanel>true</enableLayerPanel>
     <enableNetwork>false</enableNetwork>
-    <enablePerformancePanel>false</enablePerformancePanel>
+    <enablePerformancePanel>true</enablePerformancePanel>
     <enableWeatherModulators>true</enableWeatherModulators>
     <lengthUnitDisplay>METRIC</lengthUnitDisplay>
     <masterVolume>100.0</masterVolume>

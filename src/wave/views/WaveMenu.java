@@ -13,6 +13,7 @@ import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
@@ -31,6 +32,7 @@ import wave.WaveApp;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.AngleFormat;
 import wave.infrastructure.core.MeasurementSystem;
+import wave.infrastructure.handlers.FXThemeLoader;
 import wave.infrastructure.layers.GARSGraticule;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
@@ -229,8 +231,12 @@ public class WaveMenu extends MenuBar
 
 	protected void openPreferences()
 	{
-		PreferencesWindow window = new PreferencesWindow(PreferencesLoader.preferences());
-		window.show();
+		PreferencesWindow preferences = new PreferencesWindow(PreferencesLoader.preferences());
+		double sceneWidth = WaveApp.getStage().getScene().getWidth();
+		double sceneHeight = WaveApp.getStage().getScene().getHeight();
+		Scene preferencesScene = new Scene(preferences, sceneWidth, sceneHeight);
+		FXThemeLoader.applyDefaultTheme(preferencesScene);
+		WaveApp.getStage().setScene(preferencesScene);
 	}
 
 	protected void openSurvey()

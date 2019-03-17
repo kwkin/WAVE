@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -16,43 +15,35 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Separator;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.stage.Stage;
+import wave.WaveApp;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ErrorDialog;
-import wave.infrastructure.handlers.FXThemeLoader;
 import wave.infrastructure.preferences.Preferences;
 import wave.infrastructure.preferences.PreferencesLoader;
 import wave.infrastructure.util.WaveUtil;
 
-// TODO embed into primary stage (use scene to switch and animated)
-public class PreferencesWindow extends Stage implements ChangeListener<String>
+public class PreferencesWindow extends BorderPane implements ChangeListener<String>
 {
 	protected final static String TITLE = "WAVE Preferences";
-	protected final static int WINDOW_WIDTH = 720;
-	protected final static int WINDOW_HEIGHT = 480;
 
-	protected final SplitPane splitPane;
 	protected final ScrollPane scrollPane;
 	protected PreferencesPanel currentPanel;
 
 	protected Preferences initialPreferences;
+	protected Scene previousScene;
 
 	public PreferencesWindow(Preferences preferences)
 	{
 		this.initialPreferences = WaveUtil.deepCopy(preferences);
 
-		BorderPane border = new BorderPane();
-		border.setPadding(new Insets(10, 10, 5, 10));
+		this.setPadding(new Insets(10, 10, 5, 10));
 
-		this.splitPane = new SplitPane();
-		border.setCenter(this.splitPane);
-		this.splitPane.setOrientation(Orientation.HORIZONTAL);
 		ListView<String> list = new ListView<String>();
+		this.setLeft(list);
 		list.setMinWidth(100);
 		// @formatter:off
 		ObservableList<String> items = FXCollections.observableArrayList(
@@ -60,11 +51,10 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 				"Audio");
 		// @formatter:on
 		list.setItems(items);
-		this.splitPane.getItems().add(list);
 		this.scrollPane = new ScrollPane();
 		this.scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		this.scrollPane.setFitToWidth(true);
-		this.splitPane.getItems().add(this.scrollPane);
+		this.setCenter(this.scrollPane);
 		list.getSelectionModel().selectedItemProperty().addListener(this);
 		list.getSelectionModel().select("Display");
 
@@ -74,7 +64,7 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 		repeatColumn.setHalignment(HPos.RIGHT);
 		buttonPane.getColumnConstraints().add(repeatColumn);
 
-		border.setBottom(buttonPane);
+		this.setBottom(buttonPane);
 		buttonPane.add(new Separator(), 0, 0);
 		ButtonBar buttonBar = new ButtonBar();
 		buttonBar.setPadding(new Insets(5, 5, 5, 5));
@@ -84,7 +74,7 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 		okButton.setOnAction((value) ->
 		{
 			writePreferences(preferences);
-			closeWindow();
+			WaveApp.getStage().setScene(this.previousScene);
 		});
 		buttonBar.getButtons().add(okButton);
 		Button cancelButton = new Button("Cancel");
@@ -92,7 +82,7 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 		cancelButton.setOnAction((value) ->
 		{
 			resetPreferences();
-			closeWindow();
+			WaveApp.getStage().setScene(this.previousScene);
 		});
 		Button applyButton = new Button("Apply");
 		applyButton.setOnAction((value) ->
@@ -101,25 +91,8 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 		});
 		buttonBar.getButtons().add(applyButton);
 
-		Scene surveyScene = new Scene(border, WINDOW_WIDTH, WINDOW_HEIGHT);
-		this.setScene(surveyScene);
-
-		ChangeListener<Number> changeListener = new ChangeListener<Number>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-			{
-				splitPane.setDividerPositions(0.2);
-				if (isShowing())
-				{
-					observable.removeListener(this);
-				}
-			}
-		};
-		this.splitPane.widthProperty().addListener(changeListener);
-		this.splitPane.heightProperty().addListener(changeListener);
-
-		FXThemeLoader.applyDefaultTheme(this);
+		this.previousScene = WaveApp.getStage().getScene();
+		
 	}
 
 	@Override
@@ -158,10 +131,5 @@ public class PreferencesWindow extends Stage implements ChangeListener<String>
 	{
 		Preferences preferences = PreferencesLoader.preferences();
 		preferences.setPreferences(this.initialPreferences);
-	}
-
-	private void closeWindow()
-	{
-		this.close();
 	}
 }

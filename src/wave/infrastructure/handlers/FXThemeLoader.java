@@ -23,6 +23,18 @@ public class FXThemeLoader
 
 		}
 	}
+	
+	public static void applyDefaultTheme(Scene scene)
+	{
+		try
+		{
+			FXThemeLoader.loadTheme(scene, Wave.WAVE_CSS_FILE);
+		}
+		catch (IOException e)
+		{
+
+		}
+	}
 
 	/**
 	 * Loads the css stylesheet for the scene
