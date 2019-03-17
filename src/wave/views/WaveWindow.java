@@ -35,21 +35,22 @@ public class WaveWindow extends BorderPane
 {
 	protected WaveSession session;
 	protected BorderPane waveBorderPane;
+	protected StackPane centerPane;
 
 	public WaveWindow(WaveSession session)
 	{
 		this.session = session;
 		this.session.setWaveWindow(this);
 
-		StackPane centerPane = new StackPane();
-		this.setCenter(centerPane);
+		this.centerPane = new StackPane();
+		this.setCenter(this.centerPane);
 		SwingNode swingNode = new SwingNode();
 		SwingUtilities.invokeLater(() ->
 		{
 			swingNode.setContent((JComponent) session.getWorldWindow());
 		});
 		StackPane.setAlignment(swingNode, Pos.CENTER);
-		centerPane.getChildren().add(swingNode);
+		this.centerPane.getChildren().add(swingNode);
 
 		WaveMenu menu = new WaveMenu(session);
 		this.setTop(menu);
@@ -58,17 +59,13 @@ public class WaveWindow extends BorderPane
 
 		WaveStatusBar statusBar = new WaveStatusBar(session);
 		statusBar.setEventSource(session.getWorldWindow());
-		waveBorderPane.setBottom(statusBar);
+		this.waveBorderPane.setBottom(statusBar);
 
-		waveBorderPane.setPickOnBounds(false);
-//		createInformationPanel();
+		this.waveBorderPane.setPickOnBounds(false);
 		createInformationPanelTabs();
-
-		MarkerPanel markerPanel = new MarkerPanel(session);
-		waveBorderPane.setRight(markerPanel);
-		centerPane.getChildren().add(waveBorderPane);
-
-
+		createMarkerPanel();
+		this.centerPane.getChildren().add(waveBorderPane);
+		
 		for (Layer layer : session.getLayers())
 		{
 			if (layer instanceof CompassLayer)
@@ -174,5 +171,17 @@ public class WaveWindow extends BorderPane
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
 		Tab statisticsTab = new Tab("Performance", statisticsPanel);
 		tabPane.getTabs().add(statisticsTab);
+	}
+	
+	protected void createMarkerPanel()
+	{
+		TitledPane titledPane = new TitledPane();
+		titledPane.setMaxHeight(Double.MAX_VALUE);
+		titledPane.setText("Marker Panel");
+		titledPane.setTextAlignment(TextAlignment.CENTER);
+		this.waveBorderPane.setRight(titledPane);
+		
+		MarkerPanel markerPanel = new MarkerPanel(session);
+		titledPane.setContent(markerPanel);
 	}
 }
