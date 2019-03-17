@@ -41,7 +41,6 @@ import wave.views.windows.preferences.PreferencesWindow;
 import wave.views.windows.survey.SurveyWindow;
 
 // TODO add setting to enable/disable network connection
-// TODO add settings to enable/disable developer panels
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;

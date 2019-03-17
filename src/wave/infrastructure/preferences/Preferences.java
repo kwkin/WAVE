@@ -64,7 +64,10 @@ public class Preferences implements Serializable
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 			{
-				WorldWind.setOfflineMode(!newValue);
+				if (oldValue != newValue)
+				{
+					WorldWind.setOfflineMode(!newValue);
+				}
 			}
 		});
 		WorldWind.setOfflineMode(true);
