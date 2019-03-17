@@ -22,7 +22,8 @@ import wave.infrastructure.handlers.WeatherConverter;
 import wave.infrastructure.layers.KMLLayer;
 
 // TODO enabled/disable marker visibility
-// TODO add reset button
+// TODO add units to weather parameters
+// TODO change position values only on textfield lose focus
 public class MarkerPanel extends BorderPane
 {
 	private final ToggleButton markerToggleButton;
@@ -33,17 +34,20 @@ public class MarkerPanel extends BorderPane
 	private final TextField longitudetextfield;
 	private final Label elevationLabel;
 	private final TextField elevationTextfield;
-//	private final Label rainLabel;
-//	private final TextField rainTextfield;
-//	private final Label windSpeedLabel;
-//	private final TextField windSpeedTextField;
-//	private final Label windDirectionLabel;
-//	private final TextField windDirectionTextField;
-//	private final Label tempuratureLabel;
-//	private final TextField tempuratureTextfield;
+	private final Label rainLabel;
+	private final TextField rainTextfield;
+	private final Label windSpeedLabel;
+	private final TextField windSpeedTextField;
+	private final Label windDirectionLabel;
+	private final TextField windDirectionTextField;
+	private final Label tempuratureLabel;
+	private final TextField tempuratureTextfield;
 	private final Label humidityLabel;
 	private final TextField humidityTextfield;
 
+	private KMLLayer rainLayer;
+	private int lastRainValue;
+	
 	public MarkerPanel(WaveSession session)
 	{
 		ButtonBar buttons = new ButtonBar();
@@ -87,29 +91,15 @@ public class MarkerPanel extends BorderPane
 		this.elevationTextfield = new TextField();
 		grid.add(this.elevationTextfield, 1, 2);
 
-		KMLLayer rainLayer = session.getWeatherLayers().get(0);
+		this.rainLayer = session.getWeatherLayers().get(0);
 		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
-		{
-			private int lastRain;
-			
+		{			
 			@Override
 			public void changed(ObservableValue<? extends Position> observable, Position oldValue, Position newValue)
 			{
 				Platform.runLater(() ->
 				{
-					double latitude = newValue.latitude.degrees;
-					double longitude = newValue.longitude.degrees;
-					double elevation = newValue.elevation;
-					int rain = rainLayer.getLayerValue(newValue.latitude, newValue.longitude, elevation);
-					latitudeTextfield.setText(Double.toString(latitude));
-					longitudetextfield.setText(Double.toString(longitude));
-					elevationTextfield.setText(Double.toString(elevation));
-					if (rainLayer.isEnabled() && (lastRain != rain))
-					{
-						humidityTextfield.setText(Integer.toString(rain));
-						WeatherConverter.convertRainToValue(rain);
-						lastRain = rain;
-					}
+					updateWeatherValues(soundPosition.get());
 				});
 			}
 		});
@@ -174,38 +164,58 @@ public class MarkerPanel extends BorderPane
 			}
 		});
 
-		this.humidityLabel = new Label("Rain: ");
-		grid.add(this.humidityLabel, 0, 3);
-		this.humidityTextfield = new TextField();
-		grid.add(this.humidityTextfield, 1, 3);
-//		this.humidityTextfield.textProperty().addListener(new ChangeListener<String>()
-//		{
-//			@Override
-//			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
-//			{
-//				Platform.runLater(() ->
-//				{
-//					if (oldValue == newValue)
-//					{
-//						return;
-//					}
-//					rainLayer.getLayerValue(session.getSoundMarker().getPosition());
-//				});
-//			}
-//		});
+		this.rainLabel = new Label("Rain: ");
+		grid.add(this.rainLabel, 0, 3);
+		this.rainTextfield = new TextField();
+		grid.add(this.rainTextfield, 1, 3);
 
-		Button updateButton = new Button("Update");
+		this.windSpeedLabel = new Label("Wind Speed: ");
+		grid.add(this.windSpeedLabel, 0, 4);
+		this.windSpeedTextField = new TextField();
+		grid.add(this.windSpeedTextField, 1, 4);
+
+		this.windDirectionLabel = new Label("Wind Dir.: ");
+		grid.add(this.windDirectionLabel, 0, 5);
+		this.windDirectionTextField = new TextField();
+		grid.add(this.windDirectionTextField, 1, 5);
+
+		this.tempuratureLabel = new Label("Temp.: ");
+		grid.add(this.tempuratureLabel, 0, 6);
+		this.tempuratureTextfield = new TextField();
+		grid.add(this.tempuratureTextfield, 1, 6);
+
+		this.humidityLabel = new Label("Humidity: ");
+		grid.add(this.humidityLabel, 0, 7);
+		this.humidityTextfield = new TextField();
+		grid.add(this.humidityTextfield, 1, 7);
+
+		Button updateButton = new Button("Reset Weather");
+		updateButton.setMaxWidth(Double.MAX_VALUE);
 		updateButton.setOnAction((event) ->
 		{
-			Angle latitudeAngle = soundPosition.getValue().latitude;
-			Angle longitude = soundPosition.getValue().longitude;
-			double elevation = soundPosition.getValue().elevation;
-			rainLayer.getLayerValue(latitudeAngle, longitude, elevation);
+			updateWeatherValues(soundPosition.get());
 		});
-		grid.add(updateButton, 0, 4, 2, 1);
+		grid.add(updateButton, 1, 8);
 
 		this.setTop(buttons);
 		this.setCenter(grid);
 		this.getStyleClass().add("weather-panel");
+	}
+	
+	private void updateWeatherValues(Position position)
+	{
+		double latitude = position.latitude.degrees;
+		double longitude = position.longitude.degrees;
+		double elevation = position.elevation;
+		int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
+		this.latitudeTextfield.setText(Double.toString(latitude));
+		this.longitudetextfield.setText(Double.toString(longitude));
+		this.elevationTextfield.setText(Double.toString(elevation));
+		if (rainLayer.isEnabled() && (this.lastRainValue != rain))
+		{
+			double mmRain = WeatherConverter.convertRainToValue(rain);
+			this.lastRainValue = rain;
+			this.rainTextfield.setText(Double.toString(mmRain));
+		}
 	}
 }

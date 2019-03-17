@@ -13,7 +13,6 @@ import gov.nasa.worldwind.util.PerformanceStatistic;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
