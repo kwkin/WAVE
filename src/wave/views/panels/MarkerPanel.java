@@ -1,6 +1,5 @@
 package wave.views.panels;
 
-import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -54,7 +53,7 @@ public class MarkerPanel extends BorderPane
 		this.markerToggleButton = new ToggleButton("Marker");
 		this.markerToggleButton.setOnAction(event ->
 		{
-			System.out.println("Position: " + session.getSoundMarker().positionProperty().getValue());
+			
 		});
 		buttons.getButtons().add(this.markerToggleButton);
 

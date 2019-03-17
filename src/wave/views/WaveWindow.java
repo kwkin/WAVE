@@ -17,6 +17,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -159,7 +160,7 @@ public class WaveWindow extends BorderPane
 		this.waveBorderPane.setLeft(titledPane);
 		
 		TabPane tabPane = new TabPane();
-//		tabPane.setSide(Side.LEFT);
+		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		titledPane.setContent(tabPane);
 		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
