@@ -30,7 +30,6 @@ import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
 
-// TODO add kml tree
 public class WaveSession
 {
 	private WorldWindow worldWindow;

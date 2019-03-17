@@ -31,6 +31,19 @@ public class DraggableMarker extends BasicMarker implements Movable, Draggable
 	}
 
 	@Override
+	public Position getPosition()
+	{
+		return this.positionProperty.getValue();
+	}
+
+	@Override
+	public void setPosition(Position position)
+	{
+		this.position = position;
+		this.positionProperty.setValue(position);
+	}
+	
+	@Override
 	public boolean isDragEnabled()
 	{
 		return this.dragEnabled;
