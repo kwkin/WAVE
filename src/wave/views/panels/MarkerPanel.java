@@ -32,7 +32,7 @@ import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.preferences.PreferencesLoader;
 
 public class MarkerPanel extends BorderPane implements ChangeListener<Object>
-{
+{	
 	private final WaveSession session;
 
 	private final Label latitudeLabel;
@@ -294,6 +294,8 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		updateUnitLabels();
 		updateMarkerValues(soundPosition.get());
 		this.setCenter(grid);
+		
+		PreferencesLoader.preferences().lengthUnitDisplayProperty().addListener(this);
 	}
 
 	private void updateMarkerValues(Position position)
