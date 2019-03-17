@@ -36,19 +36,15 @@ public enum WeatherColorValues
 	public static WeatherColorValues getRain(int intPixelColor)
 	{
 		byte[] colors = ByteBuffer.allocate(4).putInt(intPixelColor).array();
+		
 		WeatherColorValues rain = WeatherColorValues.RAIN_NONE;
-		if (colors[1] == -1 || colors[2] == -1 || colors[3] == -1)
+		if (colors[1] == -1 && colors[2] == -1 && colors[3] == -1)
 		{
 			rain = WeatherColorValues.RAIN_NONE;
 		}
 		else
 		{
 			Color pixelColor = Color.rgb(colors[1] & 0xff, colors[2] & 0xff, colors[3] & 0xff);
-			for (byte color : colors)
-			{
-				System.out.print(" " + (color & 0xff));
-			}
-			System.out.println();
 			rain = getRain(pixelColor);
 		}
 		return rain;

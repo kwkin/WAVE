@@ -202,6 +202,7 @@ public class MarkerPanel extends BorderPane
 	
 	private void updateWeatherValues(Position position)
 	{
+		
 		double latitude = position.latitude.degrees;
 		double longitude = position.longitude.degrees;
 		double elevation = position.elevation;
