@@ -118,6 +118,7 @@ public class WaveWindow extends BorderPane
 		ScrollPane weatherScrollPane = new ScrollPane();
 		weatherScrollPane.getStyleClass().add("weather-panel-transparent");
 		weatherScrollPane.setContent(weatherOverlayPanel);
+		weatherScrollPane.setFitToWidth(true);
 		Tab weatherOverlayTab = new Tab("Weather Layers", weatherScrollPane);
 		tabPane.getTabs().add(weatherOverlayTab);
 
@@ -125,6 +126,7 @@ public class WaveWindow extends BorderPane
 		ScrollPane layersScrollPane = new ScrollPane();
 		layersScrollPane.getStyleClass().add("weather-panel-transparent");
 		layersScrollPane.setContent(layersPanel);
+		layersScrollPane.setFitToWidth(true);
 		Tab layersTab = new Tab("Layers", layersScrollPane);
 		PreferencesLoader.preferences().enableLayerPanelProperty().addListener(new ChangeListener<Boolean>()
 		{
@@ -157,6 +159,8 @@ public class WaveWindow extends BorderPane
 		ScrollPane statisticsScrollPane = new ScrollPane();
 		statisticsScrollPane.getStyleClass().add("weather-panel-transparent");
 		statisticsScrollPane.setContent(statisticsPanel);
+		statisticsScrollPane.setFitToWidth(true);
+		statisticsScrollPane.setFitToHeight(true);
 		Tab statisticsTab = new Tab("Performance", statisticsScrollPane);
 		PreferencesLoader.preferences().enablePerformancePanelProperty().addListener(new ChangeListener<Boolean>()
 		{
