@@ -27,6 +27,7 @@ import wave.WaveApp;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ConfirmCloseEventHandler;
+import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.panels.LayersPanel;
 import wave.views.panels.MarkerPanel;
 import wave.views.panels.StatisticsPanel;
@@ -47,7 +48,7 @@ public class WaveWindow extends BorderPane
 	protected double informationPaneHeight;
 	protected double statusPaneWidth;
 	protected double statusPaneHeight;
-	
+
 	public WaveWindow(WaveSession session)
 	{
 		this.session = session;
@@ -125,14 +126,64 @@ public class WaveWindow extends BorderPane
 		layersScrollPane.getStyleClass().add("weather-panel-transparent");
 		layersScrollPane.setContent(layersPanel);
 		Tab layersTab = new Tab("Layers", layersScrollPane);
-		tabPane.getTabs().add(layersTab);
+		PreferencesLoader.preferences().enableLayerPanelProperty().addListener(new ChangeListener<Boolean>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+			{
+				if (oldValue != newValue)
+				{
+					if (newValue)
+					{
+						tabPane.getTabs().add(layersTab);
+					}
+					else
+					{
+						tabPane.getTabs().remove(layersTab);
+					}
+				}
+			}
+		});
+		if (PreferencesLoader.preferences().getEnableLayerPanel())
+		{
+			tabPane.getTabs().add(layersTab);
+		}
+		else
+		{
+			tabPane.getTabs().remove(layersTab);
+		}
 
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
 		ScrollPane statisticsScrollPane = new ScrollPane();
 		statisticsScrollPane.getStyleClass().add("weather-panel-transparent");
 		statisticsScrollPane.setContent(statisticsPanel);
 		Tab statisticsTab = new Tab("Performance", statisticsScrollPane);
-		tabPane.getTabs().add(statisticsTab);
+		PreferencesLoader.preferences().enablePerformancePanelProperty().addListener(new ChangeListener<Boolean>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+			{
+				if (oldValue != newValue)
+				{
+					if (newValue)
+					{
+						tabPane.getTabs().add(statisticsTab);
+					}
+					else
+					{
+						tabPane.getTabs().remove(statisticsTab);
+					}
+				}
+			}
+		});
+		if (PreferencesLoader.preferences().getEnablePerformancePanel())
+		{
+			tabPane.getTabs().add(statisticsTab);
+		}
+		else
+		{
+			tabPane.getTabs().remove(statisticsTab);
+		}
 	}
 
 	protected void createMarkerPanel()
@@ -146,7 +197,7 @@ public class WaveWindow extends BorderPane
 		MarkerPanel markerPanel = new MarkerPanel(session);
 		this.markerPane.setContent(markerPanel);
 	}
-	
+
 	protected void updateWWInterface()
 	{
 		for (Layer layer : session.getLayers())
@@ -164,7 +215,7 @@ public class WaveWindow extends BorderPane
 					{
 						if (oldValue != newValue)
 						{
-							
+
 							Vec4 locationOffset = new Vec4(-1 * newValue.doubleValue(), 0);
 							compassLayer.setLocationOffset(locationOffset);
 						}

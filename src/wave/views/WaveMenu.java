@@ -40,7 +40,6 @@ import wave.views.windows.AboutWindow;
 import wave.views.windows.preferences.PreferencesWindow;
 import wave.views.windows.survey.SurveyWindow;
 
-// TODO add setting to enable/disable network connection
 public class WaveMenu extends MenuBar
 {
 	private FileChooser kmlChooser;
@@ -64,14 +63,13 @@ public class WaveMenu extends MenuBar
 		loadKMLMenu.setAccelerator(new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN));
 		fileMenu.getItems().add(new SeparatorMenuItem());
 
-
 		MenuItem preferencesMenu = new MenuItem("Preferences...");
 		preferencesMenu.setOnAction((event) ->
 		{
 			openPreferences();
 		});
 		fileMenu.getItems().add(preferencesMenu);
-		
+
 		MenuItem surveyMenu = new MenuItem("Take Survey...");
 		surveyMenu.setOnAction((event) ->
 		{
@@ -87,7 +85,7 @@ public class WaveMenu extends MenuBar
 		});
 		fileMenu.getItems().add(exitMenu);
 		exitMenu.setAccelerator(new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN));
-		
+
 		// View menu
 		Menu viewMenu = new Menu("View");
 		this.getMenus().add(viewMenu);
@@ -179,7 +177,7 @@ public class WaveMenu extends MenuBar
 			CheckMenuItem layerMenuItem = this.createLayerMenuItem(layer.getName());
 			layerMenu.getItems().add(layerMenuItem);
 		}
-		
+
 		// Help menu
 		Menu helpMenu = new Menu("Help");
 		this.getMenus().add(helpMenu);

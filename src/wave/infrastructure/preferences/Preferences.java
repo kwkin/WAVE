@@ -126,7 +126,7 @@ public class Preferences implements Serializable
 		this.thunderVolumeProperty.setValue(preferences.getThunderVolume());
 		this.enableWeatherModulatorsProperty.setValue(preferences.getEnableWeatherModulators());
 		this.enableNetworkProperty.setValue(preferences.getEnableNetwork());
-		this.enablePerformancePanelProperty.setValue(preferences.getEnablePerformancePanelProperty());
+		this.enablePerformancePanelProperty.setValue(preferences.getEnablePerformancePanel());
 		this.enableLayerPanelProperty.setValue(preferences.getEnableLayerPanel());
 		this.audioListenerProperty.setValue(preferences.getAudioListener());
 	}
@@ -281,12 +281,12 @@ public class Preferences implements Serializable
 		return this.enableNetworkProperty;
 	}
 
-	public boolean getEnablePerformancePanelProperty()
+	public boolean getEnablePerformancePanel()
 	{
 		return this.enablePerformancePanelProperty.getValue();
 	}
 
-	public void setEnablePerformancePanelProperty(boolean enablePerformancePanel)
+	public void setEnablePerformancePanel(boolean enablePerformancePanel)
 	{
 		this.enablePerformancePanelProperty.setValue(enablePerformancePanel);
 	}
