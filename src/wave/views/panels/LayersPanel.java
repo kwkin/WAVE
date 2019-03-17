@@ -2,26 +2,30 @@ package wave.views.panels;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import gov.nasa.worldwind.layers.Layer;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import wave.components.IconWeatherButton;
 import wave.infrastructure.WaveSession;
 
 public class LayersPanel extends BorderPane
 {
 	protected WaveSession session;
-	
+
 	public LayersPanel(WaveSession session)
 	{
 		this.session = session;
-		
+
 		GridPane layerPane = new GridPane();
 		layerPane.setPadding(new Insets(5, 5, 5, 5));
 		layerPane.setHgap(5);
@@ -39,39 +43,49 @@ public class LayersPanel extends BorderPane
 		for (Layer layer : session.getLayers())
 		{
 			String layerName = layer.getName();
-			Label layerLabel = new Label(layerName);
-			layerPane.add(layerLabel, 0, layerIndex);
 			ToggleButton layerToggleButton = createLayerToggleButton(layerName);
-			layerPane.add(layerToggleButton, 1, layerIndex);
+			layerPane.add(layerToggleButton, 0, layerIndex);
 			layerIndex = layerIndex + 1;
 		}
 		this.setCenter(layerPane);
 	}
-	
+
 	private ToggleButton createLayerToggleButton(String layerName)
 	{
-		ToggleButton toggleButton = null;
+		IconWeatherButton toggleButton = null;
 		Layer layer = this.session.getLayers().getLayerByName(layerName);
 		if (layer != null)
 		{
-			ToggleButton layerToggleButton = new ToggleButton("Toggle");
-			layerToggleButton.setOnAction((action) ->
+			try
 			{
-				layer.setEnabled(layerToggleButton.isSelected());
-			});
-			layer.addPropertyChangeListener(new PropertyChangeListener()
-			{
-				@Override
-				public void propertyChange(PropertyChangeEvent event)
+				Path unselectedPath = Paths.get("data", "icons", "invisible_unselected.png");
+				Image unselectedImage = new Image(unselectedPath.toUri().toURL().toString());
+				Path selectedPath = Paths.get("data", "icons", "visible_selected.png");
+				Image selectedImage = new Image(selectedPath.toUri().toURL().toString());
+				IconWeatherButton layerToggleButton = new IconWeatherButton(layerName, selectedImage, unselectedImage);
+				layerToggleButton.setIconSize(48, 48);
+				layerToggleButton.setOnAction((action) ->
 				{
-					if (event.getPropertyName() == "Enabled")
+					layer.setEnabled(layerToggleButton.isSelected());
+				});
+				layer.addPropertyChangeListener(new PropertyChangeListener()
+				{
+					@Override
+					public void propertyChange(PropertyChangeEvent event)
 					{
-						layerToggleButton.setSelected((boolean) event.getNewValue());
+						if (event.getPropertyName() == "Enabled")
+						{
+							layerToggleButton.setSelected((boolean) event.getNewValue());
+						}
 					}
-				}
-			});
-			layerToggleButton.setSelected(layer.isEnabled());
-			toggleButton = layerToggleButton;
+				});
+				layerToggleButton.setSelected(layer.isEnabled());
+				toggleButton = layerToggleButton;
+			}
+			catch (MalformedURLException e)
+			{
+				
+			}
 		}
 		return toggleButton;
 	}

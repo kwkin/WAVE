@@ -57,7 +57,7 @@ public class MarkerPanel extends BorderPane
 		this.markerToggleButton = new ToggleButton("Marker");
 		this.markerToggleButton.setOnAction(event ->
 		{
-
+			
 		});
 		buttons.getButtons().add(this.markerToggleButton);
 

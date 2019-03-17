@@ -105,6 +105,7 @@ public class WaveWindow extends BorderPane
 	protected void createInformationPanelTabs()
 	{
 		this.informationPane = new TitledPane();
+		this.informationPane.setPrefWidth(350);
 		this.informationPane.setMaxHeight(Double.MAX_VALUE);
 		this.informationPane.setText("Information Panels");
 		this.informationPane.setTextAlignment(TextAlignment.CENTER);
@@ -119,7 +120,7 @@ public class WaveWindow extends BorderPane
 		weatherScrollPane.getStyleClass().add("weather-panel-transparent");
 		weatherScrollPane.setContent(weatherOverlayPanel);
 		weatherScrollPane.setFitToWidth(true);
-		Tab weatherOverlayTab = new Tab("Weather Layers", weatherScrollPane);
+		Tab weatherOverlayTab = new Tab("Weather", weatherScrollPane);
 		tabPane.getTabs().add(weatherOverlayTab);
 
 		LayersPanel layersPanel = new LayersPanel(session);
@@ -193,6 +194,7 @@ public class WaveWindow extends BorderPane
 	protected void createMarkerPanel()
 	{
 		this.markerPane = new TitledPane();
+		this.markerPane.setPrefWidth(350);
 		this.markerPane.setMaxHeight(Double.MAX_VALUE);
 		this.markerPane.setText("Marker Panel");
 		this.markerPane.setTextAlignment(TextAlignment.CENTER);
