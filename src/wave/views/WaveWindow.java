@@ -174,6 +174,5 @@ public class WaveWindow extends BorderPane
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
 		Tab statisticsTab = new Tab("Performance", statisticsPanel);
 		tabPane.getTabs().add(statisticsTab);
-		titledPane.getStyleClass().add("weather-panel");
 	}
 }

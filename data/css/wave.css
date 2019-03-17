@@ -279,11 +279,13 @@
     -fx-text-fill: -fx-light-text-color;
     -fx-font-size: 18;
     -fx-font-weight: Bold;
+    -fx-border-width: 0 0 0 0;
 }
 
 .tab-pane .tab
 {
-    -fx-background-color: -fx-background;
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 0 0;
 
 }
 
@@ -297,8 +299,9 @@
  * TitledPane                                                                  *
  *                                                                             *
  ******************************************************************************/
-.titled-pane > *.content {
+ .titled-pane > *.content {
     -fx-background-color: -panel-color;
+    -fx-border-width: 0 0 0 0;
 }
 
 /*******************************************************************************
