@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -12,6 +13,8 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -22,9 +25,9 @@ import wave.infrastructure.layers.KMLLayer;
 
 // TODO enabled/disable marker visibility
 // TODO add units to weather parameters
-// TODO change position values only on textfield lose focus
 public class MarkerPanel extends BorderPane
 {
+	private final WaveSession session;
 	private final ToggleButton markerToggleButton;
 
 	private final Label latitudeLabel;
@@ -46,14 +49,15 @@ public class MarkerPanel extends BorderPane
 
 	private KMLLayer rainLayer;
 	private int lastRainValue;
-	
+
 	public MarkerPanel(WaveSession session)
 	{
+		this.session = session;
 		ButtonBar buttons = new ButtonBar();
 		this.markerToggleButton = new ToggleButton("Marker");
 		this.markerToggleButton.setOnAction(event ->
 		{
-			
+
 		});
 		buttons.getButtons().add(this.markerToggleButton);
 
@@ -92,20 +96,20 @@ public class MarkerPanel extends BorderPane
 
 		this.rainLayer = session.getWeatherLayers().get(0);
 		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
-		{			
+		{
 			@Override
 			public void changed(ObservableValue<? extends Position> observable, Position oldValue, Position newValue)
 			{
 				Platform.runLater(() ->
 				{
-					updateWeatherValues(soundPosition.get());
+					updateMarkerValues(soundPosition.get());
 				});
 			}
 		});
-		this.latitudeTextfield.textProperty().addListener(new ChangeListener<String>()
+		this.latitudeTextfield.focusedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 			{
 				Platform.runLater(() ->
 				{
@@ -113,19 +117,32 @@ public class MarkerPanel extends BorderPane
 					{
 						return;
 					}
-					double longitude = session.getSoundMarker().getPosition().longitude.degrees;
-					double elevation = session.getSoundMarker().getPosition().elevation;
-					double latitude = Double.valueOf(newValue);
-					Position newPosition = Position.fromDegrees(latitude, longitude, elevation);
-					session.getSoundMarker().setPosition(newPosition);
-					session.getWorldWindow().redraw();
+					updateLatitude();
 				});
 			}
 		});
-		this.longitudetextfield.textProperty().addListener(new ChangeListener<String>()
+		this.latitudeTextfield.setOnKeyPressed(new EventHandler<KeyEvent>()
+		{
+
+			@Override
+			public void handle(KeyEvent event)
+			{
+				if (event.getCode() == KeyCode.ENTER)
+				{
+					Platform.runLater(() ->
+					{
+						if (event.getCode() == KeyCode.ENTER)
+						{
+							updateLatitude();
+						}
+					});
+				}
+			}
+		});
+		this.longitudetextfield.focusedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 			{
 				Platform.runLater(() ->
 				{
@@ -133,19 +150,29 @@ public class MarkerPanel extends BorderPane
 					{
 						return;
 					}
-					double latitude = session.getSoundMarker().getPosition().latitude.degrees;
-					double elevation = session.getSoundMarker().getPosition().elevation;
-					double longitude = Double.valueOf(newValue);
-					Position newPosition = Position.fromDegrees(latitude, longitude, elevation);
-					session.getSoundMarker().setPosition(newPosition);
-					session.getWorldWindow().redraw();
+					updateLongitude();
 				});
 			}
 		});
-		this.elevationTextfield.textProperty().addListener(new ChangeListener<String>()
+		this.longitudetextfield.setOnKeyPressed(new EventHandler<KeyEvent>()
+		{
+
+			@Override
+			public void handle(KeyEvent event)
+			{
+				Platform.runLater(() ->
+				{
+					if (event.getCode() == KeyCode.ENTER)
+					{
+						updateLongitude();
+					}
+				});
+			}
+		});
+		this.elevationTextfield.focusedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 			{
 				Platform.runLater(() ->
 				{
@@ -153,12 +180,22 @@ public class MarkerPanel extends BorderPane
 					{
 						return;
 					}
-					double latitude = session.getSoundMarker().getPosition().latitude.degrees;
-					double longitude = session.getSoundMarker().getPosition().longitude.degrees;
-					double elevation = Double.valueOf(newValue);
-					Position newPosition = Position.fromDegrees(latitude, longitude, elevation);
-					session.getSoundMarker().setPosition(newPosition);
-					session.getWorldWindow().redraw();
+					updateElevation();
+				});
+			}
+		});
+		this.elevationTextfield.setOnKeyPressed(new EventHandler<KeyEvent>()
+		{
+
+			@Override
+			public void handle(KeyEvent event)
+			{
+				Platform.runLater(() ->
+				{
+					if (event.getCode() == KeyCode.ENTER)
+					{
+						updateElevation();
+					}
 				});
 			}
 		});
@@ -192,17 +229,18 @@ public class MarkerPanel extends BorderPane
 		updateButton.setMaxWidth(Double.MAX_VALUE);
 		updateButton.setOnAction((event) ->
 		{
-			updateWeatherValues(soundPosition.get());
+			updateMarkerValues(soundPosition.get());
 		});
+		updateMarkerValues(soundPosition.get());
 		grid.add(updateButton, 1, 8);
 
 		this.setTop(buttons);
 		this.setCenter(grid);
 	}
-	
-	private void updateWeatherValues(Position position)
+
+	private void updateMarkerValues(Position position)
 	{
-		
+
 		double latitude = position.latitude.degrees;
 		double longitude = position.longitude.degrees;
 		double elevation = position.elevation;
@@ -216,5 +254,35 @@ public class MarkerPanel extends BorderPane
 			this.lastRainValue = rain;
 			this.rainTextfield.setText(Double.toString(mmRain));
 		}
+	}
+
+	private void updateLatitude()
+	{
+		double longitude = this.session.getSoundMarker().getPosition().longitude.degrees;
+		double elevation = this.session.getSoundMarker().getPosition().elevation;
+		double latitude = Double.valueOf(this.latitudeTextfield.getText());
+		Position newPosition = Position.fromDegrees(latitude, longitude, elevation);
+		this.session.getSoundMarker().setPosition(newPosition);
+		this.session.getWorldWindow().redraw();
+	}
+	
+	private void updateLongitude()
+	{
+		double latitude = this.session.getSoundMarker().getPosition().latitude.degrees;
+		double elevation = this.session.getSoundMarker().getPosition().elevation;
+		double longitude = Double.valueOf(this.longitudetextfield.getText());
+		Position newPosition = Position.fromDegrees(latitude, longitude, elevation);
+		this.session.getSoundMarker().setPosition(newPosition);
+		this.session.getWorldWindow().redraw();
+	}
+	
+	private void updateElevation()
+	{
+		double latitude = this.session.getSoundMarker().getPosition().latitude.degrees;
+		double longitude = this.session.getSoundMarker().getPosition().longitude.degrees;
+		double elevation = Double.valueOf(this.elevationTextfield.getText());
+		Position newPosition = Position.fromDegrees(latitude, longitude, elevation);
+		this.session.getSoundMarker().setPosition(newPosition);
+		this.session.getWorldWindow().redraw();
 	}
 }

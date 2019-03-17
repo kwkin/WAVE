@@ -38,7 +38,6 @@ public class StatisticsPanel extends BorderPane implements RenderingListener
 		this.setEventSource(session.getWorldWindow());
 		session.getWorldWindow().setPerFrameStatisticsKeys(statistics);
 
-		// TODO replace with icons
 		try
 		{
 			Path playPath = Paths.get("data", "icons", "play_light.png");
