@@ -11,7 +11,7 @@ import javafx.util.Duration;
 
 public class IconWeatherButton extends ToggleButton
 {
-	protected static final String DEFAULT_STYLE_CLASS = "icon-button";
+	public static final String DEFAULT_STYLE_CLASS = "icon-button";
 
 	protected StackPane images;
 	protected ImageView selectedImage;
@@ -31,9 +31,9 @@ public class IconWeatherButton extends ToggleButton
 
 	public void setIconSize(int width, int height)
 	{
-		this.selectedImage.setFitHeight(width);
+		this.selectedImage.setFitWidth(width);
 		this.selectedImage.setFitHeight(height);
-		this.unSelectedImage.setFitHeight(width);
+		this.unSelectedImage.setFitWidth(width);
 		this.unSelectedImage.setFitHeight(height);
 	}
 

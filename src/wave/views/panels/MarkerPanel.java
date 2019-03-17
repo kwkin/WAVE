@@ -1,5 +1,9 @@
 package wave.views.panels;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import gov.nasa.worldwind.geom.Position;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -9,27 +13,27 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import wave.components.IconWeatherButton;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.MeasurementSystem;
 import wave.infrastructure.handlers.WeatherConverter;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.preferences.PreferencesLoader;
 
-// TODO enabled/disable marker visibility
 public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 {
 	private final WaveSession session;
-	private final ToggleButton markerToggleButton;
 
 	private final Label latitudeLabel;
 	private final TextField latitudeTextfield;
@@ -62,13 +66,46 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	public MarkerPanel(WaveSession session)
 	{
 		this.session = session;
-		ButtonBar buttons = new ButtonBar();
-		this.markerToggleButton = new ToggleButton("Marker");
-		this.markerToggleButton.setOnAction(event ->
+		
+		MeasurementSystem system = PreferencesLoader.preferences().getLengthUnitDisplay();
+		ObjectProperty<Position> soundPosition = session.getSoundMarker().positionProperty();
+		HBox buttons = new HBox();
+		this.setTop(buttons);
+		try
 		{
-			
-		});
-		buttons.getButtons().add(this.markerToggleButton);
+			Path unselectedPath = Paths.get("data", "icons", "marker_unselected.png");
+			Image unselectedImage = new Image(unselectedPath.toUri().toURL().toString());
+			Path selectedPath = Paths.get("data", "icons", "marker_selected.png");
+			Image selectedImage = new Image(selectedPath.toUri().toURL().toString());
+			IconWeatherButton markerToggleButton = new IconWeatherButton(selectedImage, unselectedImage);
+			markerToggleButton.setIconSize(48, 48);
+			markerToggleButton.setSelected(session.getSoundMarkerVisibility());
+			markerToggleButton.setOnAction((event) ->
+			{
+				boolean isSelected = markerToggleButton.isSelected();
+				session.setSoundMarkerVisibility(isSelected);
+			});
+			buttons.getChildren().add(markerToggleButton);
+
+			Path resetPath = Paths.get("data", "icons", "reset_unselected.png");
+			Image resetImage = new Image(resetPath.toUri().toURL().toString());
+			ImageView resetImageView = new ImageView(resetImage);
+			resetImageView.setPreserveRatio(true);
+			resetImageView.setFitWidth(48);
+			resetImageView.setFitHeight(48);
+			Button updateButton = new Button();
+			updateButton.getStyleClass().add("icon-button");
+			updateButton.setGraphic(resetImageView);
+			updateButton.resize(48, 48);
+			updateButton.setOnAction((event) ->
+			{
+				updateMarkerValues(soundPosition.get());
+			});
+			buttons.getChildren().add(updateButton);
+		}
+		catch (MalformedURLException e)
+		{
+		}
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5, 5, 5, 5));
@@ -92,8 +129,6 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		unitColumn.setHalignment(HPos.LEFT);
 		grid.getColumnConstraints().add(unitColumn);
 
-		MeasurementSystem system = PreferencesLoader.preferences().getLengthUnitDisplay();
-		ObjectProperty<Position> soundPosition = session.getSoundMarker().positionProperty();
 		this.latitudeLabel = new Label("Latitude: ");
 		grid.add(this.latitudeLabel, 0, 0);
 		this.latitudeTextfield = new TextField();
@@ -256,17 +291,8 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.humidityUnitLabel = new Label();
 		grid.add(this.humidityUnitLabel, 2, 7);
 
-		Button updateButton = new Button("Reset Weather");
-		updateButton.setMaxWidth(Double.MAX_VALUE);
-		updateButton.setOnAction((event) ->
-		{
-			updateMarkerValues(soundPosition.get());
-		});
-		updateMarkerValues(soundPosition.get());
 		updateUnitLabels();
-		grid.add(updateButton, 1, 8, 2, 1);
-
-		this.setTop(buttons);
+		updateMarkerValues(soundPosition.get());
 		this.setCenter(grid);
 	}
 
@@ -298,7 +324,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.session.getSoundMarker().setPosition(newPosition);
 		this.session.getWorldWindow().redraw();
 	}
-	
+
 	private void updateLongitude()
 	{
 		double latitude = this.session.getSoundMarker().getPosition().latitude.degrees;
@@ -308,7 +334,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.session.getSoundMarker().setPosition(newPosition);
 		this.session.getWorldWindow().redraw();
 	}
-	
+
 	private void updateElevation()
 	{
 		double latitude = this.session.getSoundMarker().getPosition().latitude.degrees;
@@ -318,13 +344,13 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.session.getSoundMarker().setPosition(newPosition);
 		this.session.getWorldWindow().redraw();
 	}
-	
+
 	@Override
 	public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue)
 	{
 		updateUnitLabels();
 	}
-	
+
 	private void updateUnitLabels()
 	{
 		MeasurementSystem system = PreferencesLoader.preferences().getLengthUnitDisplay();

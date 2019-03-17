@@ -85,6 +85,17 @@ public class WaveSession
 		Platform.exit();
 		System.exit(0);
 	}
+	
+	public void setSoundMarkerVisibility(boolean isVisible)
+	{
+		this.markerLayer.setEnabled(isVisible);
+		this.worldWindow.redraw();
+	}
+	
+	public boolean getSoundMarkerVisibility()
+	{
+		return this.markerLayer.isEnabled();
+	}
 
 	public boolean isTakingSurvey()
 	{
