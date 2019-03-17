@@ -11,6 +11,8 @@ import gov.nasa.worldwind.layers.ScalebarLayer;
 import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.util.PerformanceStatistic;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
@@ -35,7 +37,17 @@ public class WaveWindow extends BorderPane
 	protected WaveSession session;
 	protected BorderPane waveBorderPane;
 	protected StackPane centerPane;
+	protected WaveStatusBar statusBar;
+	protected TitledPane informationPane;
+	protected TitledPane markerPane;
 
+	protected double markerPaneWidth;
+	protected double markerPaneHeight;
+	protected double informationPaneWidth;
+	protected double informationPaneHeight;
+	protected double statusPaneWidth;
+	protected double statusPaneHeight;
+	
 	public WaveWindow(WaveSession session)
 	{
 		this.session = session;
@@ -56,45 +68,18 @@ public class WaveWindow extends BorderPane
 
 		this.waveBorderPane = new BorderPane();
 
-		WaveStatusBar statusBar = new WaveStatusBar(session);
-		statusBar.setEventSource(session.getWorldWindow());
-		this.waveBorderPane.setBottom(statusBar);
+		this.statusBar = new WaveStatusBar(session);
+		this.statusBar.setEventSource(session.getWorldWindow());
+		this.waveBorderPane.setBottom(this.statusBar);
 
 		this.waveBorderPane.setPickOnBounds(false);
 		createInformationPanelTabs();
 		createMarkerPanel();
 		this.centerPane.getChildren().add(waveBorderPane);
-		
-		for (Layer layer : session.getLayers())
-		{
-			if (layer instanceof CompassLayer)
-			{
-				// TODO bind to panel sizes
-				CompassLayer compassLayer = (CompassLayer) layer;
-				compassLayer.setIconScale(0.35);
-				compassLayer.setIconFilePath(Wave.COMPASS_ICON.toString());
-				compassLayer.setPosition(AVKey.NORTHEAST);
-				Vec4 locationOffset = new Vec4(-300, 0);
-				compassLayer.setLocationOffset(locationOffset);
-			}
-			else if (layer instanceof WorldMapLayer)
-			{
-				WorldMapLayer worldMapLayer = (WorldMapLayer) layer;
-				worldMapLayer.setIconScale(0.35);
-				worldMapLayer.setPosition(AVKey.NORTHWEST);
-				Vec4 locationOffset = new Vec4(350, 0);
-				worldMapLayer.setLocationOffset(locationOffset);
-			}
-			else if (layer instanceof ScalebarLayer)
-			{
-				ScalebarLayer scaleMapLayer = (ScalebarLayer) layer;
-				scaleMapLayer.setPosition(AVKey.SOUTHEAST);
-				Vec4 locationOffset = new Vec4(-300, 40);
-				scaleMapLayer.setLocationOffset(locationOffset);
-			}
-		}
+
+		updateWWInterface();
 	}
-	
+
 	public void setIsTakingSurvey(boolean isTakingSurvey)
 	{
 		if (isTakingSurvey)
@@ -115,18 +100,18 @@ public class WaveWindow extends BorderPane
 			});
 		}
 	}
-	
+
 	protected void createInformationPanelTabs()
 	{
-		TitledPane titledPane = new TitledPane();
-		titledPane.setMaxHeight(Double.MAX_VALUE);
-		titledPane.setText("Information Panels");
-		titledPane.setTextAlignment(TextAlignment.CENTER);
-		this.waveBorderPane.setLeft(titledPane);
-		
+		this.informationPane = new TitledPane();
+		this.informationPane.setMaxHeight(Double.MAX_VALUE);
+		this.informationPane.setText("Information Panels");
+		this.informationPane.setTextAlignment(TextAlignment.CENTER);
+		this.waveBorderPane.setLeft(this.informationPane);
+
 		TabPane tabPane = new TabPane();
 		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		titledPane.setContent(tabPane);
+		this.informationPane.setContent(tabPane);
 		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
 		ScrollPane weatherScrollPane = new ScrollPane();
@@ -149,16 +134,90 @@ public class WaveWindow extends BorderPane
 		Tab statisticsTab = new Tab("Performance", statisticsScrollPane);
 		tabPane.getTabs().add(statisticsTab);
 	}
-	
+
 	protected void createMarkerPanel()
 	{
-		TitledPane titledPane = new TitledPane();
-		titledPane.setMaxHeight(Double.MAX_VALUE);
-		titledPane.setText("Marker Panel");
-		titledPane.setTextAlignment(TextAlignment.CENTER);
-		this.waveBorderPane.setRight(titledPane);
-		
+		this.markerPane = new TitledPane();
+		this.markerPane.setMaxHeight(Double.MAX_VALUE);
+		this.markerPane.setText("Marker Panel");
+		this.markerPane.setTextAlignment(TextAlignment.CENTER);
+		this.waveBorderPane.setRight(this.markerPane);
+
 		MarkerPanel markerPanel = new MarkerPanel(session);
-		titledPane.setContent(markerPanel);
+		this.markerPane.setContent(markerPanel);
+	}
+	
+	protected void updateWWInterface()
+	{
+		for (Layer layer : session.getLayers())
+		{
+			if (layer instanceof CompassLayer)
+			{
+				CompassLayer compassLayer = (CompassLayer) layer;
+				compassLayer.setIconScale(0.35);
+				compassLayer.setIconFilePath(Wave.COMPASS_ICON.toString());
+				compassLayer.setPosition(AVKey.NORTHEAST);
+				this.markerPane.widthProperty().addListener(new ChangeListener<Number>()
+				{
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+					{
+						if (oldValue != newValue)
+						{
+							
+							Vec4 locationOffset = new Vec4(-1 * newValue.doubleValue(), 0);
+							compassLayer.setLocationOffset(locationOffset);
+						}
+					}
+				});
+			}
+			else if (layer instanceof WorldMapLayer)
+			{
+				WorldMapLayer worldMapLayer = (WorldMapLayer) layer;
+				worldMapLayer.setIconScale(0.35);
+				worldMapLayer.setPosition(AVKey.NORTHWEST);
+				this.informationPane.widthProperty().addListener(new ChangeListener<Number>()
+				{
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+					{
+						if (oldValue != newValue)
+						{
+							Vec4 locationOffset = new Vec4(newValue.doubleValue(), 0);
+							worldMapLayer.setLocationOffset(locationOffset);
+						}
+					}
+				});
+			}
+			else if (layer instanceof ScalebarLayer)
+			{
+				ScalebarLayer scaleMapLayer = (ScalebarLayer) layer;
+				scaleMapLayer.setPosition(AVKey.SOUTHEAST);
+				this.statusBar.heightProperty().addListener(new ChangeListener<Number>()
+				{
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+					{
+						if (oldValue != newValue)
+						{
+							Vec4 locationOffset = new Vec4(-1 * markerPane.getWidth(), newValue.doubleValue());
+							scaleMapLayer.setLocationOffset(locationOffset);
+						}
+					}
+				});
+				this.markerPane.widthProperty().addListener(new ChangeListener<Number>()
+				{
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+					{
+						if (oldValue != newValue)
+						{
+							Vec4 locationOffset = new Vec4(-1 * newValue.doubleValue(), statusBar.getHeight());
+							scaleMapLayer.setLocationOffset(locationOffset);
+						}
+					}
+				});
+			}
+		}
 	}
 }
