@@ -334,3 +334,8 @@
 	-fx-background-color: -panel-color;
     -fx-border-width: 0 0 0 0;
 }
+
+.weather-panel-transparent {
+	-fx-background: transparent;
+    -fx-border-width: 0 0 0 0;
+}

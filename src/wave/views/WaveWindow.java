@@ -13,7 +13,6 @@ import gov.nasa.worldwind.util.PerformanceStatistic;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -117,37 +116,6 @@ public class WaveWindow extends BorderPane
 		}
 	}
 	
-	protected void createInformationPanel()
-	{
-		// TODO toggle visibility of accordion 
-		Accordion accordian = new Accordion();
-		accordian.setMaxHeight(Double.MAX_VALUE);
-		StackPane.setAlignment(accordian, Pos.CENTER_LEFT);
-		this.waveBorderPane.setLeft(accordian);
-				
-		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
-		ScrollPane weatherScrollPane = new ScrollPane();
-		weatherScrollPane.setContent(weatherOverlayPanel);
-		TitledPane weatherOverlayPane = new TitledPane("Weather Layers", weatherScrollPane);
-		accordian.getPanes().add(weatherOverlayPane);
-		accordian.setExpandedPane(weatherOverlayPane);
-		weatherScrollPane.setStyle("-fx-background: transparent;");
-
-		LayersPanel layersPanel = new LayersPanel(session);
-		ScrollPane layersScrollPane = new ScrollPane();
-		layersScrollPane.setContent(layersPanel);
-		TitledPane layersPane = new TitledPane("Layers", layersScrollPane);
-		accordian.getPanes().add(layersPane);
-		layersScrollPane.setStyle("-fx-background: transparent;");
-
-		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
-		ScrollPane statisticsScrollPane = new ScrollPane();
-		statisticsScrollPane.setContent(statisticsPanel);
-		TitledPane statisticsPane = new TitledPane("Performance", statisticsScrollPane);
-		accordian.getPanes().add(statisticsPane);
-		statisticsScrollPane.setStyle("-fx-background: transparent;");
-	}
-	
 	protected void createInformationPanelTabs()
 	{
 		TitledPane titledPane = new TitledPane();
@@ -161,15 +129,24 @@ public class WaveWindow extends BorderPane
 		titledPane.setContent(tabPane);
 		StackPane.setAlignment(tabPane, Pos.CENTER_LEFT);
 		WeatherOverlayPanel weatherOverlayPanel = new WeatherOverlayPanel(session);
-		Tab weatherOverlayTab = new Tab("Weather Layers", weatherOverlayPanel);
+		ScrollPane weatherScrollPane = new ScrollPane();
+		weatherScrollPane.getStyleClass().add("weather-panel-transparent");
+		weatherScrollPane.setContent(weatherOverlayPanel);
+		Tab weatherOverlayTab = new Tab("Weather Layers", weatherScrollPane);
 		tabPane.getTabs().add(weatherOverlayTab);
 
 		LayersPanel layersPanel = new LayersPanel(session);
-		Tab layersTab = new Tab("Layers", layersPanel);
+		ScrollPane layersScrollPane = new ScrollPane();
+		layersScrollPane.getStyleClass().add("weather-panel-transparent");
+		layersScrollPane.setContent(layersPanel);
+		Tab layersTab = new Tab("Layers", layersScrollPane);
 		tabPane.getTabs().add(layersTab);
 
 		StatisticsPanel statisticsPanel = new StatisticsPanel(session, PerformanceStatistic.ALL_STATISTICS_SET);
-		Tab statisticsTab = new Tab("Performance", statisticsPanel);
+		ScrollPane statisticsScrollPane = new ScrollPane();
+		statisticsScrollPane.getStyleClass().add("weather-panel-transparent");
+		statisticsScrollPane.setContent(statisticsPanel);
+		Tab statisticsTab = new Tab("Performance", statisticsScrollPane);
 		tabPane.getTabs().add(statisticsTab);
 	}
 	
