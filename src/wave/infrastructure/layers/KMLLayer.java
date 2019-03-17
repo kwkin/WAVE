@@ -27,14 +27,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import wave.infrastructure.util.PointUtil;
 
-// TODO Use a transformation to get the pixel value
-// TODO Add a pixel color value to range of value/unit converter
 public class KMLLayer extends RenderableLayer
 {
 	protected final BooleanProperty isEnabledProperty;
 	protected final DoubleProperty opacityProperty;
 
-	// TODO integrate this with marker position
 	protected final StringProperty valueProperty;
 	protected BufferedImage bufferedImage;
 	protected Sector sector;

@@ -5,16 +5,15 @@ import gov.nasa.worldwind.util.WWMath;
 
 public enum MeasurementSystem
 {
-	METRIC(UnitsFormat.METRIC_SYSTEM),
-	IMPERIAL(UnitsFormat.IMPERIAL_SYSTEM);
-	
+	METRIC(UnitsFormat.METRIC_SYSTEM), IMPERIAL(UnitsFormat.IMPERIAL_SYSTEM);
+
 	private String wwName;
-	
+
 	MeasurementSystem(String wwName)
 	{
 		this.wwName = wwName;
 	}
-	
+
 	public String getWWName()
 	{
 		return this.wwName;
@@ -30,7 +29,7 @@ public enum MeasurementSystem
 	public String lengthDescription(double meters)
 	{
 		String string;
-		switch(this)
+		switch (this)
 		{
 		case IMPERIAL:
 			int miles = (int) Math.round(WWMath.convertMetersToMiles(meters));
@@ -60,5 +59,87 @@ public enum MeasurementSystem
 			break;
 		}
 		return string;
+	}
+
+	public String getAngleUnit()
+	{
+		return "\u00B0";
+	}
+
+	public String getLengthUnit()
+	{
+		String string;
+		switch (this)
+		{
+		case IMPERIAL:
+			string = "ft";
+			break;
+		case METRIC:
+			string = "m";
+			break;
+		default:
+			string = "";
+			break;
+		}
+		return string;
+	}
+
+	public String getRainUnit()
+	{
+		String string;
+		switch (this)
+		{
+		case IMPERIAL:
+			string = "in";
+			break;
+		case METRIC:
+			string = "mm";
+			break;
+		default:
+			string = "";
+			break;
+		}
+		return string;
+	}
+
+	public String getWindSpeedUnit()
+	{
+		String string;
+		switch (this)
+		{
+		case IMPERIAL:
+			string = "mph";
+			break;
+		case METRIC:
+			string = "m/s";
+			break;
+		default:
+			string = "";
+			break;
+		}
+		return string;
+	}
+
+	public String getTemperatureUnit()
+	{
+		String string;
+		switch (this)
+		{
+		case IMPERIAL:
+			string = "\u00B0F";
+			break;
+		case METRIC:
+			string = "\u00B0C";
+			break;
+		default:
+			string = "";
+			break;
+		}
+		return string;
+	}
+
+	public String getHumidityUnit()
+	{
+		return "%";
 	}
 }
