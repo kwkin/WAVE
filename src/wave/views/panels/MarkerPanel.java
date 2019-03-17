@@ -300,7 +300,6 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 	private void updateMarkerValues(Position position)
 	{
-
 		double latitude = position.latitude.degrees;
 		double longitude = position.longitude.degrees;
 		double elevation = position.elevation;
@@ -310,11 +309,24 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.elevationTextfield.setText(Double.toString(elevation));
 		if (rainLayer.isEnabled() && (this.lastRainValue != rain))
 		{
-			// TODO change on system
 			double mmRain = WeatherConverter.convertRainToValue(rain);
 			this.lastRainValue = rain;
 			this.rainTextfield.setText(Double.toString(mmRain));
 		}
+	}
+	
+	private void forceUpdateMarkerValues(Position position)
+	{
+		double latitude = position.latitude.degrees;
+		double longitude = position.longitude.degrees;
+		double elevation = position.elevation;
+		int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
+		this.latitudeTextfield.setText(Double.toString(latitude));
+		this.longitudetextfield.setText(Double.toString(longitude));
+		this.elevationTextfield.setText(Double.toString(elevation));
+		double mmRain = WeatherConverter.convertRainToValue(rain);
+		this.lastRainValue = rain;
+		this.rainTextfield.setText(Double.toString(mmRain));
 	}
 
 	private void updateLatitude()
@@ -351,6 +363,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue)
 	{
 		updateUnitLabels();
+		forceUpdateMarkerValues(session.getSoundMarker().getPosition());
 	}
 
 	private void updateUnitLabels()

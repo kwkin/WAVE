@@ -2,7 +2,10 @@ package wave.infrastructure.handlers;
 
 import java.nio.ByteBuffer;
 
+import gov.nasa.worldwind.util.WWMath;
 import javafx.scene.paint.Color;
+import wave.infrastructure.core.MeasurementSystem;
+import wave.infrastructure.preferences.PreferencesLoader;
 
 public enum WeatherColorValues
 {
@@ -70,8 +73,14 @@ public enum WeatherColorValues
 		return this.color;
 	}
 
-	public double getMM()
+	public double getMeasurement()
 	{
-		return this.mm;
+		double measurement = mm;
+		if (PreferencesLoader.preferences().getLengthUnitDisplay() == MeasurementSystem.IMPERIAL)
+		{
+			// Get inches
+			measurement = WWMath.convertMetersToFeet(measurement / 1000) * 12;
+		}
+		return measurement;
 	}
 }
