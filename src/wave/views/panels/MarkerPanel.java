@@ -333,8 +333,8 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		if (this.temperatureLayer.isEnabled())
 		{
 			int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
-//			if (this.lastTemperatureValue != temperature)
-//			{
+			if (this.lastTemperatureValue != temperature)
+			{
 				double temp = WeatherConverter.convertTempToValue(temperature);
 				this.lastTemperatureValue = temperature;
 				if (temp == -1)
@@ -345,7 +345,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 				{
 					this.tempuratureTextfield.setText(Double.toString(temp));
 				}
-//			}
+			}
 		}
 	}
 	
