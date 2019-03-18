@@ -13,4 +13,9 @@ public class WeatherConverter
 		double temp = TemperatureColorValues.getColor(intPixelValue);
 		return TemperatureColorValues.getMeasurement(temp);
 	}
+	
+	public static double convertHumidityValue(int intPixelValue)
+	{
+		return HumidityColorValues.getColor(intPixelValue);
+	}
 }

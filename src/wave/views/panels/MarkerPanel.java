@@ -324,12 +324,23 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 				this.rainTextfield.setText(Double.toString(mmRain));
 			}
 		}
-//		if (this.humidityLayer.isEnabled() && (this.lastHumidityValue != humidity))
-//		{
-//			double mmRain = WeatherConverter.convertRainToValue(rain);
-//			this.lastRainValue = rain;
-//			this.rainTextfield.setText(Double.toString(mmRain));
-//		}
+		if (this.humidityLayer.isEnabled())
+		{
+			int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
+			if (this.lastHumidityValue != humidity)
+			{
+				double temp = WeatherConverter.convertHumidityValue(humidity);
+				this.lastHumidityValue = humidity;
+				if (temp == -1)
+				{
+					this.humidityTextfield.setText("No Data");
+				}
+				else
+				{
+					this.humidityTextfield.setText(Double.toString(temp));
+				}
+			}
+		}
 		if (this.temperatureLayer.isEnabled())
 		{
 			int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
