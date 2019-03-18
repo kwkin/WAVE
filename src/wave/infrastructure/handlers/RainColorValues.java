@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import wave.infrastructure.core.MeasurementSystem;
 import wave.infrastructure.preferences.PreferencesLoader;
 
-public enum WeatherColorValues
+public enum RainColorValues
 {
 	// @formatter:off
 	RAIN_NONE(Color.TRANSPARENT, 0), 
@@ -24,26 +24,24 @@ public enum WeatherColorValues
 	RAIN_127(Color.rgb(200, 0, 23), 127), 
 	RAIN_152(Color.rgb(255, 45, 143), 152);
 	// @formatter:on
-	
-	
-	
+
 	private Color color;
 	private double mm;
 
-	WeatherColorValues(Color color, double mm)
+	RainColorValues(Color color, double mm)
 	{
 		this.color = color;
 		this.mm = mm;
 	}
 
-	public static WeatherColorValues getRain(int intPixelColor)
+	public static RainColorValues getRain(int intPixelColor)
 	{
 		byte[] colors = ByteBuffer.allocate(4).putInt(intPixelColor).array();
-		
-		WeatherColorValues rain = WeatherColorValues.RAIN_NONE;
+
+		RainColorValues rain = RainColorValues.RAIN_NONE;
 		if (colors[1] == -1 && colors[2] == -1 && colors[3] == -1)
 		{
-			rain = WeatherColorValues.RAIN_NONE;
+			rain = RainColorValues.RAIN_NONE;
 		}
 		else
 		{
@@ -54,10 +52,10 @@ public enum WeatherColorValues
 
 	}
 
-	public static WeatherColorValues getRain(Color color)
+	public static RainColorValues getRain(Color color)
 	{
-		WeatherColorValues rain = WeatherColorValues.RAIN_NONE;
-		for (WeatherColorValues value : WeatherColorValues.values())
+		RainColorValues rain = RainColorValues.RAIN_NONE;
+		for (RainColorValues value : RainColorValues.values())
 		{
 			if (value.getColor().equals(color))
 			{

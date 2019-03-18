@@ -9,11 +9,11 @@ import javax.imageio.ImageIO;
 
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.geom.Sector;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.ogc.kml.KMLAbstractContainer;
 import gov.nasa.worldwind.ogc.kml.KMLAbstractFeature;
 import gov.nasa.worldwind.ogc.kml.KMLGroundOverlay;
+import gov.nasa.worldwind.ogc.kml.KMLLatLonBox;
 import gov.nasa.worldwind.ogc.kml.impl.KMLController;
 import gov.nasa.worldwind.render.DrawContext;
 import gov.nasa.worldwind.render.Renderable;
@@ -34,7 +34,7 @@ public class KMLLayer extends RenderableLayer
 
 	protected final StringProperty valueProperty;
 	protected BufferedImage bufferedImage;
-	protected Sector sector;
+	protected KMLLatLonBox sector;
 
 	protected DrawContext dc;
 
@@ -46,6 +46,7 @@ public class KMLLayer extends RenderableLayer
 		this.setIsEnabled(false);
 	}
 
+	@Override
 	public boolean isEnabled()
 	{
 		return this.isEnabledProperty.getValue();
@@ -129,22 +130,30 @@ public class KMLLayer extends RenderableLayer
 						{
 							e.printStackTrace();
 						}
-						this.sector = image.getSector();
+						this.sector = ((KMLGroundOverlay) feature).getLatLonBox();
 					}
 				}
 			}
 		}
 		double outMinX = 0;
 		double outMaxX = this.bufferedImage.getWidth();
-		double inMinX = this.sector.getMinLongitude().degrees;
-		double inMaxX = this.sector.getMaxLongitude().degrees;
+		double inMinX = this.sector.getWest();
+		double inMaxX = this.sector.getEast();
 		int pixelX = (int) PointUtil.map(longitude.degrees, inMinX, inMaxX, outMinX, outMaxX);
+		if (pixelX >= this.bufferedImage.getWidth() && pixelX < 0)
+		{
+			return 0;
+		}
 
 		double outMinY = 0;
 		double outMaxY = this.bufferedImage.getHeight();
-		double inMinY = this.sector.getMinLatitude().degrees;
-		double inMaxY = this.sector.getMaxLatitude().degrees;
+		double inMinY = this.sector.getSouth();
+		double inMaxY = this.sector.getNorth();
 		int pixelY = (int) PointUtil.map(latitude.degrees, inMaxY, inMinY, outMinY, outMaxY);
+		if (pixelY >= this.bufferedImage.getHeight() && pixelY < 0)
+		{
+			return 0;
+		}
 		return this.bufferedImage.getRGB(pixelX, pixelY);
 	}
 	

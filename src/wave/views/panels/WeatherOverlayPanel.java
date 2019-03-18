@@ -29,6 +29,7 @@ import wave.components.IconWeatherButton;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.LayerFadeTransition;
+import wave.infrastructure.layers.KMLLayer;
 
 public class WeatherOverlayPanel extends BorderPane
 {
@@ -60,7 +61,7 @@ public class WeatherOverlayPanel extends BorderPane
 		int layerIndex = 0;
 		try
 		{
-			Layer precipitationLayer = session.getWeatherLayers().get(0);
+			KMLLayer precipitationLayer = session.getWeatherLayers().get(0);
 			Slider percipitationSlider = new Slider(0, 1, precipitationLayer.getOpacity());
 			layerPane.add(percipitationSlider, 1, layerIndex);
 			this.linkLayerWithSlider(precipitationLayer, percipitationSlider);
@@ -96,7 +97,7 @@ public class WeatherOverlayPanel extends BorderPane
 			layerPane.add(this.lightningButton, 0, layerIndex);
 			layerIndex++;
 
-			Layer temperatureLayer = session.getWeatherLayers().get(2);
+			KMLLayer temperatureLayer = session.getWeatherLayers().get(2);
 			Slider temperatureSlider = new Slider(0, 1, temperatureLayer.getOpacity());
 			layerPane.add(temperatureSlider, 1, layerIndex);
 			this.linkLayerWithSlider(temperatureLayer, temperatureSlider);
@@ -110,7 +111,7 @@ public class WeatherOverlayPanel extends BorderPane
 			layerPane.add(this.temperatureButton, 0, layerIndex);
 			layerIndex++;
 
-			Layer humidityLayer = session.getWeatherLayers().get(1);
+			KMLLayer humidityLayer = session.getWeatherLayers().get(1);
 			Slider humiditySlider = new Slider(0, 1, humidityLayer.getOpacity());
 			layerPane.add(humiditySlider, 1, layerIndex);
 			this.linkLayerWithSlider(humidityLayer, humiditySlider);
@@ -145,7 +146,7 @@ public class WeatherOverlayPanel extends BorderPane
 		this.setBottom(resetThemeButton);
 	}
 
-	private void linkLayerWithButton(Layer layer, ToggleButton toggleButton, DoubleProperty opacityProperty)
+	private void linkLayerWithButton(KMLLayer layer, ToggleButton toggleButton, DoubleProperty opacityProperty)
 	{
 		if (layer != null)
 		{
@@ -158,7 +159,7 @@ public class WeatherOverlayPanel extends BorderPane
 					double toOpacity;
 					if (toggleButton.isSelected())
 					{
-						layer.setEnabled(true);
+						layer.setIsEnabled(true);
 						duration = 1000;
 						fromOpacity = 0;
 						toOpacity = opacityProperty.getValue().doubleValue();
@@ -179,7 +180,7 @@ public class WeatherOverlayPanel extends BorderPane
 						@Override
 						public void changed(ObservableValue<?> observable, Object oldValue, Object newValue)
 						{
-							layer.setEnabled(toggleButton.isSelected());
+							layer.setIsEnabled(toggleButton.isSelected());
 						}
 					});
 					fade.play();

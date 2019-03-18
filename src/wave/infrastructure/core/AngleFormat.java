@@ -4,17 +4,19 @@ import gov.nasa.worldwind.geom.Angle;
 
 public enum AngleFormat
 {
+	// @formatter:off
 	DMS(Angle.ANGLE_FORMAT_DMS),
 	DM(Angle.ANGLE_FORMAT_DM),
 	DD(Angle.ANGLE_FORMAT_DD);
-	
+	// @formatter:on
+
 	private String wwName;
-	
+
 	AngleFormat(String wwName)
 	{
 		this.wwName = wwName;
 	}
-	
+
 	public String getWWName()
 	{
 		return this.wwName;

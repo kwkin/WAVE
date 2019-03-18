@@ -2,7 +2,7 @@ package wave.infrastructure.util;
 
 import java.nio.ByteBuffer;
 
-public class UnitToString
+public class Conversion
 {
 	public String colorDescription(int color)
 	{
@@ -16,5 +16,17 @@ public class UnitToString
 		message.append(" B: ");
 		message.append((byte) bytes[3] & 0xFF);
 		return message.toString();
+	}
+	
+	public static double celsiusToFarenheit(double celsius)
+	{
+		double farenheit = (9/5) * celsius + 32;
+		return farenheit;
+	}
+	
+	public static double farenheitToCelcius(double fahrenheit)
+	{
+		double celsius = (5/9) * (fahrenheit - 32);
+		return celsius;
 	}
 }

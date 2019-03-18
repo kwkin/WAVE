@@ -5,7 +5,10 @@ import gov.nasa.worldwind.util.WWMath;
 
 public enum MeasurementSystem
 {
-	METRIC(UnitsFormat.METRIC_SYSTEM), IMPERIAL(UnitsFormat.IMPERIAL_SYSTEM);
+	// @formatter:off
+	METRIC(UnitsFormat.METRIC_SYSTEM), 
+	IMPERIAL(UnitsFormat.IMPERIAL_SYSTEM);
+	// @formatter:on
 
 	private String wwName;
 

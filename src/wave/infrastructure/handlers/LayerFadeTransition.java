@@ -8,6 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Duration;
+import wave.infrastructure.layers.KMLLayer;
 
 public class LayerFadeTransition extends Transition
 {
@@ -38,7 +39,15 @@ public class LayerFadeTransition extends Transition
 		final double newOpacity = Math.max(0.0, Math.min(start + frac * delta, 1.0));
 		if (newOpacity <= 0)
 		{
-			this.getLayer().setEnabled(false);
+			Layer layer = this.getLayer();
+			if (layer instanceof KMLLayer)
+			{
+				((KMLLayer)layer).setIsEnabled(false);
+			}
+			else
+			{
+				layer.setEnabled(false);
+			}
 		}
 		this.getLayer().setOpacity(newOpacity);
 		window.redraw();

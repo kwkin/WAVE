@@ -62,6 +62,10 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 	private KMLLayer rainLayer;
 	private int lastRainValue;
+	private KMLLayer humidityLayer;
+	private int lastHumidityValue;
+	private KMLLayer temperatureLayer;
+	private int lastTemperatureValue;
 
 	public MarkerPanel(WaveSession session)
 	{
@@ -151,6 +155,8 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.elevationUnitLabel, 2, 2);
 
 		this.rainLayer = session.getWeatherLayers().get(0);
+		this.humidityLayer = session.getWeatherLayers().get(1);
+		this.temperatureLayer = session.getWeatherLayers().get(2);
 		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
 		{
 			@Override
@@ -303,15 +309,43 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		double latitude = position.latitude.degrees;
 		double longitude = position.longitude.degrees;
 		double elevation = position.elevation;
-		int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
+//		int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
 		this.latitudeTextfield.setText(Double.toString(latitude));
 		this.longitudetextfield.setText(Double.toString(longitude));
 		this.elevationTextfield.setText(Double.toString(elevation));
-		if (rainLayer.isEnabled() && (this.lastRainValue != rain))
+
+		if (this.rainLayer.isEnabled())
 		{
-			double mmRain = WeatherConverter.convertRainToValue(rain);
-			this.lastRainValue = rain;
-			this.rainTextfield.setText(Double.toString(mmRain));
+			int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
+			if (this.lastRainValue != rain)
+			{
+				double mmRain = WeatherConverter.convertRainToValue(rain);
+				this.lastRainValue = rain;
+				this.rainTextfield.setText(Double.toString(mmRain));
+			}
+		}
+//		if (this.humidityLayer.isEnabled() && (this.lastHumidityValue != humidity))
+//		{
+//			double mmRain = WeatherConverter.convertRainToValue(rain);
+//			this.lastRainValue = rain;
+//			this.rainTextfield.setText(Double.toString(mmRain));
+//		}
+		if (this.temperatureLayer.isEnabled())
+		{
+			int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
+//			if (this.lastTemperatureValue != temperature)
+//			{
+				double temp = WeatherConverter.convertTempToValue(temperature);
+				this.lastTemperatureValue = temperature;
+				if (temp == -1)
+				{
+					this.tempuratureTextfield.setText("No Data");
+				}
+				else
+				{
+					this.tempuratureTextfield.setText(Double.toString(temp));
+				}
+//			}
 		}
 	}
 	

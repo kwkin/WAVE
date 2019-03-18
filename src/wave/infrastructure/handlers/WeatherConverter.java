@@ -4,7 +4,13 @@ public class WeatherConverter
 {	
 	public static double convertRainToValue(int intPixelValue)
 	{
-		WeatherColorValues rain = WeatherColorValues.getRain(intPixelValue);
+		RainColorValues rain = RainColorValues.getRain(intPixelValue);
 		return rain.getMeasurement();
+	}
+	
+	public static double convertTempToValue(int intPixelValue)
+	{
+		double temp = TemperatureColorValues.getColor(intPixelValue);
+		return TemperatureColorValues.getMeasurement(temp);
 	}
 }
