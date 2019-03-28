@@ -1,5 +1,6 @@
 package wave.infrastructure;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,6 +28,7 @@ import javafx.application.Platform;
 import wave.infrastructure.handlers.GlobeSpinAnimation;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
+import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
 
@@ -49,6 +51,18 @@ public class WaveSession
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 		this.worldWindow.setModel(model);
 
+		Path windFile = Paths.get("data", "layer", "winds.csv");
+		WindLayer windLayer;
+		try
+		{
+			windLayer = new WindLayer(windFile);
+			this.worldWindow.getModel().getLayers().add(windLayer);
+			windLayer.setEnabled(true);
+		}
+		catch (IOException e)
+		{
+		}
+		
 		this.initializeMarker();
 		this.loadWeatherOverlays();
 		this.intializeAnimator();
