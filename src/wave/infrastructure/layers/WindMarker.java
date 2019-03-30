@@ -13,6 +13,7 @@ import wave.infrastructure.util.PointUtil;
 
 public class WindMarker
 {
+	public static final int MAX_MARKER_SIZE = 100000;
 	public static final int MAX_WIND = 50;
 	
 	private Marker marker;
@@ -35,6 +36,7 @@ public class WindMarker
 		Material material = new Material(color, 255);
 		BasicMarkerAttributes wind = new BasicMarkerAttributes(material, BasicMarkerShape.CONE, 1);
 		wind.setMarkerPixels(15);
+		wind.setMaxMarkerSize(MAX_MARKER_SIZE);
 		this.marker = new BasicMarker(position, wind);
 		this.marker.setPitch(Angle.fromDegrees(90));
 		double markerHeading = 0;
