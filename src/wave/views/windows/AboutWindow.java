@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import wave.WaveApp;
@@ -17,8 +18,8 @@ import wave.infrastructure.handlers.FXThemeLoader;
 public class AboutWindow extends Stage
 {
 	protected final static String TITLE = "About WAVE";
-	protected final static int WINDOW_WIDTH = 480;
-	protected final static int WINDOW_HEIGHT = 480;
+	protected final static int WINDOW_WIDTH = 560;
+	protected final static int WINDOW_HEIGHT = 560;
 	
 	public AboutWindow()
 	{
@@ -44,16 +45,27 @@ public class AboutWindow extends Stage
 
 		}
 
+		BorderPane borderText = new BorderPane();
+		border.setBottom(borderText);
 		StringBuilder waveText = new StringBuilder("Weather Auditory and Visual Environment Version ");
 		waveText.append(Wave.VERSION);
 		waveText.append("\n\n");
-		waveText.append("WAVE is an educational tool which integrates 3D audio and visuals on a virtual Earth.\n\n");
-		waveText.append("WAVE is developed by Eric Goicochea, Bridget Homer, and Kenneth King for COP4930/6930, 3D Audio Interfaces at UF.");
+		waveText.append("WAVE is developed by Eric Goicochea, Bridget Homer, and Kenneth King for COP4930/6930, 3D Audio Interfaces at UF.\n\n");
 		Label waveTextFlow = new Label(waveText.toString());
 		waveTextFlow.setTextAlignment(TextAlignment.CENTER);
 		waveTextFlow.setPadding(new Insets(10, 10, 10, 10));
 		waveTextFlow.setWrapText(true);
-		border.setBottom(waveTextFlow);
+		borderText.setCenter(waveTextFlow);
+
+		StringBuilder dataText = new StringBuilder("The humidity and land temperature datasets are provided by Nasa Earth Observations (NEO). The rain dataset is provided by Nasa Precipitation Measurment Missions (PMM). The wind dataset is converted from the National Centers for Environmental Information (NOAA).");
+		Label dataTextFlow = new Label(dataText.toString());
+		Font defaultFont = dataTextFlow.getFont();
+		Font dataTextFont = new Font(defaultFont.getFamily(), 8);
+		dataTextFlow.setFont(dataTextFont);
+		dataTextFlow.setTextAlignment(TextAlignment.CENTER);
+		dataTextFlow.setPadding(new Insets(10, 10, 10, 10));
+		dataTextFlow.setWrapText(true);
+		borderText.setBottom(dataTextFlow);
 		
 		Scene surveyScene = new Scene(border, WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setScene(surveyScene);
