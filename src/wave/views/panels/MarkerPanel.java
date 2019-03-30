@@ -156,9 +156,9 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.elevationUnitLabel = new Label();
 		grid.add(this.elevationUnitLabel, 2, 2);
 
-		this.rainLayer = session.getWeatherLayers().get(0);
-		this.humidityLayer = session.getWeatherLayers().get(1);
-		this.temperatureLayer = session.getWeatherLayers().get(2);
+		this.rainLayer = session.getRainLayer();
+		this.humidityLayer = session.getHumidityLayer();
+		this.temperatureLayer = session.getTemperatureLayer();
 		this.windLayer = session.getWindLayer();
 		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
 		{
@@ -316,59 +316,70 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.longitudetextfield.setText(Double.toString(longitude));
 		this.elevationTextfield.setText(Double.toString(elevation));
 
-		if (this.rainLayer.isEnabled())
+		if (this.rainLayer != null)
 		{
-			// TODO fix array index exception
-			int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
-			if (this.lastRainValue != rain)
+			if (this.rainLayer.isEnabled())
 			{
-				double mmRain = WeatherConverter.convertRainToValue(rain);
-				this.lastRainValue = rain;
-				this.rainTextfield.setText(Double.toString(mmRain));
-			}
-		}
-		if (this.humidityLayer.isEnabled())
-		{
-			int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
-			if (this.lastHumidityValue != humidity)
-			{
-				double temp = WeatherConverter.convertHumidityValue(humidity);
-				this.lastHumidityValue = humidity;
-				if (temp == -1)
+				int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
+				if (this.lastRainValue != rain)
 				{
-					this.humidityTextfield.setText("No Data");
-				}
-				else
-				{
-					this.humidityTextfield.setText(Double.toString(temp));
+					double mmRain = WeatherConverter.convertRainToValue(rain);
+					this.lastRainValue = rain;
+					this.rainTextfield.setText(Double.toString(mmRain));
 				}
 			}
 		}
-		if (this.temperatureLayer.isEnabled())
+		if (this.windLayer != null)
 		{
-			int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
-			if (this.lastTemperatureValue != temperature)
+			if (this.windLayer.isEnabled())
 			{
-				double temp = WeatherConverter.convertTempToValue(temperature);
-				this.lastTemperatureValue = temperature;
-				if (temp == -1)
+				this.windLayer.setNearestMarker(position);
+				double direction = this.windLayer.getDirection(position);
+				double speed = this.windLayer.getSpeed();
+				
+				this.windDirectionTextField.setText(Double.toString(direction));
+				this.windSpeedTextField.setText(Double.toString(speed));
+			}
+		}
+		if (this.humidityLayer != null)
+		{
+			if (this.humidityLayer.isEnabled())
+			{
+				int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
+				if (this.lastHumidityValue != humidity)
 				{
-					this.tempuratureTextfield.setText("No Data");
-				}
-				else
-				{
-					this.tempuratureTextfield.setText(Double.toString(temp));
+					double temp = WeatherConverter.convertHumidityValue(humidity);
+					this.lastHumidityValue = humidity;
+					if (temp == -1)
+					{
+						this.humidityTextfield.setText("No Data");
+					}
+					else
+					{
+						this.humidityTextfield.setText(Double.toString(temp));
+					}
 				}
 			}
 		}
-		if (this.windLayer.isEnabled())
+		if (this.temperatureLayer != null)
 		{
-			this.windLayer.setNearestMarker(position);
-			double direction = this.windLayer.getDirection(position);
-			double speed = this.windLayer.getSpeed();
-			
-			this.windDirectionTextField.setText(Double.toString(direction));
-			this.windSpeedTextField.setText(Double.toString(speed));
+			if (this.temperatureLayer.isEnabled())
+			{
+				int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
+				if (this.lastTemperatureValue != temperature)
+				{
+					double temp = WeatherConverter.convertTempToValue(temperature);
+					this.lastTemperatureValue = temperature;
+					if (temp == -1)
+					{
+						this.tempuratureTextfield.setText("No Data");
+					}
+					else
+					{
+						this.tempuratureTextfield.setText(Double.toString(temp));
+					}
+				}
+			}
 		}
 	}
 	

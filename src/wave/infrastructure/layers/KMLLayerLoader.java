@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamException;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.ogc.kml.KMLAbstractFeature;
 import gov.nasa.worldwind.ogc.kml.KMLRoot;
+import gov.nasa.worldwind.ogc.kml.impl.KMLController;
 import gov.nasa.worldwind.util.WWIO;
 import gov.nasa.worldwind.util.WWUtil;
 import javafx.application.Platform;
@@ -28,10 +29,6 @@ public class KMLLayerLoader extends Thread
 		this.session = session;
 		this.isLoadImmediately = isLoadImmediately;
 		this.name = name;
-		if (this.isLoadImmediately)
-		{
-			this.loadKML();
-		}
 	}
 
 	public KMLLayerLoader(Path kmlSource, WaveSession session, boolean isLoadImmediately)
@@ -40,10 +37,6 @@ public class KMLLayerLoader extends Thread
 		this.session = session;
 		this.isLoadImmediately = isLoadImmediately;
 		this.name = null;
-		if (this.isLoadImmediately)
-		{
-			this.loadKML();
-		}
 	}
 
 	public KMLLayerLoader(Path kmlSource, WaveSession session)
@@ -60,10 +53,6 @@ public class KMLLayerLoader extends Thread
 		this.session = session;
 		this.isLoadImmediately = isLoadImmediately;
 		this.name = name;
-		if (this.isLoadImmediately)
-		{
-			this.loadKML();
-		}
 	}
 
 	public KMLLayerLoader(File kmlSource, WaveSession session, boolean isLoadImmediately)
@@ -72,10 +61,6 @@ public class KMLLayerLoader extends Thread
 		this.session = session;
 		this.isLoadImmediately = isLoadImmediately;
 		this.name = null;
-		if (this.isLoadImmediately)
-		{
-			this.loadKML();
-		}
 	}
 
 	public KMLLayerLoader(File kmlSource, WaveSession session)
@@ -96,35 +81,39 @@ public class KMLLayerLoader extends Thread
 		loadKML();
 	}
 
-	protected void loadKML()
+	public KMLLayer loadKML()
 	{
+		KMLLayer layer = new KMLLayer();
 		try
 		{
 			KMLRoot kmlRoot = this.parse();
 
 			// Set the document's display name
 			kmlRoot.setField(AVKey.DISPLAY_NAME, formName(this.kmlSource, kmlRoot));
-			final KMLRoot finalKMLRoot = kmlRoot;
 
+			KMLController kmlController = new KMLController(kmlRoot);
+			layer.setName((String) kmlRoot.getField(AVKey.DISPLAY_NAME));
+			layer.addRenderable(kmlController);
 			if (!this.isLoadImmediately)
 			{
 				Platform.runLater(new Runnable()
 				{
 					public void run()
 					{
-						session.addKMLLayer(finalKMLRoot);
+						session.addKMLLayer(layer);
 					}
 				});
 			}
 			else
 			{
-				session.addKMLLayer(finalKMLRoot);
+				session.addKMLLayer(layer);
 			}
 		}
 		catch (IOException | XMLStreamException e)
 		{
 			e.printStackTrace();
 		}
+		return layer;
 	}
 
 	protected KMLRoot parse() throws IOException, XMLStreamException

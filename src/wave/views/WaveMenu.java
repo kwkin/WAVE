@@ -37,6 +37,7 @@ import wave.infrastructure.layers.GARSGraticule;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.LatLonGraticule;
+import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.windows.AboutWindow;
 import wave.views.windows.preferences.PreferencesWindow;
@@ -174,10 +175,33 @@ public class WaveMenu extends MenuBar
 		// Layer menu
 		Menu layerMenu = new Menu("Weather");
 		this.getMenus().add(layerMenu);
-		for (KMLLayer layer : session.getWeatherLayers())
+
+		KMLLayer rainLayer = session.getRainLayer();
+		if (rainLayer != null)
 		{
-			CheckMenuItem layerMenuItem = this.createLayerMenuItem(layer.getName());
-			layerMenu.getItems().add(layerMenuItem);
+			CheckMenuItem rainMenuItem = this.createLayerMenuItem(rainLayer.getName());
+			layerMenu.getItems().add(rainMenuItem);
+		}
+
+		WindLayer windLayer = session.getWindLayer();
+		if (windLayer != null)
+		{
+			CheckMenuItem windMenuItem = this.createLayerMenuItem(windLayer.getName());
+			layerMenu.getItems().add(windMenuItem);
+		}
+
+		KMLLayer humidityLayer = session.getHumidityLayer();
+		if (humidityLayer != null)
+		{
+			CheckMenuItem humidityMenuItem = this.createLayerMenuItem(humidityLayer.getName());
+			layerMenu.getItems().add(humidityMenuItem);
+		}
+
+		KMLLayer temperatureLayer = session.getHumidityLayer();
+		if (temperatureLayer != null)
+		{
+			CheckMenuItem temperatureMenuItem = this.createLayerMenuItem(temperatureLayer.getName());
+			layerMenu.getItems().add(temperatureMenuItem);
 		}
 
 		// Help menu

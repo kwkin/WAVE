@@ -14,11 +14,8 @@ import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
-import gov.nasa.worldwind.ogc.kml.KMLRoot;
-import gov.nasa.worldwind.ogc.kml.impl.KMLController;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.markers.BasicMarkerAttributes;
 import gov.nasa.worldwind.render.markers.BasicMarkerShape;
@@ -39,30 +36,20 @@ public class WaveSession
 
 	private MarkerLayer markerLayer;
 	private DraggableMarker soundMarker;
-	private List<KMLLayer> weatherOverlays;
+	private KMLLayer rainLayer;
 	private WindLayer windLayer;
+	private KMLLayer temperatureLayer;
+	private KMLLayer humidityLayer;
 	private boolean isTakingSurvey;
 
 	public WaveSession()
 	{
 		this.worldWindow = new WorldWindowGLJPanel();
 		this.isTakingSurvey = false;
-		this.weatherOverlays = new ArrayList<KMLLayer>();
 
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 		this.worldWindow.setModel(model);
-		
-		Path windFile = Paths.get("data", "layer", "winds.csv");
-		try
-		{
-			this.windLayer = new WindLayer(windFile);
-			this.worldWindow.getModel().getLayers().add(windLayer);
-			this.windLayer.setEnabled(true);
-		}
-		catch (IOException e)
-		{
-		}
-		
+
 		this.initializeMarker();
 		this.loadWeatherOverlays();
 		this.intializeAnimator();
@@ -88,24 +75,19 @@ public class WaveSession
 		return this.worldWindow.getModel().getLayers();
 	}
 
-	public List<KMLLayer> getWeatherLayers()
-	{
-		return this.weatherOverlays;
-	}
-
 	public void shutdown()
 	{
 		this.worldWindow.shutdown();
 		Platform.exit();
 		System.exit(0);
 	}
-	
+
 	public void setSoundMarkerVisibility(boolean isVisible)
 	{
 		this.markerLayer.setEnabled(isVisible);
 		this.worldWindow.redraw();
 	}
-	
+
 	public boolean getSoundMarkerVisibility()
 	{
 		return this.markerLayer.isEnabled();
@@ -125,16 +107,11 @@ public class WaveSession
 		}
 	}
 
-	public void addKMLLayer(KMLRoot kmlRoot)
+	public void addKMLLayer(KMLLayer layer)
 	{
 		// Create a KMLController to adapt the KMLRoot to the World Wind renderable
 		// interface.
-		KMLController kmlController = new KMLController(kmlRoot);
-		KMLLayer layer = new KMLLayer();
-		layer.setName((String) kmlRoot.getField(AVKey.DISPLAY_NAME));
-		layer.addRenderable(kmlController);
 		this.getModel().getLayers().add(layer);
-		this.weatherOverlays.add(layer);
 	}
 
 	public WaveWindow getWaveWindow()
@@ -146,7 +123,22 @@ public class WaveSession
 	{
 		this.waveWindow = window;
 	}
-	
+
+	public KMLLayer getRainLayer()
+	{
+		return this.rainLayer;
+	}
+
+	public KMLLayer getTemperatureLayer()
+	{
+		return this.temperatureLayer;
+	}
+
+	public KMLLayer getHumidityLayer()
+	{
+		return this.humidityLayer;
+	}
+
 	public WindLayer getWindLayer()
 	{
 		return this.windLayer;
@@ -154,31 +146,47 @@ public class WaveSession
 
 	private void loadWeatherOverlays()
 	{
-		// TODO refactor this code
-		Path precipitationLayer = Paths.get("data", "layer", "1day_mid.kmz");
+		Path precipitationLayer = Paths.get("data", "layer", "rain_2019_01_01.kmz");
 		if (Files.exists(precipitationLayer))
 		{
-			new KMLLayerLoader(precipitationLayer, this, true, "Rain Forcast March 1. (Jan 2019)");
+			KMLLayerLoader loader = new KMLLayerLoader(precipitationLayer, this, true, "Rain Forcast (Jan 1 2019)");
+			KMLLayer layer = loader.loadKML();
+			layer.setOpacity(0.5);
+			layer.setIsEnabled(true);
+			this.rainLayer = layer;
+
 		}
-		Path humidityLayer = Paths.get("data", "layer", "MYDAL2_M_SKY_WV_2019-01-01_rgb_3600x1800.KMZ");
+		Path humidityLayer = Paths.get("data", "layer", "humidity_2019_01_01.kmz");
 		if (Files.exists(humidityLayer))
 		{
-			new KMLLayerLoader(humidityLayer, this, true, "Avg. Humidity (Jan 2019)");
-		}
-		Path temperatureLayer = Paths.get("data", "layer", "MOD_LSTD_M_2019-01-01_rgb_3600x1800.KMZ");
-		if (Files.exists(humidityLayer))
-		{
-			new KMLLayerLoader(temperatureLayer, this, true, "Avg. Land Temp. (Jan 2019)");
-		}
-		List<KMLLayer> weatherLayers = this.getWeatherLayers();
-		for (KMLLayer layer : weatherLayers)
-		{
+			KMLLayerLoader loader = new KMLLayerLoader(humidityLayer, this, true, "Avg. Humidity (Jan 2019)");
+			KMLLayer layer = loader.loadKML();
+			layer.setOpacity(0.5);
 			layer.setIsEnabled(false);
+			this.humidityLayer = layer;
 		}
-		weatherLayers.get(0).setIsEnabled(true);
-		for (Layer weatherLayer : this.getWeatherLayers())
+		Path temperatureLayer = Paths.get("data", "layer", "temperature_2019_01_01.kmz");
+		if (Files.exists(humidityLayer))
 		{
-			weatherLayer.setOpacity(0.5);
+			KMLLayerLoader loader = new KMLLayerLoader(temperatureLayer, this, true, "Avg. Land Temp. (Jan 2019)");
+			KMLLayer layer = loader.loadKML();
+			layer.setOpacity(0.5);
+			layer.setIsEnabled(false);
+			this.temperatureLayer = layer;
+		}
+
+		Path windFile = Paths.get("data", "layer", "winds_2019_03_01.csv");
+		if (Files.exists(windFile))
+		{
+			try
+			{
+				this.windLayer = new WindLayer(windFile);
+				this.worldWindow.getModel().getLayers().add(windLayer);
+				this.windLayer.setEnabled(false);
+			}
+			catch (IOException e)
+			{
+			}
 		}
 	}
 
