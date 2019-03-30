@@ -181,6 +181,7 @@ public class WaveSession
 			try
 			{
 				this.windLayer = new WindLayer(windFile);
+				this.windLayer.setName("Wind Direction and Speed (Mar 2019)");
 				this.worldWindow.getModel().getLayers().add(windLayer);
 				this.windLayer.setEnabled(false);
 			}
