@@ -146,16 +146,6 @@ public class WaveSession
 
 	private void loadWeatherOverlays()
 	{
-		Path precipitationLayer = Paths.get("data", "layer", "rain_2019_01_01.kmz");
-		if (Files.exists(precipitationLayer))
-		{
-			KMLLayerLoader loader = new KMLLayerLoader(precipitationLayer, this, true, "Rain Forcast (Jan 1 2019)");
-			KMLLayer layer = loader.loadKML();
-			layer.setOpacity(0.5);
-			layer.setIsEnabled(true);
-			this.rainLayer = layer;
-
-		}
 		Path humidityLayer = Paths.get("data", "layer", "humidity_2019_01_01.kmz");
 		if (Files.exists(humidityLayer))
 		{
@@ -174,6 +164,16 @@ public class WaveSession
 			layer.setIsEnabled(false);
 			this.temperatureLayer = layer;
 		}
+		Path precipitationLayer = Paths.get("data", "layer", "rain_2019_01_01.kmz");
+		if (Files.exists(precipitationLayer))
+		{
+			KMLLayerLoader loader = new KMLLayerLoader(precipitationLayer, this, true, "Rain Forcast (Jan 1 2019)");
+			KMLLayer layer = loader.loadKML();
+			layer.setOpacity(0.5);
+			layer.setIsEnabled(true);
+			this.rainLayer = layer;
+
+		}
 
 		Path windFile = Paths.get("data", "layer", "winds_2019_03_01.csv");
 		if (Files.exists(windFile))
@@ -189,6 +189,8 @@ public class WaveSession
 			{
 			}
 		}
+		
+		// TODO add thunder layer
 	}
 
 	private void initializeMarker()
