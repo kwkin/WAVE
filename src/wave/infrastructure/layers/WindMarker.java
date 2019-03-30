@@ -37,7 +37,16 @@ public class WindMarker
 		wind.setMarkerPixels(15);
 		this.marker = new BasicMarker(position, wind);
 		this.marker.setPitch(Angle.fromDegrees(90));
-		this.marker.setHeading(Angle.fromDegrees(direction));
+		double markerHeading = 0;
+		if (direction > 180)
+		{
+			markerHeading = direction % 180;
+		}
+		else
+		{
+			markerHeading = direction + 180;
+		}
+		this.marker.setHeading(Angle.fromDegrees(markerHeading));
 	}
 
 	public Marker getMarker()
