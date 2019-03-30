@@ -140,7 +140,7 @@ public class KMLLayer extends RenderableLayer
 		double inMinX = this.sector.getWest();
 		double inMaxX = this.sector.getEast();
 		int pixelX = (int) PointUtil.map(longitude.degrees, inMinX, inMaxX, outMinX, outMaxX);
-		if (pixelX >= this.bufferedImage.getWidth() && pixelX < 0)
+		if (pixelX >= this.bufferedImage.getWidth() || pixelX < 0)
 		{
 			return 0;
 		}
@@ -150,7 +150,7 @@ public class KMLLayer extends RenderableLayer
 		double inMinY = this.sector.getSouth();
 		double inMaxY = this.sector.getNorth();
 		int pixelY = (int) PointUtil.map(latitude.degrees, inMaxY, inMinY, outMinY, outMaxY);
-		if (pixelY >= this.bufferedImage.getHeight() && pixelY < 0)
+		if (pixelY >= this.bufferedImage.getHeight() || pixelY < 0)
 		{
 			return 0;
 		}
