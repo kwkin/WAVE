@@ -30,6 +30,7 @@ import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.LayerFadeTransition;
 import wave.infrastructure.layers.KMLLayer;
+import wave.infrastructure.layers.WindLayer;
 
 public class WeatherOverlayPanel extends BorderPane
 {
@@ -75,6 +76,7 @@ public class WeatherOverlayPanel extends BorderPane
 			layerPane.add(this.percipitationButton, 0, layerIndex);
 			layerIndex++;
 
+			WindLayer rainLayer = session.getWindLayer();
 			Slider windSlider = new Slider(0, 1, 1);
 			layerPane.add(windSlider, 1, layerIndex);
 			Path windPath1 = Paths.get("data", "icons", "wind_selected.png");
@@ -83,6 +85,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image windImage2 = new Image(windPath2.toUri().toURL().toString());
 			this.windButton = new IconWeatherButton("Wind", windImage1, windImage2);
 			windButton.setGraphicTextGap(12);
+			this.linkLayerWithButton(rainLayer, this.windButton, windSlider.valueProperty());
 			layerPane.add(windButton, 0, layerIndex);
 			layerIndex++;
 
@@ -201,6 +204,32 @@ public class WeatherOverlayPanel extends BorderPane
 		}
 	}
 
+	private void linkLayerWithButton(WindLayer layer, ToggleButton toggleButton, DoubleProperty opacityProperty)
+	{
+		if (layer != null)
+		{
+			toggleButton.setOnAction((action) ->
+			{
+				Platform.runLater(() ->
+				{
+					layer.setEnabled(toggleButton.isSelected());
+				});
+			});
+			layer.addPropertyChangeListener(new PropertyChangeListener()
+			{
+				@Override
+				public void propertyChange(PropertyChangeEvent event)
+				{
+					if (event.getPropertyName() == "Enabled")
+					{
+						toggleButton.setSelected((boolean) event.getNewValue());
+					}
+				}
+			});
+			toggleButton.setSelected(layer.isEnabled());
+		}
+	}
+	
 	private void linkLayerWithSlider(Layer layer, Slider slider)
 	{
 		slider.valueProperty().addListener(new ChangeListener<Number>()

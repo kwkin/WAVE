@@ -29,6 +29,7 @@ import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.MeasurementSystem;
 import wave.infrastructure.handlers.WeatherConverter;
 import wave.infrastructure.layers.KMLLayer;
+import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.preferences.PreferencesLoader;
 
 public class MarkerPanel extends BorderPane implements ChangeListener<Object>
@@ -66,6 +67,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	private int lastHumidityValue;
 	private KMLLayer temperatureLayer;
 	private int lastTemperatureValue;
+	private WindLayer windLayer;
 
 	public MarkerPanel(WaveSession session)
 	{
@@ -157,6 +159,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.rainLayer = session.getWeatherLayers().get(0);
 		this.humidityLayer = session.getWeatherLayers().get(1);
 		this.temperatureLayer = session.getWeatherLayers().get(2);
+		this.windLayer = session.getWindLayer();
 		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
 		{
 			@Override
@@ -309,13 +312,13 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		double latitude = position.latitude.degrees;
 		double longitude = position.longitude.degrees;
 		double elevation = position.elevation;
-//		int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
 		this.latitudeTextfield.setText(Double.toString(latitude));
 		this.longitudetextfield.setText(Double.toString(longitude));
 		this.elevationTextfield.setText(Double.toString(elevation));
 
 		if (this.rainLayer.isEnabled())
 		{
+			// TODO fix array index exception
 			int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
 			if (this.lastRainValue != rain)
 			{
@@ -357,6 +360,15 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 					this.tempuratureTextfield.setText(Double.toString(temp));
 				}
 			}
+		}
+		if (this.windLayer.isEnabled())
+		{
+			this.windLayer.setNearestMarker(position);
+			double direction = this.windLayer.getDirection(position);
+			double speed = this.windLayer.getSpeed();
+			
+			this.windDirectionTextField.setText(Double.toString(direction));
+			this.windSpeedTextField.setText(Double.toString(speed));
 		}
 	}
 	

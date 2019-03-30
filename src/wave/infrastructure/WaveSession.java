@@ -40,6 +40,7 @@ public class WaveSession
 	private MarkerLayer markerLayer;
 	private DraggableMarker soundMarker;
 	private List<KMLLayer> weatherOverlays;
+	private WindLayer windLayer;
 	private boolean isTakingSurvey;
 
 	public WaveSession()
@@ -50,14 +51,13 @@ public class WaveSession
 
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 		this.worldWindow.setModel(model);
-
+		
 		Path windFile = Paths.get("data", "layer", "winds.csv");
-		WindLayer windLayer;
 		try
 		{
-			windLayer = new WindLayer(windFile);
+			this.windLayer = new WindLayer(windFile);
 			this.worldWindow.getModel().getLayers().add(windLayer);
-			windLayer.setEnabled(true);
+			this.windLayer.setEnabled(true);
 		}
 		catch (IOException e)
 		{
@@ -145,6 +145,11 @@ public class WaveSession
 	public void setWaveWindow(WaveWindow window)
 	{
 		this.waveWindow = window;
+	}
+	
+	public WindLayer getWindLayer()
+	{
+		return this.windLayer;
 	}
 
 	private void loadWeatherOverlays()
