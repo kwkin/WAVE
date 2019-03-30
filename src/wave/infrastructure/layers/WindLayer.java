@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.render.markers.Marker;
@@ -26,6 +25,10 @@ public class WindLayer extends MarkerLayer
 	private WindMarker[][] markers;
 	private double latIndex;
 	private double lonIndex;
+	private double tlScale;
+	private double trScale;
+	private double blScale;
+	private double brScale;
 	
 	public WindLayer(Path windFile) throws IOException
 	{
@@ -97,11 +100,7 @@ public class WindLayer extends MarkerLayer
 	{
 		this.latIndex = PointUtil.map(position.latitude.degrees, -90, 90, 0, this.numLatitude);
 		this.lonIndex = PointUtil.map(position.longitude.degrees, -180, 180, 0, this.numLongitude);
-	}
-	
-	public double getDirection(Position position)
-	{
-		double direction = 0;
+
 		int latIntIndex = (int)this.latIndex;
 		int lonIntIndex = (int)this.lonIndex;
 		
@@ -112,44 +111,52 @@ public class WindLayer extends MarkerLayer
 		double ld = Math.abs(1 - rd);
 		
 		double tlDistance = Math.sqrt(bd * bd + rd * rd);
-		double tlScale = 0;
+		this.tlScale = 0;
 		if (tlDistance <= 1)
 		{
-			tlScale = Math.abs(1 - tlDistance);
+			this.tlScale = Math.abs(1 - tlDistance);
 		}
 		
 		double trDistance = Math.sqrt(bd * bd + ld * ld);
-		double trScale = 0;
+		this.trScale = 0;
 		if (trDistance <= 1)
 		{
-			trScale = Math.abs(1 - trDistance);
+			this.trScale = Math.abs(1 - trDistance);
 		}
 		
 		double blDistance = Math.sqrt(td * td + rd * rd);
-		double blScale = 0;
+		this.blScale = 0;
 		if (blDistance <= 1)
 		{
-			blScale = Math.abs(1 - blDistance);
+			this.blScale = Math.abs(1 - blDistance);
 		}
 		
 		double brDistance = Math.sqrt(td * td + ld * ld);
-		double brScale = 0;
+		this.brScale = 0;
 		if (brDistance <= 1)
 		{
-			brScale = Math.abs(1 - brDistance);
+			this.brScale = Math.abs(1 - brDistance);
 		}
+	}
+	
+	public double getDirection(Position position)
+	{
+		double direction = 0;
+		int latIntIndex = (int)this.latIndex;
+		int lonIntIndex = (int)this.lonIndex;
 		
 		// Top right
-		direction += this.markers[latIntIndex][lonIntIndex].getDirection() * trScale;
+		direction += this.markers[latIntIndex][lonIntIndex].getDirection() * this.trScale;
 		
 		// Bottom right
-		direction += this.markers[latIntIndex - 1][lonIntIndex].getDirection() * brScale;
+		direction += this.markers[latIntIndex - 1][lonIntIndex].getDirection() * this.brScale;
 
 		// Top Left
-		direction += this.markers[latIntIndex][lonIntIndex - 1].getDirection() * tlScale;
+		direction += this.markers[latIntIndex][lonIntIndex - 1].getDirection() * this.tlScale;
 
 		// Bottom Left
-		direction += this.markers[latIntIndex - 1][lonIntIndex - 1].getDirection() * blScale;
+		direction += this.markers[latIntIndex - 1][lonIntIndex - 1].getDirection() * this.blScale;
+		direction = Math.min(direction, 360);
 		return direction;
 	}
 	
