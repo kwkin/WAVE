@@ -15,8 +15,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -61,6 +61,8 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	private final TextField humidityTextfield;
 	private final Label humidityUnitLabel;
 
+	private IconWeatherButton resetToggleButton;
+	
 	private KMLLayer rainLayer;
 	private int lastRainValue;
 	private KMLLayer humidityLayer;
@@ -84,6 +86,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			Path selectedPath = Paths.get("data", "icons", "marker_selected.png");
 			Image selectedImage = new Image(selectedPath.toUri().toURL().toString());
 			IconWeatherButton markerToggleButton = new IconWeatherButton(selectedImage, unselectedImage);
+			markerToggleButton.setTooltip(new Tooltip("Toggles the visibility of the marker."));
 			markerToggleButton.setIconSize(48, 48);
 			markerToggleButton.setSelected(session.getSoundMarkerVisibility());
 			markerToggleButton.setOnAction((event) ->
@@ -92,26 +95,24 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 				session.setSoundMarkerVisibility(isSelected);
 			});
 			buttons.getChildren().add(markerToggleButton);
-
-			Path resetPath = Paths.get("data", "icons", "reset_unselected.png");
-			Image resetImage = new Image(resetPath.toUri().toURL().toString());
-			ImageView resetImageView = new ImageView(resetImage);
-			resetImageView.setPreserveRatio(true);
-			resetImageView.setFitWidth(48);
-			resetImageView.setFitHeight(48);
-			Button updateButton = new Button();
-			updateButton.getStyleClass().add("icon-button");
-			updateButton.setGraphic(resetImageView);
-			updateButton.resize(48, 48);
-			updateButton.setOnAction((event) ->
-			{
-				updateMarkerValues(soundPosition.get());
-			});
-			buttons.getChildren().add(updateButton);
+			
+			Path resetUnselectedPath = Paths.get("data", "icons", "reset_unselected.png");
+			Image resetUnselectedImage = new Image(resetUnselectedPath.toUri().toURL().toString());
+			Path resetSelectedPath = Paths.get("data", "icons", "reset_selected.png");
+			Image resetSelectedImage = new Image(resetSelectedPath.toUri().toURL().toString());
+			this.resetToggleButton = new IconWeatherButton(resetSelectedImage, resetUnselectedImage);
+			this.resetToggleButton.setTooltip(new Tooltip("Toggles whether the data values update when the overlays are visible."));
+			this.resetToggleButton.setIconSize(48, 48);
+			this.resetToggleButton.setSelected(true);
+			buttons.getChildren().add(this.resetToggleButton);
 		}
 		catch (MalformedURLException e)
 		{
 		}
+		this.rainLayer = session.getRainLayer();
+		this.humidityLayer = session.getHumidityLayer();
+		this.temperatureLayer = session.getTemperatureLayer();
+		this.windLayer = session.getWindLayer();
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5, 5, 5, 5));
@@ -135,42 +136,14 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		unitColumn.setHalignment(HPos.LEFT);
 		grid.getColumnConstraints().add(unitColumn);
 
+		int rowIndex = 0;
 		this.latitudeLabel = new Label("Latitude: ");
-		grid.add(this.latitudeLabel, 0, 0);
+		grid.add(this.latitudeLabel, 0, rowIndex);
 		this.latitudeTextfield = new TextField();
-		grid.add(this.latitudeTextfield, 1, 0);
+		grid.add(this.latitudeTextfield, 1, rowIndex);
 		this.latitudeUnitLabel = new Label(system.getAngleUnit());
-		grid.add(this.latitudeUnitLabel, 2, 0);
-
-		this.longitudeLabel = new Label("Longitude: ");
-		grid.add(this.longitudeLabel, 0, 1);
-		this.longitudetextfield = new TextField();
-		grid.add(this.longitudetextfield, 1, 1);
-		this.longitudeUnitLabel = new Label(system.getAngleUnit());
-		grid.add(this.longitudeUnitLabel, 2, 1);
-
-		this.elevationLabel = new Label("Elevation: ");
-		grid.add(this.elevationLabel, 0, 2);
-		this.elevationTextfield = new TextField();
-		grid.add(this.elevationTextfield, 1, 2);
-		this.elevationUnitLabel = new Label();
-		grid.add(this.elevationUnitLabel, 2, 2);
-
-		this.rainLayer = session.getRainLayer();
-		this.humidityLayer = session.getHumidityLayer();
-		this.temperatureLayer = session.getTemperatureLayer();
-		this.windLayer = session.getWindLayer();
-		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends Position> observable, Position oldValue, Position newValue)
-			{
-				Platform.runLater(() ->
-				{
-					updateMarkerValues(soundPosition.get());
-				});
-			}
-		});
+		grid.add(this.latitudeUnitLabel, 2, rowIndex);
+		rowIndex++;
 		this.latitudeTextfield.focusedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
@@ -204,6 +177,14 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 				}
 			}
 		});
+
+		this.longitudeLabel = new Label("Longitude: ");
+		grid.add(this.longitudeLabel, 0, rowIndex);
+		this.longitudetextfield = new TextField();
+		grid.add(this.longitudetextfield, 1, rowIndex);
+		this.longitudeUnitLabel = new Label(system.getAngleUnit());
+		grid.add(this.longitudeUnitLabel, 2, rowIndex);
+		rowIndex++;
 		this.longitudetextfield.focusedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
@@ -234,6 +215,14 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 				});
 			}
 		});
+
+		this.elevationLabel = new Label("Elevation: ");
+		grid.add(this.elevationLabel, 0, rowIndex);
+		this.elevationTextfield = new TextField();
+		grid.add(this.elevationTextfield, 1, rowIndex);
+		this.elevationUnitLabel = new Label();
+		grid.add(this.elevationUnitLabel, 2, rowIndex);
+		rowIndex++;
 		this.elevationTextfield.focusedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
@@ -266,43 +255,69 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		});
 
 		this.rainLabel = new Label("Rain: ");
-		grid.add(this.rainLabel, 0, 3);
+		grid.add(this.rainLabel, 0, rowIndex);
 		this.rainTextfield = new TextField();
-		grid.add(this.rainTextfield, 1, 3);
+		grid.add(this.rainTextfield, 1, rowIndex);
 		this.rainUnitLabel = new Label();
-		grid.add(this.rainUnitLabel, 2, 3);
+		grid.add(this.rainUnitLabel, 2, rowIndex);
+		rowIndex++;
 
 		this.windSpeedLabel = new Label("Wind Speed: ");
-		grid.add(this.windSpeedLabel, 0, 4);
+		grid.add(this.windSpeedLabel, 0, rowIndex);
 		this.windSpeedTextField = new TextField();
-		grid.add(this.windSpeedTextField, 1, 4);
+		grid.add(this.windSpeedTextField, 1, rowIndex);
 		this.windSpeedUnitLabel = new Label();
-		grid.add(this.windSpeedUnitLabel, 2, 4);
+		grid.add(this.windSpeedUnitLabel, 2, rowIndex);
+		rowIndex++;
 
 		this.windDirectionLabel = new Label("Wind Direction: ");
-		grid.add(this.windDirectionLabel, 0, 5);
+		grid.add(this.windDirectionLabel, 0, rowIndex);
 		this.windDirectionTextField = new TextField();
-		grid.add(this.windDirectionTextField, 1, 5);
+		grid.add(this.windDirectionTextField, 1, rowIndex);
 		this.windDirectionUnitLabel = new Label(system.getAngleUnit());
-		grid.add(this.windDirectionUnitLabel, 2, 5);
+		grid.add(this.windDirectionUnitLabel, 2, rowIndex);
+		rowIndex++;
 
 		this.tempuratureLabel = new Label("Temp.: ");
-		grid.add(this.tempuratureLabel, 0, 6);
+		grid.add(this.tempuratureLabel, 0, rowIndex);
 		this.tempuratureTextfield = new TextField();
-		grid.add(this.tempuratureTextfield, 1, 6);
+		grid.add(this.tempuratureTextfield, 1, rowIndex);
 		this.temperatureUnitLabel = new Label();
-		grid.add(this.temperatureUnitLabel, 2, 6);
+		grid.add(this.temperatureUnitLabel, 2, rowIndex);
+		rowIndex++;
 
 		this.humidityLabel = new Label("Humidity: ");
-		grid.add(this.humidityLabel, 0, 7);
+		grid.add(this.humidityLabel, 0, rowIndex);
 		this.humidityTextfield = new TextField();
-		grid.add(this.humidityTextfield, 1, 7);
+		grid.add(this.humidityTextfield, 1, rowIndex);
 		this.humidityUnitLabel = new Label();
-		grid.add(this.humidityUnitLabel, 2, 7);
+		grid.add(this.humidityUnitLabel, 2, rowIndex);
+		rowIndex++;
 
+		Button updateButton = new Button("Reset Values");
+		updateButton.setMaxWidth(Double.MAX_VALUE);
+		updateButton.setOnAction((event) ->
+		{
+			updateMarkerValues(soundPosition.get());
+		});
+		grid.add(updateButton, 1, rowIndex, 2, 1);
+		rowIndex++;
+		
 		updateUnitLabels();
 		updateMarkerValues(soundPosition.get());
 		this.setCenter(grid);
+
+		session.getSoundMarker().positionProperty().addListener(new ChangeListener<Position>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Position> observable, Position oldValue, Position newValue)
+			{
+				Platform.runLater(() ->
+				{
+					updateMarkerValues(soundPosition.get());
+				});
+			}
+		});
 		
 		PreferencesLoader.preferences().lengthUnitDisplayProperty().addListener(this);
 	}
@@ -318,7 +333,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		if (this.rainLayer != null)
 		{
-			if (this.rainLayer.isEnabled())
+			if (this.rainLayer.isEnabled() || this.resetToggleButton.isSelected())
 			{
 				int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
 				if (this.lastRainValue != rain)
@@ -331,7 +346,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		}
 		if (this.windLayer != null)
 		{
-			if (this.windLayer.isEnabled())
+			if (this.windLayer.isEnabled() || this.resetToggleButton.isSelected())
 			{
 				this.windLayer.setNearestMarker(position);
 				double direction = this.windLayer.getDirection(position);
@@ -343,7 +358,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		}
 		if (this.humidityLayer != null)
 		{
-			if (this.humidityLayer.isEnabled())
+			if (this.humidityLayer.isEnabled() || this.resetToggleButton.isSelected())
 			{
 				int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
 				if (this.lastHumidityValue != humidity)
@@ -363,7 +378,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		}
 		if (this.temperatureLayer != null)
 		{
-			if (this.temperatureLayer.isEnabled())
+			if (this.temperatureLayer.isEnabled() || this.resetToggleButton.isSelected())
 			{
 				int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
 				if (this.lastTemperatureValue != temperature)

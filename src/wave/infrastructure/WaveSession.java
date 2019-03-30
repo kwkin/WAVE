@@ -152,7 +152,7 @@ public class WaveSession
 			KMLLayerLoader loader = new KMLLayerLoader(humidityLayer, this, true, "Avg. Humidity (Jan 2019)");
 			KMLLayer layer = loader.loadKML();
 			layer.setOpacity(0.5);
-			layer.setIsEnabled(false);
+			layer.setIsEnabled(true);
 			this.humidityLayer = layer;
 		}
 		Path temperatureLayer = Paths.get("data", "layer", "temperature_2019_01_01.kmz");
@@ -161,7 +161,7 @@ public class WaveSession
 			KMLLayerLoader loader = new KMLLayerLoader(temperatureLayer, this, true, "Avg. Land Temp. (Jan 2019)");
 			KMLLayer layer = loader.loadKML();
 			layer.setOpacity(0.5);
-			layer.setIsEnabled(false);
+			layer.setIsEnabled(true);
 			this.temperatureLayer = layer;
 		}
 		Path precipitationLayer = Paths.get("data", "layer", "rain_2019_01_01.kmz");
@@ -183,7 +183,7 @@ public class WaveSession
 				this.windLayer = new WindLayer(windFile);
 				this.windLayer.setName("Wind Direction and Speed (Mar 2019)");
 				this.worldWindow.getModel().getLayers().add(windLayer);
-				this.windLayer.setEnabled(false);
+				this.windLayer.setEnabled(true);
 			}
 			catch (IOException e)
 			{

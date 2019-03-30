@@ -34,7 +34,6 @@ public class HumidityColorValues
 		if (!color.equals(Color.TRANSPARENT))
 		{
 			brightness = color.getBrightness();
-			System.out.println(brightness);
 			if (brightness >= MIN_BRIGHTNESS && brightness <= MAX_BRIGHTNESS)
 			{
 				brightness = PointUtil.map(brightness, MAX_BRIGHTNESS, MIN_BRIGHTNESS, MIN_HUMIDITY, MAX_HUMIDITY);
