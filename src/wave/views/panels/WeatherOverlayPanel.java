@@ -53,11 +53,13 @@ public class WeatherOverlayPanel extends BorderPane
 
 		ColumnConstraints nameColumn = new ColumnConstraints();
 		nameColumn.setHgrow(Priority.ALWAYS);
-		nameColumn.setHalignment(HPos.RIGHT);
+		nameColumn.setHalignment(HPos.LEFT);
+		nameColumn.setMinWidth(200);
 
 		ColumnConstraints displayColumn = new ColumnConstraints();
 		displayColumn.setHgrow(Priority.NEVER);
 		displayColumn.setHalignment(HPos.CENTER);
+		layerPane.getColumnConstraints().addAll(nameColumn, displayColumn);
 
 		int layerIndex = 0;
 		try
@@ -124,7 +126,7 @@ public class WeatherOverlayPanel extends BorderPane
 			Image humidityImage2 = new Image(humidityPath2.toUri().toURL().toString());
 			this.humidityButton = new IconWeatherButton("Humidity", humidityImage1, humidityImage2);
 			this.humidityButton.setGraphicTextGap(12);
-			this.linkLayerWithButton(humidityLayer, this.humidityButton, lightningSlider.valueProperty());
+			this.linkLayerWithButton(humidityLayer, this.humidityButton, humiditySlider.valueProperty());
 			layerPane.add(this.humidityButton, 0, layerIndex);
 			layerIndex++;
 		}
