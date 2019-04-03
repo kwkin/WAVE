@@ -45,6 +45,11 @@ public class Preferences implements Serializable
 	private BooleanProperty enableWeatherModulatorsProperty;
 	private ObjectProperty<AudioListener> audioListenerProperty;
 
+	// Marker Settings
+	private BooleanProperty showAllWeatherProperty;
+	private BooleanProperty showAnnotationProperty;
+	private BooleanProperty showPositionProperty;
+	
 	private Preferences()
 	{
 		this.lengthUnitDisplayProperty = new SimpleObjectProperty<MeasurementSystem>(MeasurementSystem.METRIC);
@@ -58,6 +63,9 @@ public class Preferences implements Serializable
 		this.enablePerformancePanelProperty = new SimpleBooleanProperty(true);
 		this.enableLayerPanelProperty = new SimpleBooleanProperty(true);
 		this.audioListenerProperty = new SimpleObjectProperty<AudioListener>(AudioListener.MARKER);
+		this.showAnnotationProperty = new SimpleBooleanProperty(true);
+		this.showPositionProperty = new SimpleBooleanProperty(false);
+		this.showAllWeatherProperty = new SimpleBooleanProperty(true);
 
 		this.enableNetworkProperty.addListener(new ChangeListener<Boolean>()
 		{
@@ -129,6 +137,51 @@ public class Preferences implements Serializable
 		this.enablePerformancePanelProperty.setValue(preferences.getEnablePerformancePanel());
 		this.enableLayerPanelProperty.setValue(preferences.getEnableLayerPanel());
 		this.audioListenerProperty.setValue(preferences.getAudioListener());
+	}
+
+	public boolean getShowAllWeather()
+	{
+		return this.showAllWeatherProperty.getValue();
+	}
+
+	public void setShowAllWeather(boolean showAllWeather)
+	{
+		this.showAllWeatherProperty.setValue(showAllWeather);
+	}
+
+	public BooleanProperty showAllWeatherProperty()
+	{
+		return this.showAllWeatherProperty;
+	}
+
+	public boolean getShowAnnotation()
+	{
+		return this.showAnnotationProperty.getValue();
+	}
+
+	public void setShowAnnotation(boolean enableLayerPanel)
+	{
+		this.showAnnotationProperty.setValue(enableLayerPanel);
+	}
+
+	public BooleanProperty showAnnotationProperty()
+	{
+		return this.showAnnotationProperty;
+	}
+
+	public boolean getShowPosition()
+	{
+		return this.showPositionProperty.getValue();
+	}
+
+	public void setShowPosition(boolean enableLayerPanel)
+	{
+		this.showPositionProperty.setValue(enableLayerPanel);
+	}
+
+	public BooleanProperty showPositionProperty()
+	{
+		return this.showPositionProperty;
 	}
 
 	/**

@@ -32,7 +32,6 @@ import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
 
-// TODO add audio listener class that is called when the marker position updates
 public class WaveSession
 {
 	private WorldWindow worldWindow;
@@ -57,10 +56,10 @@ public class WaveSession
 		Model model = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 		this.worldWindow.setModel(model);
 
-		this.initializeMarker();
 		this.loadWeatherOverlays();
-		this.intializeAnimator();
 		this.weatherHandler = new WeatherHandler(this);
+		this.intializeAnimator();
+		this.initializeMarker();
 	}
 
 	public DraggableMarker getSoundMarker()
@@ -244,7 +243,7 @@ public class WaveSession
 		this.worldWindow.addSelectListener(new BasicDragger(this.worldWindow));
 		this.worldWindow.getModel().getLayers().add(this.markerLayer);
 		
-		this.annotationLayer = new WeatherAnnotationLayer(this.soundMarker);
+		this.annotationLayer = new WeatherAnnotationLayer(this, this.soundMarker);
 		this.worldWindow.getModel().getLayers().add(this.annotationLayer);
 	}
 
