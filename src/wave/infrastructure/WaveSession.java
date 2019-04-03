@@ -14,7 +14,6 @@ import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.layers.AnnotationLayer;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.render.Material;
@@ -39,7 +38,7 @@ public class WaveSession
 	private WeatherHandler weatherHandler;
 
 	private MarkerLayer markerLayer;
-	private AnnotationLayer annotationLayer;
+	private WeatherAnnotationLayer annotationLayer;
 	private DraggableMarker soundMarker;
 	private KMLLayer rainLayer;
 	private WindLayer windLayer;
@@ -159,6 +158,11 @@ public class WaveSession
 	public WeatherHandler getWeatherHander()
 	{
 		return this.weatherHandler;
+	}
+	
+	public void updateWeatherAnnotation(Position position)
+	{
+		this.annotationLayer.updateAnnotation(position);
 	}
 
 	private void loadWeatherOverlays()

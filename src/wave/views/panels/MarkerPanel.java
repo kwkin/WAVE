@@ -92,14 +92,17 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			});
 			buttons.getChildren().add(markerToggleButton);
 
-			IconWeatherButton showAnnotationButton = new IconWeatherButton(unselectedImage, selectedImage);
+			Path annotationUnselectedPath = Paths.get("data", "icons", "annotation_unselected.png");
+			Image annotationUnselectedImage = new Image(annotationUnselectedPath.toUri().toURL().toString());
+			Path annotationSelectedPath = Paths.get("data", "icons", "annotation_selected.png");
+			Image annotationSelectedImage = new Image(annotationSelectedPath.toUri().toURL().toString());
+			IconWeatherButton showAnnotationButton = new IconWeatherButton(annotationSelectedImage, annotationUnselectedImage);
 			showAnnotationButton.setTooltip(new Tooltip("Toggles whether the annotation will be displayed."));
 			showAnnotationButton.setIconSize(48, 48);
 			showAnnotationButton.setSelected(true);
 			showAnnotationButton.selectedProperty().bindBidirectional(pref.showAnnotationProperty());
 			buttons.getChildren().add(showAnnotationButton);
-			
-			
+						
 			Path resetUnselectedPath = Paths.get("data", "icons", "reset_unselected.png");
 			Image resetUnselectedImage = new Image(resetUnselectedPath.toUri().toURL().toString());
 			Path resetSelectedPath = Paths.get("data", "icons", "reset_selected.png");
@@ -108,14 +111,24 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			this.resetToggleButton.setTooltip(new Tooltip("Toggles whether the data values update when the overlays are visible."));
 			this.resetToggleButton.setIconSize(48, 48);
 			this.resetToggleButton.setSelected(true);
-			markerToggleButton.selectedProperty().bindBidirectional(pref.showAllWeatherProperty());
+			this.resetToggleButton.selectedProperty().bindBidirectional(pref.showAllWeatherProperty());
 			buttons.getChildren().add(this.resetToggleButton);
-			
-			IconWeatherButton showPositionButton = new IconWeatherButton(resetSelectedImage, resetUnselectedImage);
+
+			Path positionUnselectedPath = Paths.get("data", "icons", "position_unselected.png");
+			Image positionUnselectedImage = new Image(positionUnselectedPath.toUri().toURL().toString());
+			Path positionSelectedPath = Paths.get("data", "icons", "position_selected.png");
+			Image positionSelectedImage = new Image(positionSelectedPath.toUri().toURL().toString());
+			IconWeatherButton showPositionButton = new IconWeatherButton(positionSelectedImage, positionUnselectedImage);
 			showPositionButton.setTooltip(new Tooltip("Toggles whether the position information will be added to the annotation."));
 			showPositionButton.setIconSize(48, 48);
 			showPositionButton.setSelected(true);
 			showPositionButton.selectedProperty().bindBidirectional(pref.showPositionProperty());
+			showPositionButton.disableProperty().bind(showAnnotationButton.selectedProperty().not());
+			showPositionButton.setOnAction(value -> 
+			{
+				session.updateWeatherAnnotation(session.getSoundMarker().getPosition());
+				session.getWorldWindow().redraw();
+			});
 			buttons.getChildren().add(showPositionButton);
 		}
 		catch (MalformedURLException e)
