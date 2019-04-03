@@ -48,6 +48,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 		this.annotation.getAttributes().setImageScale(.7);
 		this.annotation.getAttributes().setImageOffset(new Point(1, 1));
 		this.annotation.getAttributes().setInsets(new Insets(6, 6, 6, 6));
+		this.annotation.setDragEnabled(false);
 		this.addAnnotation(this.annotation);
 
 		if (PreferencesLoader.preferences().getShowAnnotation())
@@ -75,21 +76,13 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 			{
-				if (newValue)
-				{
-					addAnnotation(annotation);
-				}
-				else
-				{
-					removeAnnotation(annotation);
-				}
+				setEnabled(newValue);
 			}
 		});
 	}
 
 	public void updateAnnotation(Position newValue)
 	{
-
 		this.annotation.setPosition(newValue);
 		StringBuilder markerText = new StringBuilder();
 		Preferences pref = PreferencesLoader.preferences();
@@ -103,6 +96,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append("\nElevation: ");
 			markerText.append(pref.getLengthUnitDisplay().lengthDescription(newValue.getElevation()));
 		}
+		// TODO append units
 		DecimalFormat weatherFormat = new DecimalFormat(".##");
 		if (this.handler.showRain())
 		{

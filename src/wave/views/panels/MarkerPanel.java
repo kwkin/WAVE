@@ -96,7 +96,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			showAnnotationButton.setTooltip(new Tooltip("Toggles whether the annotation will be displayed."));
 			showAnnotationButton.setIconSize(48, 48);
 			showAnnotationButton.setSelected(true);
-			markerToggleButton.selectedProperty().bindBidirectional(pref.showAnnotationProperty());
+			showAnnotationButton.selectedProperty().bindBidirectional(pref.showAnnotationProperty());
 			buttons.getChildren().add(showAnnotationButton);
 			
 			
