@@ -29,6 +29,8 @@ import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
 
+// TODO fix wind speed not calculating
+// TODO add audio listener class that is called when the marker position updates
 public class WaveSession
 {
 	private WorldWindow worldWindow;
@@ -40,6 +42,7 @@ public class WaveSession
 	private WindLayer windLayer;
 	private KMLLayer temperatureLayer;
 	private KMLLayer humidityLayer;
+	private KMLLayer lightningLayer;
 	private boolean isTakingSurvey;
 
 	public WaveSession()
@@ -143,16 +146,31 @@ public class WaveSession
 	{
 		return this.windLayer;
 	}
+	
+	public KMLLayer getLightningLayer()
+	{
+		return this.lightningLayer;
+	}
 
 	private void loadWeatherOverlays()
 	{
+		Path lightningLayer = Paths.get("data", "layer", "lightning_98_05.kmz");
+		if (Files.exists(lightningLayer))
+		{
+			KMLLayerLoader loader = new KMLLayerLoader(lightningLayer, this, true, "Lightning Rate (98 - 05");
+			KMLLayer layer = loader.loadKML();
+			layer.setOpacity(0.5);
+			layer.setIsEnabled(true);
+			this.lightningLayer = layer;
+
+		}
 		Path humidityLayer = Paths.get("data", "layer", "humidity_2019_01_01.kmz");
 		if (Files.exists(humidityLayer))
 		{
 			KMLLayerLoader loader = new KMLLayerLoader(humidityLayer, this, true, "Avg. Humidity (Jan 2019)");
 			KMLLayer layer = loader.loadKML();
 			layer.setOpacity(0.5);
-			layer.setIsEnabled(true);
+			layer.setIsEnabled(false);
 			this.humidityLayer = layer;
 		}
 		Path temperatureLayer = Paths.get("data", "layer", "temperature_2019_01_01.kmz");
@@ -161,7 +179,7 @@ public class WaveSession
 			KMLLayerLoader loader = new KMLLayerLoader(temperatureLayer, this, true, "Avg. Land Temp. (Jan 2019)");
 			KMLLayer layer = loader.loadKML();
 			layer.setOpacity(0.5);
-			layer.setIsEnabled(true);
+			layer.setIsEnabled(false);
 			this.temperatureLayer = layer;
 		}
 		Path precipitationLayer = Paths.get("data", "layer", "rain_2019_01_01.kmz");
@@ -189,8 +207,6 @@ public class WaveSession
 			{
 			}
 		}
-		
-		// TODO add thunder layer
 	}
 
 	private void initializeMarker()

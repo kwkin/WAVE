@@ -3,7 +3,6 @@ package wave.views.panels;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -14,8 +13,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
@@ -24,10 +21,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.util.Duration;
-import wave.WaveApp;
 import wave.components.IconWeatherButton;
 import wave.infrastructure.WaveSession;
-import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.LayerFadeTransition;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.WindLayer;
@@ -97,16 +92,22 @@ public class WeatherOverlayPanel extends BorderPane
 				layerIndex++;
 			}
 
-			Slider lightningSlider = new Slider(0, 1, 1);
-			layerPane.add(lightningSlider, 1, layerIndex);
-			Path lightningPath1 = Paths.get("data", "icons", "lightning_selected.png");
-			Image lightningImage1 = new Image(lightningPath1.toUri().toURL().toString());
-			Path lightningPath2 = Paths.get("data", "icons", "lightning_unselected.png");
-			Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
-			this.lightningButton = new IconWeatherButton("Lightning", lightningImage1, lightningImage2);
-			this.lightningButton.setGraphicTextGap(12);
-			layerPane.add(this.lightningButton, 0, layerIndex);
-			layerIndex++;
+			KMLLayer lightningLayer = session.getLightningLayer();
+			if (lightningLayer != null)
+			{
+				Slider lightningSlider = new Slider(0, 1, lightningLayer.getOpacity());
+				layerPane.add(lightningSlider, 1, layerIndex);
+				this.linkLayerWithSlider(lightningLayer, lightningSlider);
+				Path lightningPath1 = Paths.get("data", "icons", "lightning_selected.png");
+				Image lightningImage1 = new Image(lightningPath1.toUri().toURL().toString());
+				Path lightningPath2 = Paths.get("data", "icons", "lightning_unselected.png");
+				Image lightningImage2 = new Image(lightningPath2.toUri().toURL().toString());
+				this.lightningButton = new IconWeatherButton("Lightning", lightningImage1, lightningImage2);
+				this.lightningButton.setGraphicTextGap(12);
+				this.linkLayerWithButton(lightningLayer, this.lightningButton, lightningSlider.valueProperty());
+				layerPane.add(this.lightningButton, 0, layerIndex);
+				layerIndex++;
+			}
 
 			KMLLayer temperatureLayer = session.getTemperatureLayer();
 			if (temperatureLayer != null)
@@ -146,21 +147,6 @@ public class WeatherOverlayPanel extends BorderPane
 		{
 		}
 		this.setCenter(layerPane);
-
-		Button resetThemeButton = new Button("Reset");
-		resetThemeButton.setOnAction((event) ->
-		{
-			Scene scene = WaveApp.getStage().getScene();
-			Path stylesheet = Wave.WAVE_CSS_FILE;
-			if (Files.exists(stylesheet))
-			{
-				scene.getStylesheets().set(0, "file:///" + stylesheet.toAbsolutePath().toString().replace("\\", "/"));
-			}
-			else
-			{
-			}
-		});
-		this.setBottom(resetThemeButton);
 	}
 
 	private void linkLayerWithButton(KMLLayer layer, ToggleButton toggleButton, DoubleProperty opacityProperty)

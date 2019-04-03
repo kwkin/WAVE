@@ -60,6 +60,9 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	private final Label humidityLabel;
 	private final TextField humidityTextfield;
 	private final Label humidityUnitLabel;
+	private final Label lightningLabel;
+	private final TextField lightningTextfield;
+	private final Label lightningUnitLabel;
 
 	private IconWeatherButton resetToggleButton;
 	
@@ -70,6 +73,8 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	private KMLLayer temperatureLayer;
 	private int lastTemperatureValue;
 	private WindLayer windLayer;
+	private KMLLayer lightningLayer;
+	private int lastLightningValue;
 
 	public MarkerPanel(WaveSession session)
 	{
@@ -113,6 +118,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.humidityLayer = session.getHumidityLayer();
 		this.temperatureLayer = session.getTemperatureLayer();
 		this.windLayer = session.getWindLayer();
+		this.lightningLayer = session.getLightningLayer();
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5, 5, 5, 5));
@@ -180,7 +186,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.longitudeLabel = new Label("Longitude: ");
 		grid.add(this.longitudeLabel, 0, rowIndex);
-		this.longitudetextfield = new TextField();
+		this.longitudetextfield = new TextField("No Data");
 		grid.add(this.longitudetextfield, 1, rowIndex);
 		this.longitudeUnitLabel = new Label(system.getAngleUnit());
 		grid.add(this.longitudeUnitLabel, 2, rowIndex);
@@ -218,7 +224,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.elevationLabel = new Label("Elevation: ");
 		grid.add(this.elevationLabel, 0, rowIndex);
-		this.elevationTextfield = new TextField();
+		this.elevationTextfield = new TextField("No Data");
 		grid.add(this.elevationTextfield, 1, rowIndex);
 		this.elevationUnitLabel = new Label();
 		grid.add(this.elevationUnitLabel, 2, rowIndex);
@@ -256,7 +262,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.rainLabel = new Label("Rain: ");
 		grid.add(this.rainLabel, 0, rowIndex);
-		this.rainTextfield = new TextField();
+		this.rainTextfield = new TextField("No Data");
 		grid.add(this.rainTextfield, 1, rowIndex);
 		this.rainUnitLabel = new Label();
 		grid.add(this.rainUnitLabel, 2, rowIndex);
@@ -264,7 +270,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.windSpeedLabel = new Label("Wind Speed: ");
 		grid.add(this.windSpeedLabel, 0, rowIndex);
-		this.windSpeedTextField = new TextField();
+		this.windSpeedTextField = new TextField("No Data");
 		grid.add(this.windSpeedTextField, 1, rowIndex);
 		this.windSpeedUnitLabel = new Label();
 		grid.add(this.windSpeedUnitLabel, 2, rowIndex);
@@ -272,7 +278,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.windDirectionLabel = new Label("Wind Direction: ");
 		grid.add(this.windDirectionLabel, 0, rowIndex);
-		this.windDirectionTextField = new TextField();
+		this.windDirectionTextField = new TextField("No Data");
 		grid.add(this.windDirectionTextField, 1, rowIndex);
 		this.windDirectionUnitLabel = new Label(system.getAngleUnit());
 		grid.add(this.windDirectionUnitLabel, 2, rowIndex);
@@ -280,7 +286,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.tempuratureLabel = new Label("Temp.: ");
 		grid.add(this.tempuratureLabel, 0, rowIndex);
-		this.tempuratureTextfield = new TextField();
+		this.tempuratureTextfield = new TextField("No Data");
 		grid.add(this.tempuratureTextfield, 1, rowIndex);
 		this.temperatureUnitLabel = new Label();
 		grid.add(this.temperatureUnitLabel, 2, rowIndex);
@@ -288,10 +294,18 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 
 		this.humidityLabel = new Label("Humidity: ");
 		grid.add(this.humidityLabel, 0, rowIndex);
-		this.humidityTextfield = new TextField();
+		this.humidityTextfield = new TextField("No Data");
 		grid.add(this.humidityTextfield, 1, rowIndex);
 		this.humidityUnitLabel = new Label();
 		grid.add(this.humidityUnitLabel, 2, rowIndex);
+		rowIndex++;
+
+		this.lightningLabel = new Label("Lightning: ");
+		grid.add(this.lightningLabel, 0, rowIndex);
+		this.lightningTextfield = new TextField("No Data");
+		grid.add(this.lightningTextfield, 1, rowIndex);
+		this.lightningUnitLabel = new Label("fl/km^2/yr");
+		grid.add(this.lightningUnitLabel, 2, rowIndex);
 		rowIndex++;
 
 		Button updateButton = new Button("Reset Values");
@@ -392,6 +406,26 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 					else
 					{
 						this.tempuratureTextfield.setText(Double.toString(temp));
+					}
+				}
+			}
+		}
+		if (this.lightningLayer != null)
+		{
+			if (this.lightningLayer.isEnabled() || this.resetToggleButton.isSelected())
+			{
+				int lightningValue = this.lightningLayer.getLayerValue(position.latitude, position.longitude, elevation);
+				if (this.lastLightningValue != lightningValue)
+				{
+					double lightning = WeatherConverter.convertLightningToValue(lightningValue);
+					this.lastLightningValue = lightningValue;
+					if (lightning <= 0)
+					{
+						this.lightningTextfield.setText("No Data");
+					}
+					else
+					{
+						this.lightningTextfield.setText(Double.toString(lightning));
 					}
 				}
 			}

@@ -18,4 +18,10 @@ public class WeatherConverter
 	{
 		return HumidityColorValues.getColor(intPixelValue);
 	}
+	
+	public static double convertLightningToValue(int intPixelValue)
+	{
+		LightningColorValues lightning = LightningColorValues.getLightning(intPixelValue);
+		return lightning.getMeasurement();
+	}
 }

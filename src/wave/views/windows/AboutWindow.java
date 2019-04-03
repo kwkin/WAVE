@@ -57,7 +57,10 @@ public class AboutWindow extends Stage
 		waveTextFlow.setWrapText(true);
 		borderText.setCenter(waveTextFlow);
 
-		StringBuilder dataText = new StringBuilder("The humidity and land temperature datasets are provided by Nasa Earth Observations (NEO). The rain dataset is provided by Nasa Precipitation Measurment Missions (PMM). The wind dataset is converted from the National Centers for Environmental Information (NOAA).");
+		StringBuilder dataText = new StringBuilder("The humidity and land temperature datasets are provided by Nasa Earth Observations (NEO). ");
+		dataText.append("The rain dataset is provided by Nasa Precipitation Measurment Missions (PMM).");
+		dataText.append("The wind dataset is converted from the National Centers for Environmental Information (NOAA).");
+		dataText.append("The lightning dataset originates from the National Space Science Technology Center (NSSTC) and provided by the Google Earth Blog.");
 		Label dataTextFlow = new Label(dataText.toString());
 		Font defaultFont = dataTextFlow.getFont();
 		Font dataTextFont = new Font(defaultFont.getFamily(), 8);
