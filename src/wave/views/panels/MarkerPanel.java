@@ -55,7 +55,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 	private final TextField windDirectionTextField;
 	private final Label windDirectionUnitLabel;
 	private final Label tempuratureLabel;
-	private final TextField tempuratureTextfield;
+	private final TextField temperatureTextfield;
 	private final Label temperatureUnitLabel;
 	private final Label humidityLabel;
 	private final TextField humidityTextfield;
@@ -125,25 +125,25 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.setHgap(5);
 		grid.setVgap(5);
 		ColumnConstraints labelColumn = new ColumnConstraints();
-		labelColumn.setPercentWidth(45);
+		labelColumn.setPercentWidth(32);
 		labelColumn.setHgrow(Priority.ALWAYS);
 		labelColumn.setHalignment(HPos.RIGHT);
 		grid.getColumnConstraints().add(labelColumn);
 
 		ColumnConstraints displayColumn = new ColumnConstraints();
-		displayColumn.setPercentWidth(40);
+		displayColumn.setPercentWidth(44);
 		displayColumn.setHgrow(Priority.ALWAYS);
 		displayColumn.setHalignment(HPos.LEFT);
 		grid.getColumnConstraints().add(displayColumn);
 
 		ColumnConstraints unitColumn = new ColumnConstraints();
-		unitColumn.setPercentWidth(15);
+		unitColumn.setPercentWidth(25);
 		unitColumn.setHgrow(Priority.ALWAYS);
 		unitColumn.setHalignment(HPos.LEFT);
 		grid.getColumnConstraints().add(unitColumn);
 
 		int rowIndex = 0;
-		this.latitudeLabel = new Label("Latitude: ");
+		this.latitudeLabel = new Label("Latitude:");
 		grid.add(this.latitudeLabel, 0, rowIndex);
 		this.latitudeTextfield = new TextField();
 		grid.add(this.latitudeTextfield, 1, rowIndex);
@@ -184,7 +184,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			}
 		});
 
-		this.longitudeLabel = new Label("Longitude: ");
+		this.longitudeLabel = new Label("Longitude:");
 		grid.add(this.longitudeLabel, 0, rowIndex);
 		this.longitudetextfield = new TextField("No Data");
 		grid.add(this.longitudetextfield, 1, rowIndex);
@@ -222,7 +222,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			}
 		});
 
-		this.elevationLabel = new Label("Elevation: ");
+		this.elevationLabel = new Label("Elevation:");
 		grid.add(this.elevationLabel, 0, rowIndex);
 		this.elevationTextfield = new TextField("No Data");
 		grid.add(this.elevationTextfield, 1, rowIndex);
@@ -260,7 +260,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			}
 		});
 
-		this.rainLabel = new Label("Rain: ");
+		this.rainLabel = new Label("Rain:");
 		grid.add(this.rainLabel, 0, rowIndex);
 		this.rainTextfield = new TextField("No Data");
 		grid.add(this.rainTextfield, 1, rowIndex);
@@ -268,7 +268,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.rainUnitLabel, 2, rowIndex);
 		rowIndex++;
 
-		this.windSpeedLabel = new Label("Wind Speed: ");
+		this.windSpeedLabel = new Label("Wind Spd:");
 		grid.add(this.windSpeedLabel, 0, rowIndex);
 		this.windSpeedTextField = new TextField("No Data");
 		grid.add(this.windSpeedTextField, 1, rowIndex);
@@ -276,7 +276,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.windSpeedUnitLabel, 2, rowIndex);
 		rowIndex++;
 
-		this.windDirectionLabel = new Label("Wind Direction: ");
+		this.windDirectionLabel = new Label("Wind Dir:");
 		grid.add(this.windDirectionLabel, 0, rowIndex);
 		this.windDirectionTextField = new TextField("No Data");
 		grid.add(this.windDirectionTextField, 1, rowIndex);
@@ -284,15 +284,15 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.windDirectionUnitLabel, 2, rowIndex);
 		rowIndex++;
 
-		this.tempuratureLabel = new Label("Temp.: ");
+		this.tempuratureLabel = new Label("Temp.:");
 		grid.add(this.tempuratureLabel, 0, rowIndex);
-		this.tempuratureTextfield = new TextField("No Data");
-		grid.add(this.tempuratureTextfield, 1, rowIndex);
+		this.temperatureTextfield = new TextField("No Data");
+		grid.add(this.temperatureTextfield, 1, rowIndex);
 		this.temperatureUnitLabel = new Label();
 		grid.add(this.temperatureUnitLabel, 2, rowIndex);
 		rowIndex++;
 
-		this.humidityLabel = new Label("Humidity: ");
+		this.humidityLabel = new Label("Humidity:");
 		grid.add(this.humidityLabel, 0, rowIndex);
 		this.humidityTextfield = new TextField("No Data");
 		grid.add(this.humidityTextfield, 1, rowIndex);
@@ -300,11 +300,11 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.humidityUnitLabel, 2, rowIndex);
 		rowIndex++;
 
-		this.lightningLabel = new Label("Lightning: ");
+		this.lightningLabel = new Label("Lightning:");
 		grid.add(this.lightningLabel, 0, rowIndex);
 		this.lightningTextfield = new TextField("No Data");
 		grid.add(this.lightningTextfield, 1, rowIndex);
-		this.lightningUnitLabel = new Label("fl/km^2/yr");
+		this.lightningUnitLabel = new Label("km^2/yr");
 		grid.add(this.lightningUnitLabel, 2, rowIndex);
 		rowIndex++;
 
@@ -401,11 +401,11 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 					this.lastTemperatureValue = temperature;
 					if (temp == -1)
 					{
-						this.tempuratureTextfield.setText("No Data");
+						this.temperatureTextfield.setText("No Data");
 					}
 					else
 					{
-						this.tempuratureTextfield.setText(Double.toString(temp));
+						this.temperatureTextfield.setText(Double.toString(temp));
 					}
 				}
 			}
@@ -437,13 +437,29 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		double latitude = position.latitude.degrees;
 		double longitude = position.longitude.degrees;
 		double elevation = position.elevation;
-		int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
 		this.latitudeTextfield.setText(Double.toString(latitude));
 		this.longitudetextfield.setText(Double.toString(longitude));
 		this.elevationTextfield.setText(Double.toString(elevation));
-		double mmRain = WeatherConverter.convertRainToValue(rain);
+		
+		int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
 		this.lastRainValue = rain;
+		double mmRain = WeatherConverter.convertRainToValue(rain);
 		this.rainTextfield.setText(Double.toString(mmRain));
+
+		int lightningValue = this.lightningLayer.getLayerValue(position.latitude, position.longitude, elevation);
+		this.lastLightningValue = lightningValue;
+		double lightning = WeatherConverter.convertRainToValue(lightningValue);
+		this.lightningTextfield.setText(Double.toString(lightning));
+
+		int temperatureValue = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
+		this.lastTemperatureValue = lightningValue;
+		double temperature = WeatherConverter.convertRainToValue(temperatureValue);
+		this.temperatureTextfield.setText(Double.toString(temperature));
+
+		int humidityValue = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
+		this.lastHumidityValue = humidityValue;
+		double humidity = WeatherConverter.convertRainToValue(humidityValue);
+		this.humidityTextfield.setText(Double.toString(humidity));
 	}
 
 	private void updateLatitude()
@@ -491,5 +507,6 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		this.windSpeedUnitLabel.setText(system.getWindSpeedUnit());
 		this.temperatureUnitLabel.setText(system.getTemperatureUnit());
 		this.humidityUnitLabel.setText(system.getHumidityUnit());
+		this.lightningUnitLabel.setText(system.getLightningUnit());
 	}
 }

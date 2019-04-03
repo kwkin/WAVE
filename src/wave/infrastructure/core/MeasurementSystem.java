@@ -145,4 +145,22 @@ public enum MeasurementSystem
 	{
 		return "%";
 	}
+
+	public String getLightningUnit()
+	{
+		String string;
+		switch (this)
+		{
+		case IMPERIAL:
+			string = "mi^2/yr";
+			break;
+		case METRIC:
+			string = "km^2/yr";
+			break;
+		default:
+			string = "";
+			break;
+		}
+		return string;
+	}
 }
