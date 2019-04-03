@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.render.markers.Marker;
+import wave.infrastructure.models.WindMarker;
 import wave.infrastructure.util.PointUtil;
 
 public class WindLayer extends MarkerLayer

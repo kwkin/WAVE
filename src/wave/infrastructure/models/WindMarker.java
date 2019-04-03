@@ -1,4 +1,4 @@
-package wave.infrastructure.layers;
+package wave.infrastructure.models;
 
 import java.awt.Color;
 

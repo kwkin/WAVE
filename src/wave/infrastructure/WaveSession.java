@@ -14,6 +14,7 @@ import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.AnnotationLayer;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.render.Material;
@@ -23,8 +24,10 @@ import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
 import wave.infrastructure.handlers.GlobeSpinAnimation;
+import wave.infrastructure.handlers.WeatherHandler;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
+import wave.infrastructure.layers.WeatherAnnotationLayer;
 import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
@@ -34,8 +37,10 @@ public class WaveSession
 {
 	private WorldWindow worldWindow;
 	private WaveWindow waveWindow;
+	private WeatherHandler weatherHandler;
 
 	private MarkerLayer markerLayer;
+	private AnnotationLayer annotationLayer;
 	private DraggableMarker soundMarker;
 	private KMLLayer rainLayer;
 	private WindLayer windLayer;
@@ -55,6 +60,7 @@ public class WaveSession
 		this.initializeMarker();
 		this.loadWeatherOverlays();
 		this.intializeAnimator();
+		this.weatherHandler = new WeatherHandler(this);
 	}
 
 	public DraggableMarker getSoundMarker()
@@ -150,6 +156,11 @@ public class WaveSession
 	{
 		return this.lightningLayer;
 	}
+	
+	public WeatherHandler getWeatherHander()
+	{
+		return this.weatherHandler;
+	}
 
 	private void loadWeatherOverlays()
 	{
@@ -232,6 +243,9 @@ public class WaveSession
 		this.markerLayer.setMarkers(markers);
 		this.worldWindow.addSelectListener(new BasicDragger(this.worldWindow));
 		this.worldWindow.getModel().getLayers().add(this.markerLayer);
+		
+		this.annotationLayer = new WeatherAnnotationLayer(this.soundMarker);
+		this.worldWindow.getModel().getLayers().add(this.annotationLayer);
 	}
 
 	private void intializeAnimator()
