@@ -60,7 +60,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 				public void changed(ObservableValue<? extends Position> observable, Position oldValue,
 						Position newValue)
 				{
-					if (newValue != oldValue)
+					if (newValue != oldValue && PreferencesLoader.preferences().getShowAnnotation())
 					{
 						updateAnnotation(newValue);
 					}
@@ -79,6 +79,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 				setEnabled(newValue);
 			}
 		});
+		updateAnnotation(session.getSoundMarker().getPosition());
 	}
 
 	public void updateAnnotation(Position newValue)
@@ -95,6 +96,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append(pref.getAngleUnitDisplay().angleDescription(newValue.getLongitude()));
 			markerText.append("\nElevation: ");
 			markerText.append(pref.getLengthUnitDisplay().lengthDescription(newValue.getElevation()));
+			markerText.append("\n");
 		}
 		// TODO append units
 		DecimalFormat weatherFormat = new DecimalFormat(".##");
@@ -111,6 +113,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append("Rain: ");
 			double rain = this.handler.getRain();
 			markerText.append(weatherFormat.format(rain));
+			markerText.append(pref.getLengthUnitDisplay().getRainUnit());
 		}
 		if (this.handler.showWind())
 		{
@@ -125,9 +128,11 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append("Wind Spd: ");
 			double speed = this.handler.getWindSpeed();
 			markerText.append(weatherFormat.format(speed));
+			markerText.append(pref.getLengthUnitDisplay().getWindSpeedUnit());
 			markerText.append("\nWind Dir: ");
 			double direction = this.handler.getWindDirection();
 			markerText.append(weatherFormat.format(direction));
+			markerText.append(pref.getLengthUnitDisplay().getAngleUnit());
 		}
 		if (this.handler.showLightning())
 		{
@@ -142,6 +147,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append("Lightning: ");
 			double temperature = this.handler.getLightning();
 			markerText.append(weatherFormat.format(temperature));
+			markerText.append(pref.getLengthUnitDisplay().getLightningUnit());
 		}
 		if (this.handler.showTemperature())
 		{
@@ -156,6 +162,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append("Temperature: ");
 			double temperature = this.handler.getTemperature();
 			markerText.append(weatherFormat.format(temperature));
+			markerText.append(pref.getLengthUnitDisplay().getTemperatureUnit());
 		}
 		if (this.handler.showHumidity())
 		{
@@ -170,6 +177,7 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append("Humidity: ");
 			double temperature = this.handler.getHumidity();
 			markerText.append(weatherFormat.format(temperature));
+			markerText.append(pref.getLengthUnitDisplay().getHumidityUnit());
 		}
 		this.annotation.setText(markerText.toString());
 	}

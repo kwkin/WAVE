@@ -112,6 +112,11 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			this.resetToggleButton.setIconSize(48, 48);
 			this.resetToggleButton.setSelected(true);
 			this.resetToggleButton.selectedProperty().bindBidirectional(pref.showAllWeatherProperty());
+			this.resetToggleButton.setOnAction(value -> 
+			{
+				session.updateWeatherAnnotation(session.getSoundMarker().getPosition());
+				session.getWorldWindow().redraw();
+			});
 			buttons.getChildren().add(this.resetToggleButton);
 
 			Path positionUnselectedPath = Paths.get("data", "icons", "position_unselected.png");
