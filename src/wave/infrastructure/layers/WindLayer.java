@@ -142,27 +142,63 @@ public class WindLayer extends MarkerLayer
 	public double getDirection(Position position)
 	{
 		double direction = 0;
-		int latIntIndex = (int)this.latIndex;
-		int lonIntIndex = (int)this.lonIndex;
+		int topIndex = (int)this.latIndex;
+		int rightIndex = (int)this.lonIndex;
+		int bottomIndex = topIndex - 1;
+		int leftIndex = rightIndex - 1;
+		if (topIndex == 0)
+		{
+			bottomIndex = this.numLatitude - 1;
+		}
+		if (rightIndex == 0)
+		{
+			leftIndex = this.numLongitude - 1;
+		}
+		
 		
 		// Top right
-		direction += this.markers[latIntIndex][lonIntIndex].getDirection() * this.trScale;
+		direction += this.markers[topIndex][rightIndex].getDirection() * this.trScale;
 		
 		// Bottom right
-		direction += this.markers[latIntIndex - 1][lonIntIndex].getDirection() * this.brScale;
+		direction += this.markers[bottomIndex][rightIndex].getDirection() * this.brScale;
 
 		// Top Left
-		direction += this.markers[latIntIndex][lonIntIndex - 1].getDirection() * this.tlScale;
+		direction += this.markers[topIndex][leftIndex].getDirection() * this.tlScale;
 
 		// Bottom Left
-		direction += this.markers[latIntIndex - 1][lonIntIndex - 1].getDirection() * this.blScale;
+		direction += this.markers[bottomIndex][leftIndex].getDirection() * this.blScale;
 		direction = Math.min(direction, 360);
 		return direction;
 	}
 	
 	public double getSpeed()
 	{
-		return 0;
+		double speed = 0;
+		int topIndex = (int)this.latIndex;
+		int rightIndex = (int)this.lonIndex;
+		int bottomIndex = topIndex - 1;
+		int leftIndex = rightIndex - 1;
+		if (topIndex == 0)
+		{
+			bottomIndex = this.numLatitude - 1;
+		}
+		if (rightIndex == 0)
+		{
+			leftIndex = this.numLongitude - 1;
+		}
+		
+		// Top right
+		speed += this.markers[topIndex][rightIndex].getSpeed() * this.trScale;
+		
+		// Bottom right
+		speed += this.markers[bottomIndex][rightIndex].getSpeed() * this.brScale;
+
+		// Top Left
+		speed += this.markers[topIndex][leftIndex].getSpeed() * this.tlScale;
+
+		// Bottom Left
+		speed += this.markers[bottomIndex][leftIndex].getSpeed() * this.blScale;
+		return speed;
 	}
 	
 	public void setIsEnabled(boolean isEnabled)

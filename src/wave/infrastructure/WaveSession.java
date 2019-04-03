@@ -29,7 +29,6 @@ import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.models.DraggableMarker;
 import wave.views.WaveWindow;
 
-// TODO fix wind speed not calculating
 // TODO add audio listener class that is called when the marker position updates
 public class WaveSession
 {
