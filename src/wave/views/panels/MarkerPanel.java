@@ -115,7 +115,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			showPositionButton.setTooltip(new Tooltip("Toggles whether the position information will be added to the annotation."));
 			showPositionButton.setIconSize(48, 48);
 			showPositionButton.setSelected(true);
-			markerToggleButton.selectedProperty().bindBidirectional(pref.showPositionProperty());
+			showPositionButton.selectedProperty().bindBidirectional(pref.showPositionProperty());
 			buttons.getChildren().add(showPositionButton);
 		}
 		catch (MalformedURLException e)
