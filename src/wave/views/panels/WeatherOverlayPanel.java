@@ -187,6 +187,7 @@ public class WeatherOverlayPanel extends BorderPane
 						}
 					});
 					fade.play();
+					this.session.updateWeatherAnnotation(session.getSoundMarker().getPosition());
 				});
 			});
 			layer.addPropertyChangeListener(new PropertyChangeListener()
@@ -213,6 +214,7 @@ public class WeatherOverlayPanel extends BorderPane
 				Platform.runLater(() ->
 				{
 					layer.setEnabled(toggleButton.isSelected());
+					this.session.updateWeatherAnnotation(session.getSoundMarker().getPosition());
 				});
 			});
 			layer.addPropertyChangeListener(new PropertyChangeListener()

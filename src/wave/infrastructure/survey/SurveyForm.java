@@ -14,7 +14,7 @@ public class SurveyForm
 		// TODO complete scenarios
 		SurveyScenario scenario1 = new SurveyScenario(ScenarioType.SCENARIO, "This is question 1");
 		this.scenarios.add(scenario1);
-		SurveyScenario scenario2 = new SurveyScenario(ScenarioType.DIRECTION, "This is question 2");
+		SurveyScenario scenario2 = new SurveyScenario(ScenarioType.DIRECTION, "What direction do you think the thunder came from?");
 		this.scenarios.add(scenario2);
 		SurveyScenario scenario3 = new SurveyScenario(ScenarioType.RATING, "This is question 3");
 		this.scenarios.add(scenario3);

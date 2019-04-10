@@ -118,8 +118,7 @@ public class DisplayPreferencesPanel extends BorderPane implements PreferencesPa
 		this.enableNetwork.setAlignment(Pos.CENTER_LEFT);
 		gridPane.add(this.enableNetwork, 1, 8);
 
-		StringBuilder networkConnectionText = new StringBuilder("Toggles the visibility of the performance panel.");
-		networkConnectionText.append("The performance panel displays runtime statistics, such as frames per second and memory usage of indiivdual layers.");
+		StringBuilder networkConnectionText = new StringBuilder("Toggles the network connection to the image and elevation servers.");
 		Label networkConnectionFlow = new Label(networkConnectionText.toString());
 		networkConnectionFlow.setWrapText(true);
 		gridPane.add(networkConnectionFlow, 1, 9, 2, 1);
