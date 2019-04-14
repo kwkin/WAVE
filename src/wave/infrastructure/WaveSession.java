@@ -23,7 +23,7 @@ import gov.nasa.worldwind.render.markers.Marker;
 import gov.nasa.worldwind.util.BasicDragger;
 import javafx.application.Platform;
 import wave.infrastructure.handlers.GlobeSpinAnimation;
-import wave.infrastructure.handlers.WeatherHandler;
+import wave.infrastructure.handlers.weather.WeatherHandler;
 import wave.infrastructure.layers.KMLLayer;
 import wave.infrastructure.layers.KMLLayerLoader;
 import wave.infrastructure.layers.WeatherAnnotationLayer;

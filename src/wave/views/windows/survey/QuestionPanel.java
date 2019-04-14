@@ -3,7 +3,7 @@ package wave.views.windows.survey;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import wave.infrastructure.survey.ScenarioType;
-import wave.infrastructure.survey.SurveyScenario;
+import wave.infrastructure.survey.SurveyQuestion;
 
 public interface QuestionPanel
 {
@@ -22,7 +22,7 @@ public interface QuestionPanel
 	 * 
 	 * @param scenario
 	 */
-	public static QuestionPanel CreatePanel(SurveyScenario scenario)
+	public static QuestionPanel CreatePanel(SurveyQuestion scenario)
 	{
 		ScenarioType type = scenario.getType();
 		QuestionPanel panel = null;

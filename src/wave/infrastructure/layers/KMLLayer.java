@@ -107,7 +107,7 @@ public class KMLLayer extends RenderableLayer
 	{
 		if (this.dc == null)
 		{
-			return 0;
+			return -1;
 		}
 
 		if (this.bufferedImage == null)

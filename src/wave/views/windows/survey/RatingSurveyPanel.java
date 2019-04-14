@@ -12,7 +12,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import wave.infrastructure.survey.SurveyScenario;
+import wave.infrastructure.survey.SurveyQuestion;
 
 public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 {
@@ -20,7 +20,7 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 	private final Label questionLabel;
 	private ToggleGroup toggleGroup;
 
-	public RatingSurveyPanel(SurveyScenario scenario)
+	public RatingSurveyPanel(SurveyQuestion scenario)
 	{
 		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
 

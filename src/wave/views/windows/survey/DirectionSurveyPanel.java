@@ -26,7 +26,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import wave.infrastructure.core.Wave;
-import wave.infrastructure.survey.SurveyScenario;
+import wave.infrastructure.survey.SurveyQuestion;
 
 public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 {
@@ -38,7 +38,7 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 	private final Label questionLabel;
 	private final Slider degreeSlider;
 
-	public DirectionSurveyPanel(SurveyScenario scenario)
+	public DirectionSurveyPanel(SurveyQuestion scenario)
 	{
 		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
 		this.degreeProperty = new SimpleStringProperty();

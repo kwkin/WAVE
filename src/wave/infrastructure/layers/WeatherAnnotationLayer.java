@@ -15,7 +15,7 @@ import gov.nasa.worldwind.render.GlobeAnnotation;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import wave.infrastructure.WaveSession;
-import wave.infrastructure.handlers.WeatherHandler;
+import wave.infrastructure.handlers.weather.WeatherHandler;
 import wave.infrastructure.models.DraggableMarker;
 import wave.infrastructure.preferences.Preferences;
 import wave.infrastructure.preferences.PreferencesLoader;

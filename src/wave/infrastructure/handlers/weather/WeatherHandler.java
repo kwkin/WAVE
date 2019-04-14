@@ -1,4 +1,4 @@
-package wave.infrastructure.handlers;
+package wave.infrastructure.handlers.weather;
 
 import gov.nasa.worldwind.geom.Position;
 import javafx.beans.property.ObjectProperty;
@@ -26,7 +26,9 @@ public class WeatherHandler
 	private KMLLayer temperatureLayer;
 	private WindLayer windLayer;
 	private KMLLayer lightningLayer;
-
+	
+	private LightningSpawner spawner;
+	
 	public WeatherHandler(WaveSession session)
 	{
 		this.rainLayer = session.getRainLayer();
@@ -44,6 +46,9 @@ public class WeatherHandler
 		this.humidity = new SimpleObjectProperty<Double>(0.0);
 		this.temperature = new SimpleObjectProperty<Double>(0.0);
 		this.lightning = new SimpleObjectProperty<Double>(0.0);
+		
+		this.spawner = new LightningSpawner(0);
+		this.spawner.startProcess();
 	}
 
 	public void updateMarkerValues(Position position)
@@ -103,6 +108,13 @@ public class WeatherHandler
 				int lightning = this.lightningLayer.getLayerValue(position.latitude, position.longitude, elevation);
 				double lightningValue = WeatherConverter.convertLightningToValue(lightning);
 				this.setLightning(lightningValue);
+				
+				if (lightningValue >= 0.0001)
+				{
+					this.spawner.stopProcess();
+					this.spawner = new LightningSpawner(lightningValue);
+					this.spawner.startProcess();
+				}
 			}
 		}
 	}

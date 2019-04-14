@@ -1,4 +1,4 @@
-package wave.infrastructure.handlers;
+package wave.infrastructure.handlers.weather;
 
 import java.nio.ByteBuffer;
 

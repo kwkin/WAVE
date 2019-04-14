@@ -87,7 +87,7 @@ public class Survey
 		return new Survey(session, surveyFile, form);
 	}
 
-	public SurveyScenario getNextScenario()
+	public SurveyQuestion getNextScenario()
 	{
 		if (scenarioIndex == this.form.getScenarios().size())
 		{
@@ -96,7 +96,7 @@ public class Survey
 		return this.form.getScenario(this.scenarioIndex++);
 	}
 
-	public SurveyScenario getScenario(int index)
+	public SurveyQuestion getScenario(int index)
 	{
 		this.scenarioIndex = index;
 		return this.form.getScenario(this.scenarioIndex);
@@ -112,7 +112,7 @@ public class Survey
 		return this.form.getScenarios().size();
 	}
 
-	public void writeAnswer(int questionNumber, SurveyScenario scenario, String answer)
+	public void writeAnswer(int questionNumber, SurveyQuestion scenario, String answer)
 	{
 		StringJoiner tokenizer = new StringJoiner(",");
 		tokenizer.add(Integer.toString(questionNumber));

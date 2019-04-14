@@ -24,7 +24,7 @@ import wave.infrastructure.core.Wave;
 import wave.infrastructure.handlers.ErrorDialog;
 import wave.infrastructure.survey.Survey;
 import wave.infrastructure.survey.SurveyForm;
-import wave.infrastructure.survey.SurveyScenario;
+import wave.infrastructure.survey.SurveyQuestion;
 
 public class SurveyPanel extends BorderPane
 {
@@ -32,7 +32,7 @@ public class SurveyPanel extends BorderPane
 	protected SurveyWindow parent;
 	protected Survey survey;
 	protected QuestionPanel currentPanel;
-	protected SurveyScenario currentScenario;
+	protected SurveyQuestion currentScenario;
 	protected boolean isSurveyStarted;
 	protected boolean isSurveyCompleted;
 
