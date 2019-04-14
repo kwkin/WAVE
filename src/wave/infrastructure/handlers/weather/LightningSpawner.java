@@ -24,10 +24,13 @@ public class LightningSpawner extends TimerTask
 
 	public void startProcess()
 	{
-		long baseRate = this.calculateRate();
-		if (baseRate > 0)
+		if (this.baseRate > 0)
 		{
-			this.timerProcess.scheduleAtFixedRate(this, baseRate, baseRate);
+			long baseRate = this.calculateRate();
+			if (baseRate > 0)
+			{
+				this.timerProcess.scheduleAtFixedRate(this, baseRate, baseRate);
+			}
 		}
 	}
 	
@@ -53,7 +56,6 @@ public class LightningSpawner extends TimerTask
 		double lightningDist = MIN_LIGHTNING + (MAX_LIGHTNING - MIN_LIGHTNING) * this.random.nextDouble();
 		double lightningDir = 359 * this.random.nextDouble();
 		long deviation = (long) (2000 * this.random.nextDouble());
-		System.out.println("Spawning in: " + deviation);
 		this.lightningTasks = new LightningSoundTask(lightningDist, lightningDir, deviation);
 		this.lightningTasks.startProcess();
 	}

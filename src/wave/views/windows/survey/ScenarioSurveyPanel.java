@@ -4,30 +4,88 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import wave.infrastructure.survey.ScenarioQuestion;
 import wave.infrastructure.survey.SurveyQuestion;
 
 public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
+	private final BooleanProperty bothSoundsPlayedProperty;
 	private final Label questionLabel;
 	private ToggleGroup toggleGroup;
 
-	public ScenarioSurveyPanel(SurveyQuestion scenario)
+	private int soundAPressed;
+	private int soundBPressed;
+	
+	public ScenarioSurveyPanel(SurveyQuestion question)
 	{
+		ScenarioQuestion scenario = (ScenarioQuestion)question;
+		
+		this.bothSoundsPlayedProperty = new SimpleBooleanProperty();
 		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
 
+		ColumnConstraints leftColumn = new ColumnConstraints();
+		leftColumn.setHgrow(Priority.ALWAYS);
+		leftColumn.setHalignment(HPos.CENTER);
+		leftColumn.setPercentWidth(50);
+
+		ColumnConstraints rightColumn = new ColumnConstraints();
+		rightColumn.setHgrow(Priority.ALWAYS);
+		rightColumn.setHalignment(HPos.CENTER);
+		rightColumn.setPercentWidth(50);
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.getColumnConstraints().addAll(leftColumn, rightColumn);
+		this.setTop(grid);
+		Label selectLabel = new Label("Select both sounds to proceed.");
+		grid.add(selectLabel, 0, 0, 2, 1);
+		
+		Button soundAButton = new Button("Sound A");
+		this.soundAPressed = 0;
+		soundAButton.setOnAction(value -> 
+		{
+			scenario.getSoundA().play();
+			this.soundAPressed++;
+			if (this.soundAPressed > 0 && this.soundBPressed > 0)
+			{
+				this.bothSoundsPlayedProperty.setValue(true);
+			}
+		});
+		soundAButton.setMaxWidth(Double.MAX_VALUE);
+		grid.add(soundAButton, 0, 1);
+		Button soundBButton = new Button("Sound B");
+		this.soundBPressed = 0;
+		soundBButton.setOnAction(value -> 
+		{
+			scenario.getSoundB().play();
+			this.soundBPressed++;
+			if (this.soundAPressed > 0 && this.soundBPressed > 0)
+			{
+				this.bothSoundsPlayedProperty.setValue(true);
+			}
+		});
+		soundBButton.setMaxWidth(Double.MAX_VALUE);
+		grid.add(soundBButton, 1, 1);
+		
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
 		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
-		this.setTop(this.questionLabel);
+		this.questionLabel.disableProperty().bind(this.bothSoundsPlayedProperty.not());
+		grid.add(this.questionLabel, 0, 2, 2, 1);
 
 		GridPane scenarioPane = new GridPane();
 		scenarioPane.setPadding(new Insets(5, 5, 5, 5));
@@ -42,9 +100,11 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 				isAnswerSelectedProperty.setValue(true);
 			}
 		});
-		RadioButton firstScenario = new RadioButton("First");
+		RadioButton firstScenario = new RadioButton("Sound A");
+		firstScenario.disableProperty().bind(this.bothSoundsPlayedProperty.not());
 		firstScenario.setToggleGroup(this.toggleGroup);
-		RadioButton secondScenario = new RadioButton("Second");
+		RadioButton secondScenario = new RadioButton("Second B");
+		secondScenario.disableProperty().bind(this.bothSoundsPlayedProperty.not());
 		secondScenario.setToggleGroup(this.toggleGroup);
 		scenarioPane.add(firstScenario, 0, 0);
 		scenarioPane.add(secondScenario, 0, 1);

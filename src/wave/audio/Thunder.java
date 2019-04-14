@@ -18,32 +18,16 @@ import wave.infrastructure.handlers.HRTFData;
 
 public class Thunder
 {
+	public static final Path CLOSE = Paths.get("data", "audio", "close_thunder.mat");
+	public static final Path MEDIUM = Paths.get("data", "audio", "medium_thunder.mat");
+	public static final Path FAR = Paths.get("data", "audio", "far_thunder.mat");
 
-	public Thunder()
-	{
-	}
+	private int aIndex;
+	private int eIndex;
+	private int dist;
+	private Path sound;
 
-	public void play(int aIndex, int eIndex, int dist, String sound)
-	{
-
-		// perform calculations for aIndex and eIndex here
-
-		// determine which sound to play here
-
-		Thread obj = new Thread(new playThunder(aIndex, eIndex, dist, sound));
-		obj.start();
-	}
-}
-
-class playThunder implements Runnable
-{
-
-	public volatile int aIndex;
-	public volatile int eIndex;
-	public volatile int dist;
-	public volatile String sound;
-
-	public playThunder(int aIndex, int eIndex, int dist, String sound)
+	public Thunder(int aIndex, int eIndex, int dist, Path sound)
 	{
 		this.aIndex = aIndex;
 		this.eIndex = eIndex;
@@ -51,14 +35,42 @@ class playThunder implements Runnable
 		this.sound = sound;
 	}
 
+	public void play()
+	{
+
+		// perform calculations for aIndex and eIndex here
+
+		// determine which sound to play here
+
+		Thread obj = new Thread(new playThunder(this.aIndex, this.eIndex, this.dist, this.sound));
+		obj.start();
+	}
+}
+
+class playThunder implements Runnable
+{
+	public static final Path HRTF = Paths.get("data", "hrtf", "hrir_final.mat");
+
+	public volatile int aIndex;
+	public volatile int eIndex;
+	public volatile int dist;
+	public volatile Path wavePath;
+
+	public playThunder(int aIndex, int eIndex, int dist, Path sound)
+	{
+		this.aIndex = aIndex;
+		this.eIndex = eIndex;
+		this.dist = dist;
+		this.wavePath = sound;
+	}
+
 	public void run()
 	{
 		try
 		{
 			// get paths of the wav and mat file
-			Path hrtfPath = Paths.get("data", "hrir_final.mat");
-			Path wavePath = Paths.get("data", this.sound);
-			File sourceSound = wavePath.toFile();
+			Path hrtfPath = HRTF;
+			File sourceSound = this.wavePath.toFile();
 
 			// used to play back sound during runtime
 			File sound;

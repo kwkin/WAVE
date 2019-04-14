@@ -39,7 +39,6 @@ public class SurveyPanel extends BorderPane
 	private final StringProperty questionTextProperty;
 	private final StringProperty nextScenarioTextProperty;
 	private Button nextScenarioButton;
-	private Button replaySoundButton;
 	private GridPane buttonPanel;
 
 	public SurveyPanel(WaveSession session, SurveyWindow parent)
@@ -130,8 +129,6 @@ public class SurveyPanel extends BorderPane
 			this.survey = Survey.CreateSurveyFile(this.session, form);
 			this.nextScenarioTextProperty.setValue("Next Scenario");
 			this.isSurveyStarted = true;
-			this.replaySoundButton = new Button("Repeat Sound");
-			this.buttonPanel.add(this.replaySoundButton, 0, 1);
 			this.nextScenarioButton.setOnAction((event) ->
 			{
 				this.getNextScenario();
@@ -182,15 +179,12 @@ public class SurveyPanel extends BorderPane
 		this.survey.closeSurveyFile();
 		this.questionTextProperty.setValue("You have completed the survey!");
 		this.nextScenarioTextProperty.setValue("Close Window");
-		this.buttonPanel.getChildren().remove(this.replaySoundButton);
 
 		TextFlow completionText = new TextFlow();
 		completionText.setTextAlignment(TextAlignment.CENTER);
 		completionText.setPadding(new Insets(10, 10, 10, 10));
 
-		// @formatter:off
-		Text text1 = new Text("You may now leave the testing area.");
-		// @formatter:on
+		Label text1 = new Label("You may now leave the testing area.");
 
 		completionText.getChildren().add(text1);
 		this.setCenter(completionText);

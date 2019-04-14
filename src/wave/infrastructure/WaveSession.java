@@ -228,7 +228,6 @@ public class WaveSession
 		double initialLongitude;
 		try
 		{
-
 			initialLatitude = Configuration.getDoubleValue("gov.nasa.worldwind.avkey.InitialLatitude");
 			initialLongitude = Configuration.getDoubleValue("gov.nasa.worldwind.avkey.InitialLongitude");
 		}
