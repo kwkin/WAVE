@@ -6,33 +6,59 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import wave.infrastructure.survey.RatingQuestion;
 import wave.infrastructure.survey.SurveyQuestion;
 
 public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
+	private final BooleanProperty isSoundPlayedProperty;
+	
 	private final Label questionLabel;
 	private ToggleGroup toggleGroup;
 
-	public RatingSurveyPanel(SurveyQuestion scenario)
+	public RatingSurveyPanel(SurveyQuestion question)
 	{
+		RatingQuestion scenario = (RatingQuestion)question;
+		
 		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
+		this.isSoundPlayedProperty = new SimpleBooleanProperty();
 
+		BorderPane border = new BorderPane();
+		this.setTop(border);
+		Label selectLabel = new Label("Play the sound to proceed.");
+		border.setTop(selectLabel);
+
+		Button soundButton = new Button("Play Sound");
+		scenario.setRepeat(0);
+		soundButton.setOnAction(value -> 
+		{
+			scenario.getSound().play();
+			int repeated = scenario.getRepeat() + 1;
+			scenario.setRepeat(repeated);
+			this.isSoundPlayedProperty.setValue(true);
+		});
+		soundButton.setMaxWidth(Double.MAX_VALUE);
+		border.setCenter(soundButton);
+		
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
+		this.questionLabel.setWrapText(true);
 		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
-		this.setTop(this.questionLabel);
+		border.setBottom(this.questionLabel);
 
-		GridPane scenarioPane = new GridPane();
-		scenarioPane.setPadding(new Insets(5, 5, 5, 5));
-		scenarioPane.setHgap(5);
-		scenarioPane.setVgap(8);
+		GridPane ratingPane = new GridPane();
+		ratingPane.disableProperty().bind(this.isSoundPlayedProperty.not());
+		ratingPane.setPadding(new Insets(5, 5, 5, 5));
+		ratingPane.setHgap(5);
+		ratingPane.setVgap(8);
 		this.toggleGroup = new ToggleGroup();
 		this.toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
 		{
@@ -42,22 +68,22 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 				isAnswerSelectedProperty.setValue(true);
 			}
 		});
-		RadioButton rating1 = new RadioButton("1");
+		RadioButton rating1 = new RadioButton("1 - Completely unrealistic");
 		rating1.setToggleGroup(this.toggleGroup);
-		scenarioPane.add(rating1, 0, 0);
-		RadioButton rating2 = new RadioButton("2");
+		ratingPane.add(rating1, 0, 0);
+		RadioButton rating2 = new RadioButton("2 - Unrealistic");
 		rating2.setToggleGroup(this.toggleGroup);
-		scenarioPane.add(rating2, 0, 1);
-		RadioButton rating3 = new RadioButton("3");
+		ratingPane.add(rating2, 0, 1);
+		RadioButton rating3 = new RadioButton("3 - Neutral");
 		rating3.setToggleGroup(this.toggleGroup);
-		scenarioPane.add(rating3, 0, 2);
-		RadioButton rating4 = new RadioButton("4");
+		ratingPane.add(rating3, 0, 2);
+		RadioButton rating4 = new RadioButton("4 - Realistic");
 		rating4.setToggleGroup(this.toggleGroup);
-		scenarioPane.add(rating4, 0, 3);
-		RadioButton rating5 = new RadioButton("5");
+		ratingPane.add(rating4, 0, 3);
+		RadioButton rating5 = new RadioButton("5 - Very Realistic");
 		rating5.setToggleGroup(this.toggleGroup);
-		scenarioPane.add(rating5, 0, 4);
-		this.setCenter(scenarioPane);
+		ratingPane.add(rating5, 0, 4);
+		this.setCenter(ratingPane);
 	}
 
 	@Override

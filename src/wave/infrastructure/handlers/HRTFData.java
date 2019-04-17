@@ -74,17 +74,17 @@ public class HRTFData
 
 		return delay;
 	}
-	
+
 	public int getNumAzimuths()
 	{
 		return this.numAzimuths;
 	}
-	
+
 	public int getNumElevations()
 	{
 		return this.numElevations;
 	}
-	
+
 	public int getNumSamples()
 	{
 		return this.numSamples;

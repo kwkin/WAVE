@@ -6,8 +6,8 @@ import java.util.TimerTask;
 
 public class LightningSpawner extends TimerTask
 {
-	private static double MIN_LIGHTNING = 0.5;
-	private static double MAX_LIGHTNING = 10;
+	public static double MIN_LIGHTNING = 0.5;
+	public static double MAX_LIGHTNING = 10;
 	
 	private Random random;
 	private double baseRate;
@@ -37,13 +37,16 @@ public class LightningSpawner extends TimerTask
 	public void stopProcess()
 	{
 		this.timerProcess.cancel();
-		this.lightningTasks.stopProcess();
+		if (this.lightningTasks != null)
+		{
+			this.lightningTasks.stopProcess();
+		}
 	}
 	
 	public long calculateRate()
 	{
 		Random random = new Random();
-		long rate = (long) ((double)(1 / this.baseRate) * 700000);
+		long rate = (long) ((double)(1 / this.baseRate) * 500000);
 		double deviation = 2000 * (random.nextDouble() - 0.5);
 		rate += deviation;
 		rate = Math.max(1000, rate);
@@ -53,8 +56,10 @@ public class LightningSpawner extends TimerTask
 	@Override
 	public void run()
 	{
-		double lightningDist = MIN_LIGHTNING + (MAX_LIGHTNING - MIN_LIGHTNING) * this.random.nextDouble();
-		double lightningDir = 359 * this.random.nextDouble();
+//		double lightningDist = MIN_LIGHTNING + (MAX_LIGHTNING - MIN_LIGHTNING) * this.random.nextDouble();
+//		double lightningDir = 359 * this.random.nextDouble();
+		double lightningDist = this.random.nextInt(3);
+		double lightningDir = this.random.nextInt(25);
 		long deviation = (long) (2000 * this.random.nextDouble());
 		this.lightningTasks = new LightningSoundTask(lightningDist, lightningDir, deviation);
 		this.lightningTasks.startProcess();

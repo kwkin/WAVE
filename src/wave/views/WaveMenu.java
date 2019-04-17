@@ -260,7 +260,14 @@ public class WaveMenu extends MenuBar
 		double sceneHeight = WaveApp.getStage().getScene().getHeight();
 		Scene preferencesScene = new Scene(preferences, sceneWidth, sceneHeight);
 		FXThemeLoader.applyDefaultTheme(preferencesScene);
+
+		WaveApp.getStage().setWidth(sceneWidth);
+		WaveApp.getStage().setHeight(sceneHeight);
 		WaveApp.getStage().setScene(preferencesScene);
+		if (WaveApp.getStage().isFullScreen())
+		{
+			WaveApp.getStage().setFullScreen(true);
+		}
 	}
 
 	protected void openSurvey()

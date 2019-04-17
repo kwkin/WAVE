@@ -74,6 +74,14 @@ public class PreferencesWindow extends BorderPane implements ChangeListener<Stri
 		okButton.setOnAction((value) ->
 		{
 			writePreferences(preferences);
+			double sceneWidth = WaveApp.getStage().getScene().getWidth();
+			double sceneHeight = WaveApp.getStage().getScene().getHeight();
+			WaveApp.getStage().setWidth(sceneWidth);
+			WaveApp.getStage().setHeight(sceneHeight);
+			if (WaveApp.getStage().isFullScreen())
+			{
+				WaveApp.getStage().setFullScreen(true);
+			}
 			WaveApp.getStage().setScene(this.previousScene);
 		});
 		buttonBar.getButtons().add(okButton);
@@ -82,6 +90,14 @@ public class PreferencesWindow extends BorderPane implements ChangeListener<Stri
 		cancelButton.setOnAction((value) ->
 		{
 			resetPreferences();
+			double sceneWidth = WaveApp.getStage().getScene().getWidth();
+			double sceneHeight = WaveApp.getStage().getScene().getHeight();
+			WaveApp.getStage().setWidth(sceneWidth);
+			WaveApp.getStage().setHeight(sceneHeight);
+			if (WaveApp.getStage().isFullScreen())
+			{
+				WaveApp.getStage().setFullScreen(true);
+			}
 			WaveApp.getStage().setScene(this.previousScene);
 		});
 		Button applyButton = new Button("Apply");

@@ -55,11 +55,14 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		grid.add(selectLabel, 0, 0, 2, 1);
 		
 		Button soundAButton = new Button("Sound A");
+		scenario.setRepeat(0);
 		this.soundAPressed = 0;
 		soundAButton.setOnAction(value -> 
 		{
 			scenario.getSoundA().play();
 			this.soundAPressed++;
+			int repeated = scenario.getRepeat() + 1;
+			scenario.setRepeat(repeated);
 			if (this.soundAPressed > 0 && this.soundBPressed > 0)
 			{
 				this.bothSoundsPlayedProperty.setValue(true);
@@ -73,6 +76,8 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		{
 			scenario.getSoundB().play();
 			this.soundBPressed++;
+			int repeated = scenario.getRepeat() + 1;
+			scenario.setRepeat(repeated);
 			if (this.soundAPressed > 0 && this.soundBPressed > 0)
 			{
 				this.bothSoundsPlayedProperty.setValue(true);
@@ -83,6 +88,7 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
+		this.questionLabel.setWrapText(true);
 		this.questionLabel.setPadding(new Insets(5, 5, 10, 5));
 		this.questionLabel.disableProperty().bind(this.bothSoundsPlayedProperty.not());
 		grid.add(this.questionLabel, 0, 2, 2, 1);
@@ -103,7 +109,7 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		RadioButton firstScenario = new RadioButton("Sound A");
 		firstScenario.disableProperty().bind(this.bothSoundsPlayedProperty.not());
 		firstScenario.setToggleGroup(this.toggleGroup);
-		RadioButton secondScenario = new RadioButton("Second B");
+		RadioButton secondScenario = new RadioButton("Sound B");
 		secondScenario.disableProperty().bind(this.bothSoundsPlayedProperty.not());
 		secondScenario.setToggleGroup(this.toggleGroup);
 		scenarioPane.add(firstScenario, 0, 0);

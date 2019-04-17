@@ -2,30 +2,23 @@ package wave.infrastructure.survey;
 
 import wave.audio.SurveySounds;
 
-public class ScenarioQuestion implements SurveyQuestion
+public class RatingQuestion implements SurveyQuestion
 {
 	private String question;
-	private SurveySounds soundA;
-	private SurveySounds soundB;
+	private SurveySounds sound;
 	private String answer;
 	private int repeat;
 	
-	public ScenarioQuestion(String question, SurveySounds soundA, SurveySounds soundB, String answer)
+	public RatingQuestion(String question, SurveySounds soundA)
 	{
 		this.question = question;
-		this.soundA = soundA;
-		this.soundB = soundB;
-		this.answer = answer;
+		this.sound = soundA;
+		this.answer = "-";
 	}
 	
-	public SurveySounds getSoundA()
+	public SurveySounds getSound()
 	{
-		return this.soundA;
-	}
-	
-	public SurveySounds getSoundB()
-	{
-		return this.soundB;
+		return this.sound;
 	}
 	
 	@Override
@@ -37,7 +30,7 @@ public class ScenarioQuestion implements SurveyQuestion
 	@Override
 	public ScenarioType getType()
 	{
-		return ScenarioType.SCENARIO;
+		return ScenarioType.RATING;
 	}
 
 	@Override

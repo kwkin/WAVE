@@ -11,7 +11,7 @@ public class SurveyWindow extends Stage
 {
 	protected final static String TITLE = "WAVE Survey";
 	protected final static int WINDOW_WIDTH = 720;
-	protected final static int WINDOW_HEIGHT = 740;
+	protected final static int WINDOW_HEIGHT = 800;
 
 	protected final WaveSession session;
 

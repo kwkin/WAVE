@@ -58,7 +58,7 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 
 		Label masterVolumeLabel = new Label("Master Volume");
 		gridPane.add(masterVolumeLabel, 0, 0);
-		this.masterVolumeSlider = new Slider(0, 100, preferences.getMasterVolume());
+		this.masterVolumeSlider = new Slider(0, 1, preferences.getMasterVolume());
 		this.masterVolumeSlider.valueProperty().bindBidirectional(preferences.masterVolumeProperty());
 		gridPane.add(this.masterVolumeSlider, 1, 0);
 
@@ -70,19 +70,19 @@ public class AudioPreferencesPanel extends BorderPane implements PreferencesPane
 
 		Label rainVolumeLabel = new Label("Rain Volume");
 		gridPane.add(rainVolumeLabel, 0, 2);
-		this.rainVolumeSlider = new Slider(0, 100, preferences.getRainVolume());
+		this.rainVolumeSlider = new Slider(0, 1, preferences.getRainVolume());
 		this.rainVolumeSlider.valueProperty().bindBidirectional(preferences.rainVolumeProperty());
 		gridPane.add(this.rainVolumeSlider, 1, 2);
 
 		Label windVolumeLabel = new Label("Wind Volume");
 		gridPane.add(windVolumeLabel, 0, 3);
-		this.windVolumeSlider = new Slider(0, 100, preferences.getWindVolume());
+		this.windVolumeSlider = new Slider(0, 1, preferences.getWindVolume());
 		this.windVolumeSlider.valueProperty().bindBidirectional(preferences.windVolumeProperty());
 		gridPane.add(this.windVolumeSlider, 1, 3);
 
 		Label thunderVolumeLabel = new Label("Thunder Volume");
 		gridPane.add(thunderVolumeLabel, 0, 4);
-		this.thunderVolumeSlider = new Slider(0, 100, preferences.getThunderVolume());
+		this.thunderVolumeSlider = new Slider(0, 1, preferences.getThunderVolume());
 		this.thunderVolumeSlider.valueProperty().bindBidirectional(preferences.thunderVolumeProperty());
 		gridPane.add(this.thunderVolumeSlider, 1, 4);
 

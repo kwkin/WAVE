@@ -54,10 +54,10 @@ public class Preferences implements Serializable
 	{
 		this.lengthUnitDisplayProperty = new SimpleObjectProperty<MeasurementSystem>(MeasurementSystem.METRIC);
 		this.angleFormatDisplayProperty = new SimpleObjectProperty<AngleFormat>(AngleFormat.DMS);
-		this.masterVolumeProperty = new SimpleDoubleProperty(100);
-		this.rainVolumeProperty = new SimpleDoubleProperty(100);
-		this.windVolumeProperty = new SimpleDoubleProperty(100);
-		this.thunderVolumeProperty = new SimpleDoubleProperty(100);
+		this.masterVolumeProperty = new SimpleDoubleProperty(1);
+		this.rainVolumeProperty = new SimpleDoubleProperty(1);
+		this.windVolumeProperty = new SimpleDoubleProperty(1);
+		this.thunderVolumeProperty = new SimpleDoubleProperty(1);
 		this.enableWeatherModulatorsProperty = new SimpleBooleanProperty(true);
 		this.enableNetworkProperty = new SimpleBooleanProperty(false);
 		this.enablePerformancePanelProperty = new SimpleBooleanProperty(true);
@@ -246,7 +246,9 @@ public class Preferences implements Serializable
 
 	public double getMasterVolume()
 	{
-		return this.masterVolumeProperty.getValue();
+		double volume = this.masterVolumeProperty.getValue();
+		volume = Math.min(volume, 1);
+		return volume;
 	}
 
 	public void setMasterVolume(double masterVolume)

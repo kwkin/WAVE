@@ -7,8 +7,11 @@
     <enablePerformancePanel>true</enablePerformancePanel>
     <enableWeatherModulators>true</enableWeatherModulators>
     <lengthUnitDisplay>METRIC</lengthUnitDisplay>
-    <masterVolume>100.0</masterVolume>
-    <rainVolume>100.0</rainVolume>
-    <thunderVolume>100.0</thunderVolume>
-    <windVolume>100.0</windVolume>
+    <masterVolume>0.0</masterVolume>
+    <rainVolume>1.0</rainVolume>
+    <showAllWeather>true</showAllWeather>
+    <showAnnotation>true</showAnnotation>
+    <showPosition>false</showPosition>
+    <thunderVolume>1.0</thunderVolume>
+    <windVolume>1.0</windVolume>
 </preferences>

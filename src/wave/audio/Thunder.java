@@ -18,9 +18,9 @@ import wave.infrastructure.handlers.HRTFData;
 
 public class Thunder
 {
-	public static final Path CLOSE = Paths.get("data", "audio", "close_thunder.mat");
-	public static final Path MEDIUM = Paths.get("data", "audio", "medium_thunder.mat");
-	public static final Path FAR = Paths.get("data", "audio", "far_thunder.mat");
+	public static final Path CLOSE = Paths.get("data", "audio", "thunder_close.wav");
+	public static final Path MEDIUM = Paths.get("data", "audio", "thunder_medium.wav");
+	public static final Path FAR = Paths.get("data", "audio", "thunder_far.wav");
 
 	private int aIndex;
 	private int eIndex;

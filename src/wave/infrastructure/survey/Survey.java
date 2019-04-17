@@ -118,6 +118,8 @@ public class Survey
 		tokenizer.add(Integer.toString(questionNumber));
 		tokenizer.add(scenario.getType().toString());
 		tokenizer.add(answer);
+		tokenizer.add(scenario.getAnswer());
+		tokenizer.add(Integer.toString(scenario.getRepeat()));
 
 		LocalDateTime curTime = LocalDateTime.now();
 		long curEpoch = curTime.toEpochSecond(ZoneOffset.UTC);
@@ -153,6 +155,8 @@ public class Survey
 		tokenizer.add("question");
 		tokenizer.add("type");
 		tokenizer.add("answer");
+		tokenizer.add("correct");
+		tokenizer.add("repeat");
 		tokenizer.add("timestamp");
 		try
 		{

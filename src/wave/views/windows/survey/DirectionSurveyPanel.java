@@ -14,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
@@ -26,11 +27,14 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import wave.infrastructure.core.Wave;
+import wave.infrastructure.survey.DirectionQuestion;
 import wave.infrastructure.survey.SurveyQuestion;
 
 public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 {
 	private final BooleanProperty isAnswerSelectedProperty;
+	private final BooleanProperty isSoundPlayedProperty;
+	
 	private final StringProperty degreeProperty;
 	private final static int MIN_DEGREE = 0;
 	private final static int MAX_DEGREE = 359;
@@ -38,19 +42,42 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 	private final Label questionLabel;
 	private final Slider degreeSlider;
 
-	public DirectionSurveyPanel(SurveyQuestion scenario)
+	public DirectionSurveyPanel(SurveyQuestion question)
 	{
+		DirectionQuestion scenario = (DirectionQuestion)question;
+
 		this.isAnswerSelectedProperty = new SimpleBooleanProperty();
+		this.isSoundPlayedProperty = new SimpleBooleanProperty();
 		this.degreeProperty = new SimpleStringProperty();
+		
+		BorderPane border = new BorderPane();
+		this.setTop(border);
+		Label selectLabel = new Label("Play the sound to proceed.");
+		border.setTop(selectLabel);
+
+		Button soundButton = new Button("Play Sound");
+		scenario.setRepeat(0);
+		soundButton.setOnAction(value -> 
+		{
+			scenario.getSound().play();
+			int repeated = scenario.getRepeat() + 1;
+			scenario.setRepeat(repeated);
+			this.isSoundPlayedProperty.setValue(true);
+		});
+		soundButton.setMaxWidth(Double.MAX_VALUE);
+		border.setCenter(soundButton);
 
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.questionLabel = new Label(scenario.getQuestion());
-		this.setTop(this.questionLabel);
+		this.questionLabel.setWrapText(true);
+		this.questionLabel.disableProperty().bind(this.isSoundPlayedProperty.not());
+		border.setBottom(this.questionLabel);
 
 		GridPane compassGrid = new GridPane();
 		compassGrid.setPadding(new Insets(5, 5, 5, 5));
 		compassGrid.setHgap(5);
 		compassGrid.setVgap(5);
+		compassGrid.disableProperty().bind(this.isSoundPlayedProperty.not());
 		try
 		{
 			BorderPane computerBorder = new BorderPane();
@@ -58,9 +85,10 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 			Image computerImage = new Image(computerIcon.toUri().toURL().toString());
 			ImageView computerImageView = new ImageView(computerImage);
 			computerImageView.setSmooth(true);
-			computerImageView.maxWidth(32);
-			computerImageView.maxHeight(32);
-			computerImageView.setPreserveRatio(true);
+			computerImageView.maxWidth(16);
+			computerImageView.maxHeight(16);
+			computerImageView.setScaleX(0.5);
+			computerImageView.setScaleY(0.5);
 			compassGrid.setAlignment(Pos.BOTTOM_CENTER);
 			computerBorder.setCenter(computerImageView);
 			compassGrid.add(computerBorder, 1, 0);
@@ -96,6 +124,7 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		compassGrid.add(degree270, 0, 2);
 
 		GridPane controlsGrid = new GridPane();
+		controlsGrid.disableProperty().bind(this.isSoundPlayedProperty.not());
 		controlsGrid.setAlignment(Pos.CENTER);
 		controlsGrid.setMinWidth(196);
 		this.setBottom(controlsGrid);

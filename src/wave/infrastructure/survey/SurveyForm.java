@@ -14,64 +14,198 @@ public class SurveyForm
 		this.scenarios = new ArrayList<SurveyQuestion>();
 
 		//@formatter:off
-//		this.scenarios.add(new ScenarioQuestion("Do you think the rain was heavier in sound A or sound B?", sound1A, sound1B));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the rain was heavier in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the rain was heavier in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the rain was heavier in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the rain was heavier in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the rain was heavier in sound A or sound B?"));
-//
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the wind speed was higher in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the wind speed was higher in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the wind speed was higher in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the wind speed was higher in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the wind speed was higher in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the wind speed was higher in sound A or sound B?"));
-//
-		SurveySounds sound13A = new SurveySounds(-1, -1, SurveySounds.FAR, 1, 10000);
-		SurveySounds sound13B = new SurveySounds(-1, -1, SurveySounds.MEDIUM, 1, 10000);
-		this.scenarios.add(new ScenarioQuestion("Do you think the thunder was closer in sound A or sound B?", sound13A, sound13B));
-		SurveySounds sound14A = new SurveySounds(-1, -1, SurveySounds.CLOSE, 1, 10000);
-		SurveySounds sound14B = new SurveySounds(-1, -1, SurveySounds.MEDIUM, 1, 10000);
-		this.scenarios.add(new ScenarioQuestion("Do you think the thunder was closer in sound A or sound B?", sound14A, sound14B));
-		SurveySounds sound15A = new SurveySounds(-1, -1, SurveySounds.CLOSE, 1, 10000);
-		SurveySounds sound15B = new SurveySounds(-1, -1, SurveySounds.FAR, 1, 10000);
-		this.scenarios.add(new ScenarioQuestion("Do you think the thunder was closer in sound A or sound B?", sound15A, sound15B));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the thunder was closer in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the thunder was closer in sound A or sound B?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.SCENARIO, "Do you think the thunder was closer in sound A or sound B?"));
-//		
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the wind come from?"));
-//		
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.DIRECTION, "What direction did the thunder originate from?"));
-//		
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this thunder audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this thunder audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this thunder audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this rain audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this rain audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this rain audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this wind audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this wind audio clip?"));
-//		this.scenarios.add(new SurveyQuestion(ScenarioType.RATING, "On a scale of 1-5, 1 being not at all realistic and 5 being completely realistic, how realistic is this wind audio clip?"));
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the rain was heavier in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_0, 1), 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_1, 1), 
+				"Sound B"));
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the rain was heavier in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_2, 1), 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_1, 1), 
+				"Sound A"));
+
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the wind was stronger in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_1, 1), 
+				new SurveySounds(-1, -1, SurveySounds.WIND_0, 1), 
+				"Sound A"));
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the wind was stronger in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_2, 1), 
+				new SurveySounds(-1, -1, SurveySounds.WIND_1, 1), 
+				"Sound A"));
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the wind was stronger in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_4, 1), 
+				new SurveySounds(-1, -1, SurveySounds.WIND_3, 1), 
+				"Sound A"));
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the wind was stronger in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_2, 1), 
+				new SurveySounds(-1, -1, SurveySounds.WIND_3, 1), 
+				"Sound B"));
+
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the thunder was closer in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_1, 1, 10000), 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_0, 1, 10000), 
+				"Sound A"));
+		this.scenarios.add(new ScenarioQuestion(
+				"Do you think the thunder was closer in sound A or sound B?", 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_1, 1, 10000), 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_2, 1, 10000), 
+				"Sound B"));
+
+		// 0
+		int direction = 12;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_1, 1), 
+				direction));
+		// 55
+		direction = 24;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_2, 1), 
+				direction));
+		// -55
+		direction = 2;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_0, 1), 
+				direction));
+		// 20
+		direction = 16;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_2, 1), 
+				direction));
+		// 40
+		direction = 20;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
+				direction));
+		// -20
+		direction = 8;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_3, 1), 
+				direction));
+		// 45
+		direction = 21;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_0, 1), 
+				direction));
+		// -40
+		direction = 4;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_1, 1), 
+				direction));
+		// -15
+		direction = 9;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_2, 1), 
+				direction));
+		// -80
+		direction = 0;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
+				direction));
+		
+		// -45
+		direction = 3;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
+				direction));
+		// 55
+		direction = 22;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
+				direction));
+		// -30
+		direction = 6;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
+				direction));
+		// 35
+		direction = 19;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
+				direction));
+		// -5
+		direction = 11;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
+				direction));
+		// 15
+		direction = 16;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
+				direction));
+		// 10
+		direction = 14;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
+				direction));
+		// -15
+		direction = 9;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
+				direction));
+		// -80 degrees
+		direction = 0;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
+				direction));
+		// 80
+		direction = 24;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the thunder originate from?", 
+				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
+				direction));
+		
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this thunder audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_0, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this thunder audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_1, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this thunder audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.THUNDER_2, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this rain audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_0, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this rain audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_1, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this rain audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.RAIN_2, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this wind audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_0, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this wind audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_2, 1)));
+		this.scenarios.add(new RatingQuestion(
+				"On a scale of 1-5, how realistic is this wind audio clip?", 
+				new SurveySounds(-1, -1, SurveySounds.WIND_4, 1)));
 		//@formatter:on
 	}
 
