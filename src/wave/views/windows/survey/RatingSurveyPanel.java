@@ -13,6 +13,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import wave.audio.SurveySounds;
 import wave.infrastructure.survey.RatingQuestion;
 import wave.infrastructure.survey.SurveyQuestion;
 
@@ -23,6 +24,7 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 	
 	private final Label questionLabel;
 	private ToggleGroup toggleGroup;
+	private SurveySounds currentClip;
 
 	public RatingSurveyPanel(SurveyQuestion question)
 	{
@@ -41,6 +43,11 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 		soundButton.setOnAction(value -> 
 		{
 			scenario.getSound().play();
+			if (this.currentClip != null)
+			{
+				this.currentClip.stop();
+			}
+			this.currentClip = scenario.getSound();
 			int repeated = scenario.getRepeat() + 1;
 			scenario.setRepeat(repeated);
 			this.isSoundPlayedProperty.setValue(true);
@@ -115,5 +122,11 @@ public class RatingSurveyPanel extends BorderPane implements QuestionPanel
 	public BooleanProperty isAnswerSelectedProperty()
 	{
 		return this.isAnswerSelectedProperty;
+	}
+
+	@Override
+	public void stopSound()
+	{
+		this.currentClip.stop();
 	}
 }

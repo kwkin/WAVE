@@ -26,6 +26,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
+import wave.audio.SurveySounds;
 import wave.infrastructure.core.Wave;
 import wave.infrastructure.survey.DirectionQuestion;
 import wave.infrastructure.survey.SurveyQuestion;
@@ -36,11 +37,12 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 	private final BooleanProperty isSoundPlayedProperty;
 	
 	private final StringProperty degreeProperty;
-	private final static int MIN_DEGREE = 0;
-	private final static int MAX_DEGREE = 359;
+	private final static int MIN_DEGREE = -179;
+	private final static int MAX_DEGREE = 180;
 
 	private final Label questionLabel;
 	private final Slider degreeSlider;
+	private SurveySounds currentClip;
 
 	public DirectionSurveyPanel(SurveyQuestion question)
 	{
@@ -60,6 +62,11 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		soundButton.setOnAction(value -> 
 		{
 			scenario.getSound().play();
+			if (this.currentClip != null)
+			{
+				this.currentClip.stop();
+			}
+			this.currentClip = scenario.getSound();
 			int repeated = scenario.getRepeat() + 1;
 			scenario.setRepeat(repeated);
 			this.isSoundPlayedProperty.setValue(true);
@@ -116,7 +123,7 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		degree180.setAlignment(Pos.CENTER);
 		degree180.setMaxWidth(Double.MAX_VALUE);
 		compassGrid.add(degree180, 1, 3);
-		Label degree270 = new Label("270");
+		Label degree270 = new Label("-90");
 		degree270.setTextAlignment(TextAlignment.RIGHT);
 		degree270.setAlignment(Pos.CENTER_RIGHT);
 		degree270.setMaxWidth(Double.MAX_VALUE);
@@ -225,5 +232,11 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 	public BooleanProperty isAnswerSelectedProperty()
 	{
 		return this.isAnswerSelectedProperty;
+	}
+
+	@Override
+	public void stopSound()
+	{
+		this.currentClip.stop();
 	}
 }

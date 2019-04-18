@@ -17,6 +17,8 @@ public interface QuestionPanel
 
 	public BooleanProperty isAnswerSelectedProperty();
 
+	public void stopSound();
+	
 	/**
 	 * Create a survey panel given the survey scenario
 	 * 

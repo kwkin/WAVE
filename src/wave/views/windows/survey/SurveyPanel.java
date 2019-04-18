@@ -130,6 +130,7 @@ public class SurveyPanel extends BorderPane
 			this.isSurveyStarted = true;
 			this.nextScenarioButton.setOnAction((event) ->
 			{
+				this.currentPanel.stopSound();
 				this.getNextScenario();
 			});
 			this.getNextScenario();

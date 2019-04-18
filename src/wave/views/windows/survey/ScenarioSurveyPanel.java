@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import wave.audio.SurveySounds;
 import wave.infrastructure.survey.ScenarioQuestion;
 import wave.infrastructure.survey.SurveyQuestion;
 
@@ -28,6 +29,7 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 
 	private int soundAPressed;
 	private int soundBPressed;
+	private SurveySounds currentClip;
 	
 	public ScenarioSurveyPanel(SurveyQuestion question)
 	{
@@ -60,6 +62,11 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		soundAButton.setOnAction(value -> 
 		{
 			scenario.getSoundA().play();
+			if (this.currentClip != null)
+			{
+				this.currentClip.stop();
+			}
+			this.currentClip = scenario.getSoundA();
 			this.soundAPressed++;
 			int repeated = scenario.getRepeat() + 1;
 			scenario.setRepeat(repeated);
@@ -75,6 +82,11 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		soundBButton.setOnAction(value -> 
 		{
 			scenario.getSoundB().play();
+			if (this.currentClip != null)
+			{
+				this.currentClip.stop();
+			}
+			this.currentClip = scenario.getSoundB();
 			this.soundBPressed++;
 			int repeated = scenario.getRepeat() + 1;
 			scenario.setRepeat(repeated);
@@ -146,5 +158,11 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 	public BooleanProperty isAnswerSelectedProperty()
 	{
 		return this.isAnswerSelectedProperty;
+	}
+
+	@Override
+	public void stopSound()
+	{
+		this.currentClip.stop();
 	}
 }

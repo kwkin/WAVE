@@ -36,6 +36,7 @@ public class SurveySounds
 	private double scaleFactor;
 	private int dur;
 	private double speed;
+	private PlaySound sound;
 
 	public SurveySounds(int aIndex, int eIndex, Path soundToPlay, double scaleFactor)
 	{
@@ -116,8 +117,21 @@ public class SurveySounds
 
 	public void play()
 	{
-		Thread obj = new Thread(new PlaySound(aIndex, eIndex, soundToPlay, hrtf, scaleFactor, dur, speed));
+		if (sound != null)
+		{
+			this.sound.stop();
+		}
+		this.sound = new PlaySound(aIndex, eIndex, soundToPlay, hrtf, scaleFactor, dur, speed);
+		Thread obj = new Thread(this.sound);
 		obj.start();
+	}
+	
+	public void stop()
+	{
+		if (this.sound != null)
+		{
+			this.sound.stop();
+		}
 	}
 }
 
@@ -130,6 +144,7 @@ class PlaySound implements Runnable
 	public volatile double scaleFactor;
 	public volatile int dur;
 	public volatile double speed;
+	private Clip clip; 
 	private HRTFData hrtf;
 
 	public PlaySound(int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, double speed)
@@ -151,7 +166,7 @@ class PlaySound implements Runnable
 			File sourceSound = soundToPlay.toFile();
 
 			AudioInputStream aStream;
-			Clip clip = AudioSystem.getClip();
+			this.clip = AudioSystem.getClip();
 
 			// used to play back sound during runtime
 			File sound;
@@ -292,11 +307,11 @@ class PlaySound implements Runnable
 			aStream = getAudioInputStream(sound);
 
 			// play back the AudioInputStream
-			clip.open(aStream);
-			clip.start();
+			this.clip.open(aStream);
+			this.clip.start();
 
 			Thread.sleep(dur);
-			clip.close();
+			this.clip.close();
 
 			writeFile.close();
 
@@ -304,6 +319,17 @@ class PlaySound implements Runnable
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public void stop()
+	{
+		if (this.clip != null)
+		{
+			this.clip.close();
+			this.clip.stop();
+			this.clip.drain();
+			this.clip.flush();
 		}
 	}
 }
