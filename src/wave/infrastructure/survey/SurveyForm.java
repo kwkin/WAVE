@@ -57,66 +57,67 @@ public class SurveyForm
 				new SurveySounds(-1, -1, SurveySounds.THUNDER_2, 1, 10000), 
 				"Sound B"));
 
-		// 0
-		int direction = 12;
+		// 100
+		int rElev = 24;
+		int direction = 24;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_1, 1), 
-				direction));
-		// 55
-		direction = 24;
-		this.scenarios.add(new DirectionQuestion(
-				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_2, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.WIND_2, 1), 
+				100));
 		// -55
 		direction = 2;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_0, 1), 
-				direction));
-		// 20
+				new SurveySounds(direction, -1, SurveySounds.WIND_1, 1), 
+				-55));
+		// 160
 		direction = 16;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_2, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.WIND_2, 1), 
+				160));
 		// 40
 		direction = 20;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
 				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
 				direction));
-		// -20
+		// -160
 		direction = 8;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_3, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.WIND_3, 1), 
+				-160));
+		// 0
+		direction = 12;
+		this.scenarios.add(new DirectionQuestion(
+				"What direction did the wind come from?", 
+				new SurveySounds(direction, -1, SurveySounds.WIND_1, 1), 
+				0));
 		// 45
 		direction = 21;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_0, 1), 
+				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
 				direction));
-		// -40
+		// -140
 		direction = 4;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_1, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.WIND_1, 1), 
+				-140));
 		// -15
 		direction = 9;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
 				new SurveySounds(direction, -1, SurveySounds.WIND_2, 1), 
-				direction));
-		// -80
+				-15));
+		// -100
 		direction = 0;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.WIND_4, 1), 
+				-100));
 		
 		// -45
 		direction = 3;
@@ -124,60 +125,60 @@ public class SurveyForm
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
 				direction));
-		// 55
+		// 125
 		direction = 22;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.THUNDER_1, 1), 
+				125));
 		// -30
 		direction = 6;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
 				direction));
-		// 35
+		// 145
 		direction = 19;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.THUNDER_0, 1), 
+				145));
 		// -5
 		direction = 11;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
 				direction));
-		// 15
+		// 110
 		direction = 16;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.THUNDER_2, 1), 
+				110));
 		// 10
 		direction = 14;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
 				direction));
-		// -15
+		// -105
 		direction = 9;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.THUNDER_0, 1), 
+				-105));
 		// -80 degrees
 		direction = 0;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
 				direction));
-		// 80
+		// 100
 		direction = 24;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
-				direction));
+				new SurveySounds(direction, rElev, SurveySounds.THUNDER_2, 1), 
+				100));
 		
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this thunder audio clip?", 
