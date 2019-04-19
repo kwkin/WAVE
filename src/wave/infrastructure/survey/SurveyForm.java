@@ -81,7 +81,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
 				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
-				direction));
+				40));
 		// -160
 		direction = 8;
 		this.scenarios.add(new DirectionQuestion(
@@ -99,7 +99,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
 				new SurveySounds(direction, -1, SurveySounds.WIND_4, 1), 
-				direction));
+				45));
 		// -140
 		direction = 4;
 		this.scenarios.add(new DirectionQuestion(
@@ -124,7 +124,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
-				direction));
+				-45));
 		// 125
 		direction = 22;
 		this.scenarios.add(new DirectionQuestion(
@@ -136,7 +136,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_2, 1), 
-				direction));
+				-30));
 		// 145
 		direction = 19;
 		this.scenarios.add(new DirectionQuestion(
@@ -148,7 +148,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_0, 1), 
-				direction));
+				-5));
 		// 110
 		direction = 16;
 		this.scenarios.add(new DirectionQuestion(
@@ -160,7 +160,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
-				direction));
+				40));
 		// -105
 		direction = 9;
 		this.scenarios.add(new DirectionQuestion(
@@ -172,7 +172,7 @@ public class SurveyForm
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
 				new SurveySounds(direction, -1, SurveySounds.THUNDER_1, 1), 
-				direction));
+				-80));
 		// 100
 		direction = 24;
 		this.scenarios.add(new DirectionQuestion(

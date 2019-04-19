@@ -17,9 +17,9 @@ public class SurveySounds
 	public static final Path RAIN_1 = Paths.get("data", "audio", "rain_medium_fade.wav");
 	public static final Path RAIN_2 = Paths.get("data", "audio", "rain_heavy_fade.wav");
 
-	public static final Path THUNDER_0 = Paths.get("data", "audio", "thunder_close.wav");
+	public static final Path THUNDER_0 = Paths.get("data", "audio", "thunder_far.wav");
 	public static final Path THUNDER_1 = Paths.get("data", "audio", "thunder_medium.wav");
-	public static final Path THUNDER_2 = Paths.get("data", "audio", "thunder_far.wav");
+	public static final Path THUNDER_2 = Paths.get("data", "audio", "thunder_close.wav");
 
 	public static final Path WIND_0 = Paths.get("data", "audio", "wind_lightest_fade.wav");
 	public static final Path WIND_1 = Paths.get("data", "audio", "wind_light_fade.wav");
