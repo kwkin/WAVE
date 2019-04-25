@@ -61,10 +61,10 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 		scenario.setRepeat(0);
 		soundButton.setOnAction(value -> 
 		{
-			scenario.getSound().play();
+			scenario.getSound().playAudio();
 			if (this.currentClip != null)
 			{
-				this.currentClip.stop();
+				this.currentClip.stopAudio();
 			}
 			this.currentClip = scenario.getSound();
 			int repeated = scenario.getRepeat() + 1;
@@ -237,6 +237,6 @@ public class DirectionSurveyPanel extends BorderPane implements QuestionPanel
 	@Override
 	public void stopSound()
 	{
-		this.currentClip.stop();
+		this.currentClip.stopAudio();
 	}
 }

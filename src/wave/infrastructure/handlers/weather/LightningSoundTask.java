@@ -62,7 +62,7 @@ public class LightningSoundTask extends TimerTask
 		Preferences preferences = PreferencesLoader.preferences();
 //		System.out.println(direction + " " + this.distance + " " + preferences.getMasterVolume());
 		SurveySounds sound = new SurveySounds((int)direction, 25, audio, preferences.getMasterVolume(), 10000);
-		sound.play();
+		sound.playAudio();
 //		System.out.println("Lightning Volume: " + preferences.getMasterVolume());
 //		System.out.println("Lightning Distance: " + this.distance);
 //		System.out.println("Lightning Direction: " + this.direction);

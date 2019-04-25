@@ -61,10 +61,10 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		this.soundAPressed = 0;
 		soundAButton.setOnAction(value -> 
 		{
-			scenario.getSoundA().play();
+			scenario.getSoundA().playAudio();
 			if (this.currentClip != null)
 			{
-				this.currentClip.stop();
+				this.currentClip.stopAudio();
 			}
 			this.currentClip = scenario.getSoundA();
 			this.soundAPressed++;
@@ -81,10 +81,10 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 		this.soundBPressed = 0;
 		soundBButton.setOnAction(value -> 
 		{
-			scenario.getSoundB().play();
+			scenario.getSoundB().playAudio();
 			if (this.currentClip != null)
 			{
-				this.currentClip.stop();
+				this.currentClip.stopAudio();
 			}
 			this.currentClip = scenario.getSoundB();
 			this.soundBPressed++;
@@ -163,6 +163,6 @@ public class ScenarioSurveyPanel extends BorderPane implements QuestionPanel
 	@Override
 	public void stopSound()
 	{
-		this.currentClip.stop();
+		this.currentClip.stopAudio();
 	}
 }
