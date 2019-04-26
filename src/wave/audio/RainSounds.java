@@ -2,6 +2,7 @@ package wave.audio;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -11,68 +12,62 @@ import org.apache.commons.math3.util.MathArrays;
 
 import wave.audio.wav.WavFile;
 import wave.infrastructure.handlers.HRTFData;
-import wave.infrastructure.preferences.Preferences;
-import wave.infrastructure.preferences.PreferencesLoader;
+import wave.infrastructure.handlers.weather.RainColorValues;
 
-public class SurveySounds extends WeatherAudio
+public class RainSounds extends WeatherAudio
 {
+	public static final Path LIGHT = Paths.get("data", "audio", "rain_light_loop.wav");
+	public static final Path MEDIUM = Paths.get("data", "audio", "rain_medium_loop.wav");
+	public static final Path HEAVY = Paths.get("data", "audio", "rain_heavy_loop.wav");
+	
+	public static final Path LIGHT_FADE = Paths.get("data", "audio", "rain_light_fade.wav");
+	public static final Path MEDIUM_FADE = Paths.get("data", "audio", "rain_medium_fade.wav");
+	public static final Path HEAVY_FADE = Paths.get("data", "audio", "rain_heavy_fade.wav");
+
+	private double intensity;
 	private double scaleFactor;
 	private boolean isLoop;
 	private PlaySound sound;
 	
-	public SurveySounds(Path soundPath)
+	public RainSounds(double intensity)
 	{
-		super(soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
+		super();
+		this.setIntensity(intensity);
 	}
 	
-	public SurveySounds(Path soundPath, boolean isLoop)
+	public RainSounds(double intensity, boolean isLoop)
 	{
-		super(soundPath);
+		super();
+		this.setIntensity(intensity);
 		this.isLoop = isLoop;
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
+		this.scaleFactor = 1;
 	}
 
-	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor)
+	public RainSounds(double intensity, double scaleFactor)
 	{
-		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
+		super();
+		this.setIntensity(intensity);
+		this.isLoop = true;
+		this.scaleFactor = scaleFactor;
 	}
-
-	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor, int duration)
+	
+	public RainSounds(double intensity, boolean isLoop, double scaleFactor)
 	{
-		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
-		this.duration = duration;
-	}
-
-	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor, boolean isLoop)
-	{
-		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
+		super();
+		this.setIntensity(intensity);
 		this.isLoop = isLoop;
+		this.scaleFactor = scaleFactor;
 	}
-
-	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor, int duration, boolean isLoop)
+	
+	@Override
+	public void stopAudio()
 	{
-		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
-		this.duration = duration;
-		this.isLoop = isLoop;
+		if (this.sound != null)
+		{
+			this.sound.stop();
+		}
 	}
-
+	@Override
 	public void playAudio()
 	{
 		if (sound != null)
@@ -91,14 +86,6 @@ public class SurveySounds extends WeatherAudio
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
-	}
-
-	public void stopAudio()
-	{
-		if (this.sound != null)
-		{
-			this.sound.stop();
-		}
 	}
 
 	public void setScaleFactor(double scaleFactor)
@@ -120,11 +107,38 @@ public class SurveySounds extends WeatherAudio
 	{
 		return this.isLoop;
 	}
+	
+	public void setIntensity(double intensity)
+	{
+		this.intensity = intensity;
+
+		if (intensity <= 0)
+		{
+			this.soundPath = null;
+		}
+		else if (intensity < RainColorValues.RAIN_15.getMeasurement())
+		{
+			this.soundPath = RainSounds.LIGHT;
+		}
+		else if (intensity < RainColorValues.RAIN_32.getMeasurement())
+		{
+			this.soundPath = RainSounds.MEDIUM;
+		}
+		else if (intensity < RainColorValues.RAIN_152.getMeasurement())
+		{
+			this.soundPath = RainSounds.HEAVY;
+		}
+	}
+	
+	public double getIntensity(double intensity)
+	{
+		return this.intensity;
+	}
 }
 
-class PlaySound implements Runnable
+class PlayRain implements Runnable
 {
-	private final static File SOUND_FILE = new File("survey_sound.wav"); 
+	private final static File SOUND_FILE = new File("rain_sound.wav"); 
 	
 	public int aIndex;
 	public int eIndex;
@@ -135,7 +149,7 @@ class PlaySound implements Runnable
 	private HRTFData hrtf;
 	private boolean isLoop;
 
-	public PlaySound(int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
+	public PlayRain(int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
 	{
 		this.aIndex = aIndex;
 		this.eIndex = eIndex;

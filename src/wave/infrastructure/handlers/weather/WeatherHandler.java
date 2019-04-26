@@ -27,7 +27,8 @@ public class WeatherHandler
 	private WindLayer windLayer;
 	private KMLLayer lightningLayer;
 	
-	private LightningSpawner spawner;
+	private LightningSpawner lightningSpawner;
+	private RainSpawner rainSpawner;
 	
 	public WeatherHandler(WaveSession session)
 	{
@@ -47,8 +48,10 @@ public class WeatherHandler
 		this.temperature = new SimpleObjectProperty<Double>(0.0);
 		this.lightning = new SimpleObjectProperty<Double>(0.0);
 		
-		this.spawner = new LightningSpawner(0);
-		this.spawner.startProcess();
+		this.lightningSpawner = new LightningSpawner(0);
+		this.lightningSpawner.startProcess();
+		
+		this.rainSpawner = new RainSpawner(0);
 	}
 
 	public void updateMarkerValues(Position position)
@@ -70,6 +73,8 @@ public class WeatherHandler
 				int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
 				double rainValue = WeatherConverter.convertRainToValue(rain);
 				this.setRain(rainValue);
+				
+				this.rainSpawner.setIntensity(rainValue);
 			}
 		}
 		if (this.windLayer != null || pref.getShowAllWeather())
@@ -111,9 +116,9 @@ public class WeatherHandler
 				
 				if (lightningValue >= 0.0001)
 				{
-					this.spawner.stopProcess();
-					this.spawner = new LightningSpawner(lightningValue);
-					this.spawner.startProcess();
+					this.lightningSpawner.stopProcess();
+					this.lightningSpawner = new LightningSpawner(lightningValue);
+					this.lightningSpawner.startProcess();
 				}
 			}
 		}

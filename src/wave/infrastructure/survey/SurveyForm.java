@@ -3,7 +3,7 @@ package wave.infrastructure.survey;
 import java.util.ArrayList;
 import java.util.List;
 
-import wave.audio.Rain;
+import wave.audio.RainSounds;
 import wave.audio.SurveySounds;
 import wave.audio.Thunder;
 import wave.audio.Wind;
@@ -19,34 +19,34 @@ public class SurveyForm
 		//@formatter:off
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the rain was heavier in sound A or sound B?", 
-				new SurveySounds(-1, -1, Rain.LIGHT, 1), 
-				new SurveySounds(-1, -1, Rain.MEDIUM, 1), 
+				new SurveySounds(-1, -1, RainSounds.LIGHT_FADE, 1), 
+				new SurveySounds(-1, -1, RainSounds.MEDIUM_FADE, 1), 
 				"Sound B"));
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the rain was heavier in sound A or sound B?", 
-				new SurveySounds(-1, -1, Rain.HEAVY, 1), 
-				new SurveySounds(-1, -1, Rain.MEDIUM, 1), 
+				new SurveySounds(-1, -1, RainSounds.HEAVY_FADE, 1), 
+				new SurveySounds(-1, -1, RainSounds.MEDIUM_FADE, 1), 
 				"Sound A"));
 
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the wind was stronger in sound A or sound B?", 
-				new SurveySounds(-1, -1, Wind.LIGHT, 1), 
-				new SurveySounds(-1, -1, Wind.BREEZE, 1), 
+				new SurveySounds(-1, -1, Wind.LIGHT_FADE, 1), 
+				new SurveySounds(-1, -1, Wind.BREEZE_FADE, 1), 
 				"Sound A"));
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the wind was stronger in sound A or sound B?", 
-				new SurveySounds(-1, -1, Wind.MEDIUM, 1), 
-				new SurveySounds(-1, -1, Wind.LIGHT, 1), 
+				new SurveySounds(-1, -1, Wind.MEDIUM_FADE, 1), 
+				new SurveySounds(-1, -1, Wind.LIGHT_FADE, 1), 
 				"Sound A"));
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the wind was stronger in sound A or sound B?", 
-				new SurveySounds(-1, -1, Wind.EXTREME, 1), 
-				new SurveySounds(-1, -1, Wind.HIGH, 1), 
+				new SurveySounds(-1, -1, Wind.EXTREME_FADE, 1), 
+				new SurveySounds(-1, -1, Wind.HIGH_FADE, 1), 
 				"Sound A"));
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the wind was stronger in sound A or sound B?", 
-				new SurveySounds(-1, -1, Wind.MEDIUM, 1), 
-				new SurveySounds(-1, -1, Wind.HIGH, 1), 
+				new SurveySounds(-1, -1, Wind.MEDIUM_FADE, 1), 
+				new SurveySounds(-1, -1, Wind.HIGH_FADE, 1), 
 				"Sound B"));
 
 		this.scenarios.add(new ScenarioQuestion(
@@ -61,127 +61,127 @@ public class SurveyForm
 				"Sound B"));
 
 		// 100
-		int rElev = 24;
-		int direction = 24;
+		int elevation = 0;
+		int heading = 100;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, rElev, Wind.MEDIUM, 1), 
-				100));
+				new SurveySounds(heading, elevation, Wind.MEDIUM_FADE, 1), 
+				heading));
 		// -55
-		direction = 2;
+		heading = -55;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, Wind.LIGHT, 1), 
-				-55));
+				new SurveySounds(heading, -1, Wind.LIGHT_FADE, 1), 
+				heading));
 		// 160
-		direction = 16;
+		heading = 160;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, rElev, Wind.MEDIUM, 1), 
-				160));
+				new SurveySounds(heading, elevation, Wind.MEDIUM_FADE, 1), 
+				heading));
 		// 40
-		direction = 20;
+		heading = 40;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, Wind.EXTREME, 1), 
-				40));
+				new SurveySounds(heading, -1, Wind.EXTREME_FADE, 1), 
+				heading));
 		// -160
-		direction = 8;
+		heading = -160;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, rElev, Wind.HIGH, 1), 
-				-160));
+				new SurveySounds(heading, elevation, Wind.HIGH_FADE, 1), 
+				heading));
 		// 0
-		direction = 12;
+		heading = 0;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, Wind.LIGHT, 1), 
-				0));
+				new SurveySounds(heading, -1, Wind.LIGHT_FADE, 1), 
+				heading));
 		// 45
-		direction = 21;
+		heading = 45;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, Wind.EXTREME, 1), 
-				45));
+				new SurveySounds(heading, -1, Wind.EXTREME_FADE, 1), 
+				heading));
 		// -140
-		direction = 4;
+		heading = -140;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, rElev, Wind.LIGHT, 1), 
-				-140));
+				new SurveySounds(heading, elevation, Wind.LIGHT_FADE, 1), 
+				heading));
 		// -15
-		direction = 9;
+		heading = -15;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, -1, Wind.MEDIUM, 1), 
-				-15));
+				new SurveySounds(heading, -1, Wind.MEDIUM_FADE, 1), 
+				-heading));
 		// -100
-		direction = 0;
+		heading = -100;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the wind come from?", 
-				new SurveySounds(direction, rElev, Wind.EXTREME, 1), 
-				-100));
+				new SurveySounds(heading, elevation, Wind.EXTREME_FADE, 1), 
+				heading));
 		
 		// -45
-		direction = 3;
+		heading = -45;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, Thunder.FAR, 1), 
-				-45));
+				new SurveySounds(heading, -1, Thunder.FAR, 1), 
+				heading));
 		// 125
-		direction = 22;
+		heading = 125;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, rElev, Thunder.MEDIUM, 1), 
-				125));
+				new SurveySounds(heading, elevation, Thunder.MEDIUM, 1), 
+				heading));
 		// -30
-		direction = 6;
+		heading = -30;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, Thunder.CLOSE, 1), 
-				-30));
+				new SurveySounds(heading, -1, Thunder.CLOSE, 1), 
+				heading));
 		// 145
-		direction = 19;
+		heading = 145;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, rElev, Thunder.FAR, 1), 
-				145));
+				new SurveySounds(heading, elevation, Thunder.FAR, 1), 
+				heading));
 		// -5
-		direction = 11;
+		heading = -5;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, Thunder.FAR, 1), 
-				-5));
+				new SurveySounds(heading, -1, Thunder.FAR, 1), 
+				heading));
 		// 110
-		direction = 16;
+		heading = 110;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, rElev, Thunder.CLOSE, 1), 
-				110));
+				new SurveySounds(heading, elevation, Thunder.CLOSE, 1), 
+				heading));
 		// 10
-		direction = 14;
+		heading = 10;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, Thunder.MEDIUM, 1), 
-				40));
+				new SurveySounds(heading, -1, Thunder.MEDIUM, 1), 
+				heading));
 		// -105
-		direction = 9;
+		heading = -105;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, rElev, Thunder.FAR, 1), 
-				-105));
+				new SurveySounds(heading, elevation, Thunder.FAR, 1), 
+				heading));
 		// -80 degrees
-		direction = 0;
+		heading = -80;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, -1, Thunder.MEDIUM, 1), 
-				-80));
+				new SurveySounds(heading, -1, Thunder.MEDIUM, 1), 
+				heading));
 		// 100
-		direction = 24;
+		heading = 100;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(direction, rElev, Thunder.CLOSE, 1), 
-				100));
+				new SurveySounds(heading, elevation, Thunder.CLOSE, 1), 
+				heading));
 		
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this thunder audio clip?", 
@@ -194,22 +194,22 @@ public class SurveyForm
 				new SurveySounds(-1, -1, Thunder.CLOSE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this rain audio clip?", 
-				new SurveySounds(-1, -1, Rain.LIGHT, 1)));
+				new SurveySounds(-1, -1, RainSounds.LIGHT_FADE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this rain audio clip?", 
-				new SurveySounds(-1, -1, Rain.MEDIUM, 1)));
+				new SurveySounds(-1, -1, RainSounds.MEDIUM_FADE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this rain audio clip?", 
-				new SurveySounds(-1, -1, Rain.HEAVY, 1)));
+				new SurveySounds(-1, -1, RainSounds.HEAVY_FADE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this wind audio clip?", 
-				new SurveySounds(-1, -1, Wind.BREEZE, 1)));
+				new SurveySounds(-1, -1, Wind.BREEZE_FADE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this wind audio clip?", 
-				new SurveySounds(-1, -1, Wind.MEDIUM, 1)));
+				new SurveySounds(-1, -1, Wind.MEDIUM_FADE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this wind audio clip?", 
-				new SurveySounds(-1, -1, Wind.EXTREME, 1)));
+				new SurveySounds(-1, -1, Wind.EXTREME_FADE, 1)));
 		//@formatter:on
 	}
 

@@ -9,12 +9,10 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.apache.commons.math3.util.MathUtils;
-
 import wave.infrastructure.handlers.HRTFData;
 import wave.infrastructure.util.PointUtil;
 
-public class WeatherAudio
+public abstract class WeatherAudio
 {
 	protected double headingAngle;
 	protected double elevationAngle; 
@@ -23,6 +21,40 @@ public class WeatherAudio
 	protected Path soundPath;
 	protected int duration;
 	protected HRTFData hrtf;
+
+	public WeatherAudio()
+	{
+		this.headingAngle = -1;
+		this.elevationAngle = -1;
+		try
+		{
+			Path hrtfPath = HRTF.CIPIC_58.getPath();
+			this.hrtf = HRTFData.LoadHRTF(hrtfPath);
+		}
+		catch (Exception e)
+		{
+			
+		}
+		this.updateAngles();
+	}
+	
+	public WeatherAudio(Path soundPath)
+	{
+		this.headingAngle = -1;
+		this.elevationAngle = -1;
+		this.soundPath = soundPath;
+		this.duration = this.calculateDuration();
+		try
+		{
+			Path hrtfPath = HRTF.CIPIC_58.getPath();
+			this.hrtf = HRTFData.LoadHRTF(hrtfPath);
+		}
+		catch (Exception e)
+		{
+			
+		}
+		this.updateAngles();
+	}
 	
 	public WeatherAudio(double headingAngle, double elevationAngle, Path soundPath)
 	{
@@ -90,31 +122,39 @@ public class WeatherAudio
 	{
 		return this.headingAngle;
 	}
-	
+
 	public int getHeadingIndex()
-	{		
-		double index = 12;
-		if (this.headingAngle >= -80 && this.headingAngle <= -65)
+	{
+	    return (int) Math.round(this.getHeadingIndexPrecise());
+	}
+	
+	public double getHeadingIndexPrecise()
+	{
+		double index = -1;
+		if (this.headingAngle != -1)
 		{
-			index = PointUtil.map(this.headingAngle, -80, -65, 0, 1);
+			if (this.headingAngle >= -80 && this.headingAngle <= -65)
+			{
+				index = PointUtil.map(this.headingAngle, -80, -65, 0, 1);
+			}
+			else if (this.headingAngle >= -65 && this.headingAngle <= -45)
+			{
+				index = PointUtil.map(this.headingAngle, -65, -45, 1, 3);
+			}
+			else if (this.headingAngle >= -45 && this.headingAngle <= 45)
+			{
+				index = PointUtil.map(this.headingAngle, -45, 45, 3, 21);
+			}
+			else if (this.headingAngle >= 45 && this.headingAngle <= 65)
+			{
+				index = PointUtil.map(this.headingAngle, 45, 65, 21, 23);
+			}
+			else if (this.headingAngle >= 65 && this.headingAngle <= 80)
+			{
+				index = PointUtil.map(this.headingAngle, 65, 80, 23, 24);
+			}
 		}
-		else if (this.headingAngle >= -65 && this.headingAngle <= -45)
-		{
-			index = PointUtil.map(this.headingAngle, -65, -45, 1, 3);
-		}
-		else if (this.headingAngle >= -45 && this.headingAngle <= 45)
-		{
-			index = PointUtil.map(this.headingAngle, -45, 45, 3, 21);
-		}
-		else if (this.headingAngle >= 45 && this.headingAngle <= 65)
-		{
-			index = PointUtil.map(this.headingAngle, 45, 65, 21, 23);
-		}
-		else if (this.headingAngle >= 65 && this.headingAngle <= 80)
-		{
-			index = PointUtil.map(this.headingAngle, 65, 80, 23, 24);
-		}
-	    return (int) Math.round(index);
+	    return index;
 	}
 	
 	public void setElevation(double elevation)
@@ -130,7 +170,16 @@ public class WeatherAudio
 	
 	public int getElevationIndex()
 	{
-		int eIndex = (int) ((this.elevationAngle + 45) / 5.625);
+	    return (int) Math.round(this.getElevationIndexPrecise());
+	}
+	
+	public double getElevationIndexPrecise()
+	{
+		double eIndex = -1;
+		if (this.elevationAngle != -1)
+		{
+			eIndex = ((this.elevationAngle + 45) / 5.625);
+		}
 	    return eIndex;
 	}
 	
@@ -187,72 +236,76 @@ public class WeatherAudio
 		return duration;
 	}
 	
-//	public abstract void stopAudio();
-//	public abstract void playAudio();
+	public abstract void stopAudio();
+	public abstract void playAudio();
 	
-	public static void main(String[] args)
-	{
-		double heading = 0;
-		double elevation = 0;
-		Path sound = Rain.HEAVY;
-		WeatherAudio audio = new WeatherAudio(heading, elevation, sound);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-
-		audio.setHeading(-20);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-
-		audio.setHeading(-45);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-
-		audio.setHeading(-60);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(-90);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(-110);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(-135);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(-160);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(20);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-
-		audio.setHeading(45);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-
-		audio.setHeading(60);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(90);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(110);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(135);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-		
-		audio.setHeading(160);
-		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
-		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
-	}
+//	public static void main(String[] args)
+//	{
+//		double heading = 0;
+//		double elevation = 0;
+//		Path sound = Rain.HEAVY;
+//		WeatherAudio audio = new WeatherAudio(heading, elevation, sound);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//
+//		audio.setHeading(-20);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//
+//		audio.setHeading(-45);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//
+//		audio.setHeading(-60);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(-90);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(-110);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(-135);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(-160);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//
+//		audio.setHeading(180);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(0);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//
+//		audio.setHeading(45);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//
+//		audio.setHeading(60);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(90);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(110);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(135);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//		
+//		audio.setHeading(160);
+//		System.out.println("Heading Angle: " + audio.getHeading() + "    Heading Index: " + audio.getHeadingIndex());
+//		System.out.println("Elevation Angle: " + audio.getElevation() + "    Elevation Index: " + audio.getElevationIndex());
+//	}
 }
