@@ -21,6 +21,9 @@ public class RainSpawner
 			this.intensity = intensity;
 			
 			this.rain.setIntensity(intensity);
+			
+			// TODO add a fade effect
+			// TODO add varying intensities
 			this.rain.playAudio();
 		}
 	}

@@ -56,10 +56,8 @@ public class LightningSpawner extends TimerTask
 	@Override
 	public void run()
 	{
-//		double lightningDist = MIN_LIGHTNING + (MAX_LIGHTNING - MIN_LIGHTNING) * this.random.nextDouble();
-//		double lightningDir = 359 * this.random.nextDouble();
-		double lightningDist = this.random.nextInt(3);
-		double lightningDir = this.random.nextInt(25);
+		double lightningDir = this.random.nextInt(10);
+		double lightningDist = this.random.nextInt(360);
 		long deviation = (long) (2000 * this.random.nextDouble());
 		this.lightningTasks = new LightningSoundTask(lightningDist, lightningDir, deviation);
 		this.lightningTasks.startProcess();

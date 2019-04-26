@@ -5,7 +5,7 @@ import java.util.List;
 
 import wave.audio.RainSounds;
 import wave.audio.SurveySounds;
-import wave.audio.Thunder;
+import wave.audio.ThunderSounds;
 import wave.audio.Wind;
 
 public class SurveyForm
@@ -51,13 +51,13 @@ public class SurveyForm
 
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the thunder was closer in sound A or sound B?", 
-				new SurveySounds(-1, -1, Thunder.MEDIUM, 1, 10000), 
-				new SurveySounds(-1, -1, Thunder.FAR, 1, 10000), 
+				new SurveySounds(-1, -1, ThunderSounds.MEDIUM, 1, 10000), 
+				new SurveySounds(-1, -1, ThunderSounds.FAR, 1, 10000), 
 				"Sound A"));
 		this.scenarios.add(new ScenarioQuestion(
 				"Do you think the thunder was closer in sound A or sound B?", 
-				new SurveySounds(-1, -1, Thunder.MEDIUM, 1, 10000), 
-				new SurveySounds(-1, -1, Thunder.CLOSE, 1, 10000), 
+				new SurveySounds(-1, -1, ThunderSounds.MEDIUM, 1, 10000), 
+				new SurveySounds(-1, -1, ThunderSounds.CLOSE, 1, 10000), 
 				"Sound B"));
 
 		// 100
@@ -126,72 +126,72 @@ public class SurveyForm
 		heading = -45;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, -1, Thunder.FAR, 1), 
+				new SurveySounds(heading, -1, ThunderSounds.FAR, 1), 
 				heading));
 		// 125
 		heading = 125;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, elevation, Thunder.MEDIUM, 1), 
+				new SurveySounds(heading, elevation, ThunderSounds.MEDIUM, 1), 
 				heading));
 		// -30
 		heading = -30;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, -1, Thunder.CLOSE, 1), 
+				new SurveySounds(heading, -1, ThunderSounds.CLOSE, 1), 
 				heading));
 		// 145
 		heading = 145;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, elevation, Thunder.FAR, 1), 
+				new SurveySounds(heading, elevation, ThunderSounds.FAR, 1), 
 				heading));
 		// -5
 		heading = -5;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, -1, Thunder.FAR, 1), 
+				new SurveySounds(heading, -1, ThunderSounds.FAR, 1), 
 				heading));
 		// 110
 		heading = 110;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, elevation, Thunder.CLOSE, 1), 
+				new SurveySounds(heading, elevation, ThunderSounds.CLOSE, 1), 
 				heading));
 		// 10
 		heading = 10;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, -1, Thunder.MEDIUM, 1), 
+				new SurveySounds(heading, -1, ThunderSounds.MEDIUM, 1), 
 				heading));
 		// -105
 		heading = -105;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, elevation, Thunder.FAR, 1), 
+				new SurveySounds(heading, elevation, ThunderSounds.FAR, 1), 
 				heading));
 		// -80 degrees
 		heading = -80;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, -1, Thunder.MEDIUM, 1), 
+				new SurveySounds(heading, -1, ThunderSounds.MEDIUM, 1), 
 				heading));
 		// 100
 		heading = 100;
 		this.scenarios.add(new DirectionQuestion(
 				"What direction did the thunder originate from?", 
-				new SurveySounds(heading, elevation, Thunder.CLOSE, 1), 
+				new SurveySounds(heading, elevation, ThunderSounds.CLOSE, 1), 
 				heading));
 		
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this thunder audio clip?", 
-				new SurveySounds(-1, -1, Thunder.FAR, 1)));
+				new SurveySounds(-1, -1, ThunderSounds.FAR, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this thunder audio clip?", 
-				new SurveySounds(-1, -1, Thunder.MEDIUM, 1)));
+				new SurveySounds(-1, -1, ThunderSounds.MEDIUM, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this thunder audio clip?", 
-				new SurveySounds(-1, -1, Thunder.CLOSE, 1)));
+				new SurveySounds(-1, -1, ThunderSounds.CLOSE, 1)));
 		this.scenarios.add(new RatingQuestion(
 				"On a scale of 1-5, how realistic is this rain audio clip?", 
 				new SurveySounds(-1, -1, RainSounds.LIGHT_FADE, 1)));

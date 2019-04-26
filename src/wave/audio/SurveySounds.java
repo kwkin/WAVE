@@ -134,6 +134,7 @@ class PlaySound implements Runnable
 	private Clip clip;
 	private HRTFData hrtf;
 	private boolean isLoop;
+	private File soundFile = SOUND_FILE;
 
 	public PlaySound(int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
 	{
@@ -147,12 +148,30 @@ class PlaySound implements Runnable
 		
 		processAudio();
 	}
+	
+	public PlaySound(File soundFile, int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
+	{
+		this.soundFile = soundFile;
+		this.aIndex = aIndex;
+		this.eIndex = eIndex;
+		this.soundToPlay = sound;
+		this.hrtf = hrtf;
+		this.scaleFactor = scaleFactor;
+		this.dur = dur;
+		this.isLoop = isLoop;
+		
+		processAudio();
+	}
 
 	public void run()
 	{
+		if (this.soundFile == null || this.soundToPlay == null)
+		{
+			return;
+		}
 		try
 		{
-			AudioInputStream aStream = AudioSystem.getAudioInputStream(SOUND_FILE);
+			AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
 			this.clip = AudioSystem.getClip();
 			this.clip.open(aStream);
 			if (this.isLoop)
@@ -181,6 +200,10 @@ class PlaySound implements Runnable
 	
 	private void processAudio()
 	{
+		if (this.soundToPlay == null)
+		{
+			return;
+		}
 		try
 		{
 			File sourceSound = this.soundToPlay.toFile();
@@ -307,7 +330,7 @@ class PlaySound implements Runnable
 				}
 			}
 			long sampleRate = wavFile.getSampleRate();
-			WavFile writeFile = WavFile.newWavFile(SOUND_FILE, numChannels, finalF, wavFile.getValidBits(), sampleRate);
+			WavFile writeFile = WavFile.newWavFile(this.soundFile, numChannels, finalF, wavFile.getValidBits(), sampleRate);
 
 			// write audio data to wav file
 			writeFile.writeFrames(finalBuffer, numFrames);
