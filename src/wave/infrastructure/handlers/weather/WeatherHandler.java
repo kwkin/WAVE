@@ -26,9 +26,10 @@ public class WeatherHandler
 	private KMLLayer temperatureLayer;
 	private WindLayer windLayer;
 	private KMLLayer lightningLayer;
-	
-	private LightningSpawner lightningSpawner;
+
 	private RainSpawner rainSpawner;
+	private WindSpawner windSpawner;
+	private LightningSpawner lightningSpawner;
 	
 	public WeatherHandler(WaveSession session)
 	{
@@ -47,11 +48,12 @@ public class WeatherHandler
 		this.humidity = new SimpleObjectProperty<Double>(0.0);
 		this.temperature = new SimpleObjectProperty<Double>(0.0);
 		this.lightning = new SimpleObjectProperty<Double>(0.0);
-		
+
+		this.rainSpawner = new RainSpawner(0);
+		this.windSpawner = new WindSpawner(0, 0);
 		this.lightningSpawner = new LightningSpawner(0);
 		this.lightningSpawner.startProcess();
 		
-		this.rainSpawner = new RainSpawner(0);
 	}
 
 	public void updateMarkerValues(Position position)
@@ -86,6 +88,10 @@ public class WeatherHandler
 				this.setWindDirection(direction);
 				double speed = this.windLayer.getSpeed();
 				this.setWindSpeed(speed);
+				
+				this.windSpawner.setDirection(direction);
+				this.windSpawner.setIntensity(speed);
+				this.windSpawner.playAudio();
 			}
 		}
 		if (this.humidityLayer != null || pref.getShowAllWeather())
