@@ -53,20 +53,23 @@ public class WindSounds extends WeatherAudio
 	}
 
 	@Override
-	public void stopAudio()
+	public boolean stopAudio()
 	{
+		boolean hasStopped = false;
 		if (this.sound != null)
 		{
-			this.sound.stop();
+			hasStopped = this.sound.stop();
 		}
+		return hasStopped;
 	}
 
 	@Override
-	public void playAudio()
+	public boolean playAudio()
 	{
-		if (this.sound != null)
+		boolean hasStopped = false;
+		if (sound != null)
 		{
-			this.sound.stop();
+			hasStopped = this.sound.stop();
 		}
 		// @formatter:off
 		if (this.intensity > 0)
@@ -84,6 +87,7 @@ public class WindSounds extends WeatherAudio
 			this.thread = new Thread(this.sound);
 			this.thread.start();
 		}
+		return hasStopped;
 	}
 
 	public void setScaleFactor(double scaleFactor)

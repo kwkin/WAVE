@@ -39,20 +39,23 @@ public class ThunderSounds extends WeatherAudio
 	}
 
 	@Override
-	public void stopAudio()
+	public boolean stopAudio()
 	{
+		boolean hasStopped = false;
 		if (this.sound != null)
 		{
-			this.sound.stop();
+			hasStopped = this.sound.stop();
 		}
+		return hasStopped;
 	}
 
 	@Override
-	public void playAudio()
+	public boolean playAudio()
 	{
+		boolean hasStopped = false;
 		if (sound != null)
 		{
-			this.sound.stop();
+			hasStopped = this.sound.stop();
 		}
 		// @formatter:off
 		this.sound = new PlaySound(
@@ -67,6 +70,7 @@ public class ThunderSounds extends WeatherAudio
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
+		return hasStopped;
 	}
 
 	public void setScaleFactor(double scaleFactor)

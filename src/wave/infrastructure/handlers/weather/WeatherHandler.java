@@ -50,15 +50,14 @@ public class WeatherHandler
 		this.temperature = new SimpleObjectProperty<Double>(0.0);
 		this.lightning = new SimpleObjectProperty<Double>(0.0);
 
-		this.rainSpawner = new RainSpawner(0);
-		this.rain.addListener(this.rainSpawner);
+//		this.rainSpawner = new RainSpawner(0);
+//		this.rain.addListener(this.rainSpawner);
 		
 		this.windSpawner = new WindSpawner(0, 0);
 		this.windDirection.addListener(this.windSpawner);
 		
 		this.lightningSpawner = new LightningSpawner(0);
 		this.lightningSpawner.startProcess();
-		
 	}
 
 	public void updateMarkerValues(Position position)

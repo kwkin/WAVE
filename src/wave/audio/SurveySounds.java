@@ -1,11 +1,14 @@
 package wave.audio;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.apache.commons.math3.util.MathArrays;
 
@@ -73,11 +76,12 @@ public class SurveySounds extends WeatherAudio
 		this.isLoop = isLoop;
 	}
 
-	public void playAudio()
+	public boolean playAudio()
 	{
+		boolean hasStopped = false;
 		if (sound != null)
 		{
-			this.sound.stop();
+			hasStopped = this.sound.stop();
 		}
 		// @formatter:off
 		this.sound = new PlaySound(
@@ -91,14 +95,17 @@ public class SurveySounds extends WeatherAudio
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
+		return hasStopped;
 	}
 
-	public void stopAudio()
+	public boolean stopAudio()
 	{
+		boolean hasStopped = false;
 		if (this.sound != null)
 		{
-			this.sound.stop();
+			hasStopped = this.sound.stop();
 		}
+		return hasStopped;
 	}
 
 	public void setScaleFactor(double scaleFactor)
@@ -135,6 +142,7 @@ class PlaySound implements Runnable
 	private HRTFData hrtf;
 	private boolean isLoop;
 	private File soundFile = SOUND_FILE;
+	private boolean isStopped;
 
 	public PlaySound(int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
 	{
@@ -165,15 +173,13 @@ class PlaySound implements Runnable
 	public void run()
 	{
 		processAudio();
-		if (this.soundFile == null || this.soundToPlay == null)
+		if (this.soundFile == null || this.soundToPlay == null || this.isStopped)
 		{
 			return;
 		}
 		try
 		{
-			AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
-			this.clip = AudioSystem.getClip();
-			this.clip.open(aStream);
+			resetClip();
 			if (this.isLoop)
 			{
 				this.clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -186,16 +192,24 @@ class PlaySound implements Runnable
 		}
 	}
 
-	public void stop()
+	public void resetClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException
 	{
+		AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
+		this.clip = AudioSystem.getClip();
+		this.clip.open(aStream);
+	}
+	
+	public boolean stop()
+	{
+		this.isStopped = true;
 		this.isLoop = false;
 		if (this.clip != null)
 		{
-			this.clip.close();
 			this.clip.stop();
+			this.clip.close();
 			this.clip.drain();
-			this.clip.flush();
 		}
+		return this.isStopped;
 	}
 	
 	private void processAudio()
