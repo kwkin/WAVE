@@ -9,6 +9,7 @@ public class RainSpawner implements ChangeListener<Double>
 {
 	private double intensity;
 	private RainSounds rain;
+	private double previousIntensity;
 	
 	public RainSpawner(double intensity)
 	{
@@ -21,6 +22,10 @@ public class RainSpawner implements ChangeListener<Double>
 	{
 		// TODO add a fade effect
 		// TODO add varying intensities
+		if (this.previousIntensity < this.intensity)
+		{
+			this.rain.fadeStop(2000);
+		}
 		this.rain.playAudio();
 	}
 	
@@ -28,6 +33,7 @@ public class RainSpawner implements ChangeListener<Double>
 	{
 		if (this.intensity != intensity)
 		{
+			this.previousIntensity = this.intensity;
 			this.intensity = intensity;
 			
 			this.rain.setIntensity(intensity);
