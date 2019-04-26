@@ -19,7 +19,7 @@ import wave.views.WaveWindow;
 // TODO:
 // - Crossfading
 // - Varying Intensity
-// - Fading when the marker moves
+// - Wind fade
 public class WaveApp extends Application
 {
 	private static Stage primaryStage;

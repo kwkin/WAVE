@@ -74,13 +74,8 @@ public class SurveySounds extends WeatherAudio
 		this.isLoop = isLoop;
 	}
 
-	public boolean playAudio()
+	public void playAudio()
 	{
-		boolean hasStopped = false;
-		if (sound != null)
-		{
-			hasStopped = this.sound.stop();
-		}
 		// @formatter:off
 		this.sound = new PlaySound(
 				this.getHeadingIndex(), 
@@ -93,7 +88,6 @@ public class SurveySounds extends WeatherAudio
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
-		return hasStopped;
 	}
 
 	public boolean stopAudio()

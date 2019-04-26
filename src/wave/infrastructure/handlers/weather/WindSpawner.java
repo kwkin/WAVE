@@ -9,6 +9,7 @@ public class WindSpawner implements ChangeListener<Double>
 	private double intensity;
 	private double direction;
 	private WindSounds wind;
+	private double previousIntensity;
 
 	public WindSpawner(double intensity, double direction)
 	{
@@ -21,15 +22,33 @@ public class WindSpawner implements ChangeListener<Double>
 
 	public void playAudio()
 	{
-		// TODO add a fade effect
 		// TODO add varying intensities
-		this.wind.playAudio();
+		if (Math.abs(this.previousIntensity - this.intensity) > 1)
+		{
+			if (this.previousIntensity < this.intensity)
+			{
+				this.wind.fadeStop(1500);
+			}
+			else
+			{
+				this.wind.fadeStop(1500);
+			}
+			this.wind.playAudio();
+		}
 	}
 
 	public void setIntensity(double intensity)
 	{
-		this.intensity = intensity;
-		this.wind.setIntensity(intensity);
+		if (this.intensity != intensity)
+		{
+			if (Math.abs(this.previousIntensity - this.intensity) > 1)
+			{
+				this.previousIntensity = this.intensity;
+			}
+			this.intensity = intensity;
+			
+			this.wind.setIntensity(intensity);
+		}
 	}
 
 	public double getIntensity()

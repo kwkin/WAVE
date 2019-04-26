@@ -64,13 +64,8 @@ public class WindSounds extends WeatherAudio
 	}
 
 	@Override
-	public boolean playAudio()
+	public void playAudio()
 	{
-		boolean hasStopped = false;
-		if (sound != null)
-		{
-			hasStopped = this.sound.stop();
-		}
 		// @formatter:off
 		if (this.intensity > 0)
 		{
@@ -86,6 +81,18 @@ public class WindSounds extends WeatherAudio
 			// @formatter:on
 			this.thread = new Thread(this.sound);
 			this.thread.start();
+		}
+	}
+
+	public boolean fadeStop(long duration)
+	{
+		boolean hasStopped = false;
+		if (this.sound != null)
+		{
+			FadeEffect fade = new FadeEffect(this.sound, duration);
+			Thread thread = new Thread(fade);
+			thread.start();
+			hasStopped = true;
 		}
 		return hasStopped;
 	}

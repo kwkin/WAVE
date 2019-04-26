@@ -74,13 +74,8 @@ public class RainSounds extends WeatherAudio
 	}
 	
 	@Override
-	public boolean playAudio()
+	public void playAudio()
 	{
-		boolean hasStopped = false;
-		if (sound != null)
-		{
-			hasStopped = this.fadeStop(3000);
-		}
 		// @formatter:off
 		if (this.intensity > 0)
 		{
@@ -97,7 +92,6 @@ public class RainSounds extends WeatherAudio
 			Thread thread = new Thread(this.sound);
 			thread.start();
 		}
-		return hasStopped;
 	}
 
 	public void setScaleFactor(double scaleFactor)

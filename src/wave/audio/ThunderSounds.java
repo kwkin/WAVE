@@ -50,13 +50,8 @@ public class ThunderSounds extends WeatherAudio
 	}
 
 	@Override
-	public boolean playAudio()
+	public void playAudio()
 	{
-		boolean hasStopped = false;
-		if (sound != null)
-		{
-			hasStopped = this.sound.stop();
-		}
 		// @formatter:off
 		this.sound = new PlaySound(
 				THUNDER_FILE,
@@ -70,7 +65,6 @@ public class ThunderSounds extends WeatherAudio
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
-		return hasStopped;
 	}
 
 	public void setScaleFactor(double scaleFactor)

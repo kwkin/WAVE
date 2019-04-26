@@ -237,7 +237,7 @@ public abstract class WeatherAudio
 	}
 	
 	public abstract boolean stopAudio();
-	public abstract boolean playAudio();
+	public abstract void playAudio();
 	
 //	public static void main(String[] args)
 //	{
