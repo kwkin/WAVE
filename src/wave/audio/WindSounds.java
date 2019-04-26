@@ -26,6 +26,7 @@ public class WindSounds extends WeatherAudio
 	private double intensity;
 	private double scaleFactor;
 	private boolean isLoop;
+	private Thread thread;
 	private PlaySound sound;
 	
 	public WindSounds(double heading, double intensity)
@@ -63,7 +64,7 @@ public class WindSounds extends WeatherAudio
 	@Override
 	public void playAudio()
 	{
-		if (sound != null)
+		if (this.sound != null)
 		{
 			this.sound.stop();
 		}
@@ -80,8 +81,8 @@ public class WindSounds extends WeatherAudio
 					this.duration,
 					this.isLoop);
 			// @formatter:on
-			Thread thread = new Thread(this.sound);
-			thread.start();
+			this.thread = new Thread(this.sound);
+			this.thread.start();
 		}
 	}
 

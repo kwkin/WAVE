@@ -160,11 +160,11 @@ class PlaySound implements Runnable
 		this.dur = dur;
 		this.isLoop = isLoop;
 		
-		processAudio();
 	}
 
 	public void run()
 	{
+		processAudio();
 		if (this.soundFile == null || this.soundToPlay == null)
 		{
 			return;
