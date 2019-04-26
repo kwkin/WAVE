@@ -1,14 +1,12 @@
 package wave.audio;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.FloatControl;
 
 import org.apache.commons.math3.util.MathArrays;
 
@@ -22,7 +20,7 @@ public class SurveySounds extends WeatherAudio
 	private double scaleFactor;
 	private boolean isLoop;
 	private PlaySound sound;
-	
+
 	public SurveySounds(Path soundPath)
 	{
 		super(soundPath);
@@ -30,7 +28,7 @@ public class SurveySounds extends WeatherAudio
 		double volume = preferences.getMasterVolume();
 		this.scaleFactor = volume;
 	}
-	
+
 	public SurveySounds(Path soundPath, boolean isLoop)
 	{
 		super(soundPath);
@@ -108,16 +106,29 @@ public class SurveySounds extends WeatherAudio
 		return hasStopped;
 	}
 
+	public boolean fadeStop()
+	{
+		boolean hasStopped = false;
+		if (this.sound != null)
+		{
+			FadeEffect fade = new FadeEffect(this.sound, 3000);
+			Thread thread = new Thread(fade);
+			thread.start();
+			hasStopped = true;
+		}
+		return hasStopped;
+	}
+	
 	public void setScaleFactor(double scaleFactor)
 	{
 		this.scaleFactor = scaleFactor;
 	}
-	
+
 	public double getScaleFactor()
 	{
 		return scaleFactor;
 	}
-	
+
 	public void setIsLoop(boolean isLoop)
 	{
 		this.isLoop = isLoop;
@@ -131,8 +142,8 @@ public class SurveySounds extends WeatherAudio
 
 class PlaySound implements Runnable
 {
-	private final static File SOUND_FILE = new File("survey_sound.wav"); 
-	
+	private final static File SOUND_FILE = new File("survey_sound.wav");
+
 	public int aIndex;
 	public int eIndex;
 	public Path soundToPlay;
@@ -153,11 +164,12 @@ class PlaySound implements Runnable
 		this.scaleFactor = scaleFactor;
 		this.dur = dur;
 		this.isLoop = isLoop;
-		
+
 		processAudio();
 	}
-	
-	public PlaySound(File soundFile, int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
+
+	public PlaySound(File soundFile, int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur,
+			boolean isLoop)
 	{
 		this.soundFile = soundFile;
 		this.aIndex = aIndex;
@@ -167,7 +179,7 @@ class PlaySound implements Runnable
 		this.scaleFactor = scaleFactor;
 		this.dur = dur;
 		this.isLoop = isLoop;
-		
+
 	}
 
 	public void run()
@@ -179,7 +191,9 @@ class PlaySound implements Runnable
 		}
 		try
 		{
-			resetClip();
+			AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
+			this.clip = AudioSystem.getClip();
+			this.clip.open(aStream);
 			if (this.isLoop)
 			{
 				this.clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -192,13 +206,15 @@ class PlaySound implements Runnable
 		}
 	}
 
-	public void resetClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException
+	public void setGain(float gain)
 	{
-		AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
-		this.clip = AudioSystem.getClip();
-		this.clip.open(aStream);
+		if (this.clip != null)
+		{
+			FloatControl gainControl = (FloatControl) this.clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(gain);
+		}
 	}
-	
+
 	public boolean stop()
 	{
 		this.isStopped = true;
@@ -211,7 +227,7 @@ class PlaySound implements Runnable
 		}
 		return this.isStopped;
 	}
-	
+
 	private void processAudio()
 	{
 		if (this.soundToPlay == null)
@@ -344,7 +360,8 @@ class PlaySound implements Runnable
 				}
 			}
 			long sampleRate = wavFile.getSampleRate();
-			WavFile writeFile = WavFile.newWavFile(this.soundFile, numChannels, finalF, wavFile.getValidBits(), sampleRate);
+			WavFile writeFile = WavFile.newWavFile(this.soundFile, numChannels, finalF, wavFile.getValidBits(),
+					sampleRate);
 
 			// write audio data to wav file
 			writeFile.writeFrames(finalBuffer, numFrames);

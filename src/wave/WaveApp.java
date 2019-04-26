@@ -20,7 +20,6 @@ import wave.views.WaveWindow;
 // - Crossfading
 // - Varying Intensity
 // - Fading when the marker moves
-// - Fix multiple audio occuring at the same time
 public class WaveApp extends Application
 {
 	private static Stage primaryStage;

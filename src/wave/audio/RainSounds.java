@@ -79,7 +79,7 @@ public class RainSounds extends WeatherAudio
 		boolean hasStopped = false;
 		if (sound != null)
 		{
-			hasStopped = this.sound.stop();
+			hasStopped = this.fadeStop();
 		}
 		// @formatter:off
 		if (this.intensity > 0)
@@ -118,6 +118,19 @@ public class RainSounds extends WeatherAudio
 	public boolean isLoop()
 	{
 		return this.isLoop;
+	}
+
+	public boolean fadeStop()
+	{
+		boolean hasStopped = false;
+		if (this.sound != null)
+		{
+			FadeEffect fade = new FadeEffect(this.sound, 3000);
+			Thread thread = new Thread(fade);
+			thread.start();
+			hasStopped = true;
+		}
+		return hasStopped;
 	}
 	
 	public void setIntensity(double intensity)

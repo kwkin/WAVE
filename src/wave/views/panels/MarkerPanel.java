@@ -371,6 +371,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		{
 			SurveySounds sound = new SurveySounds(RainSounds.HEAVY, true);
 			sound.playAudio();
+			sound.fadeStop();
 		});
 		grid.add(playSoundButton, 1, rowIndex, 2, 1);
 		rowIndex++;
