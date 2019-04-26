@@ -1,8 +1,11 @@
 package wave.infrastructure.handlers.weather;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import wave.audio.WindSounds;
 
-public class WindSpawner
+public class WindSpawner implements ChangeListener<Double>
 {
 	private double intensity;
 	private double direction;
@@ -49,5 +52,12 @@ public class WindSpawner
 	public void stopProcess()
 	{
 		this.wind.stopAudio();
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue)
+	{
+		this.setDirection(newValue);
+		this.playAudio();
 	}
 }

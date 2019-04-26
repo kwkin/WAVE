@@ -21,6 +21,16 @@ public class LightningSpawner extends TimerTask
 		this.timerProcess = new Timer(true);
 		this.random = new Random();
 	}
+	
+	public void setBaserate(double baseRate)
+	{
+		this.baseRate = baseRate;
+	}
+	
+	public double getBaserate()
+	{
+		return this.baseRate;
+	}
 
 	public void startProcess()
 	{

@@ -16,6 +16,11 @@ import wave.infrastructure.handlers.FXThemeLoader;
 import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.WaveWindow;
 
+// TODO:
+// - Crossfading
+// - Varying Intensity
+// - Fading when the marker moves
+// - Fix pausing gui when moving marker
 public class WaveApp extends Application
 {
 	private static Stage primaryStage;
@@ -57,7 +62,7 @@ public class WaveApp extends Application
 		Platform.exit();
 	}
 
-	private boolean initializeSettings() 
+	private boolean initializeSettings()
 	{
 		System.setProperty("sun.awt.noerasebackground", "true");
 		Path configFile = Wave.WAVE_CONFIG_FILE;

@@ -1,6 +1,7 @@
 package wave.infrastructure.handlers.weather;
 
 import gov.nasa.worldwind.geom.Position;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import wave.infrastructure.WaveSession;
@@ -49,8 +50,12 @@ public class WeatherHandler
 		this.temperature = new SimpleObjectProperty<Double>(0.0);
 		this.lightning = new SimpleObjectProperty<Double>(0.0);
 
-		this.rainSpawner = new RainSpawner(0);
+//		this.rainSpawner = new RainSpawner(0);
+//		this.rain.addListener(this.rainSpawner);
+		
 		this.windSpawner = new WindSpawner(0, 0);
+		this.windDirection.addListener(this.windSpawner);
+		
 		this.lightningSpawner = new LightningSpawner(0);
 		this.lightningSpawner.startProcess();
 		
@@ -58,76 +63,75 @@ public class WeatherHandler
 
 	public void updateMarkerValues(Position position)
 	{
-		double latitude = position.latitude.degrees;
-		this.setLatitude(latitude);
+		Platform.runLater(() -> 
+		{
+			double latitude = position.latitude.degrees;
+			this.setLatitude(latitude);
 
-		double longitude = position.longitude.degrees;
-		this.setLongitude(longitude);
+			double longitude = position.longitude.degrees;
+			this.setLongitude(longitude);
 
-		double elevation = position.elevation;
-		this.setElevation(elevation);
+			double elevation = position.elevation;
+			this.setElevation(elevation);
 
-		Preferences pref = PreferencesLoader.preferences();
-		if (this.rainLayer != null)
-		{
-			if (this.rainLayer.isEnabled() || pref.getShowAllWeather())
+			Preferences pref = PreferencesLoader.preferences();
+			if (this.rainLayer != null)
 			{
-				int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
-				double rainValue = WeatherConverter.convertRainToValue(rain);
-				this.setRain(rainValue);
-				
-				this.rainSpawner.setIntensity(rainValue);
-			}
-		}
-		if (this.windLayer != null || pref.getShowAllWeather())
-		{
-			if (this.windLayer.isEnabled())
-			{
-				this.windLayer.setNearestMarker(position);
-				double direction = this.windLayer.getDirection(position);
-				this.setWindDirection(direction);
-				double speed = this.windLayer.getSpeed();
-				this.setWindSpeed(speed);
-				
-				this.windSpawner.setDirection(direction);
-				this.windSpawner.setIntensity(speed);
-				this.windSpawner.playAudio();
-			}
-		}
-		if (this.humidityLayer != null || pref.getShowAllWeather())
-		{
-			if (this.humidityLayer.isEnabled())
-			{
-				int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
-				double humidityValue = WeatherConverter.convertHumidityValue(humidity);
-				this.setHumidity(humidityValue);
-			}
-		}
-		if (this.temperatureLayer != null || pref.getShowAllWeather())
-		{
-			if (this.temperatureLayer.isEnabled())
-			{
-				int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
-				double temperatureValue = WeatherConverter.convertTempToValue(temperature);
-				this.setTemperature(temperatureValue);
-			}
-		}
-		if (this.lightningLayer != null || pref.getShowAllWeather())
-		{
-			if (this.lightningLayer.isEnabled())
-			{
-				int lightning = this.lightningLayer.getLayerValue(position.latitude, position.longitude, elevation);
-				double lightningValue = WeatherConverter.convertLightningToValue(lightning);
-				this.setLightning(lightningValue);
-				
-				if (lightningValue >= 0.0001)
+				if (this.rainLayer.isEnabled() || pref.getShowAllWeather())
 				{
-					this.lightningSpawner.stopProcess();
-					this.lightningSpawner = new LightningSpawner(lightningValue);
-					this.lightningSpawner.startProcess();
+					int rain = this.rainLayer.getLayerValue(position.latitude, position.longitude, elevation);
+					double rainValue = WeatherConverter.convertRainToValue(rain);
+					this.setRain(rainValue);
 				}
 			}
-		}
+			if (this.windLayer != null || pref.getShowAllWeather())
+			{
+				if (this.windLayer.isEnabled())
+				{
+					this.windLayer.setNearestMarker(position);
+					double direction = this.windLayer.getDirection(position);
+					this.setWindDirection(direction);
+					double speed = this.windLayer.getSpeed();
+					this.setWindSpeed(speed);
+					
+					this.windSpawner.setIntensity(speed);
+				}
+			}
+			if (this.humidityLayer != null || pref.getShowAllWeather())
+			{
+				if (this.humidityLayer.isEnabled())
+				{
+					int humidity = this.humidityLayer.getLayerValue(position.latitude, position.longitude, elevation);
+					double humidityValue = WeatherConverter.convertHumidityValue(humidity);
+					this.setHumidity(humidityValue);
+				}
+			}
+			if (this.temperatureLayer != null || pref.getShowAllWeather())
+			{
+				if (this.temperatureLayer.isEnabled())
+				{
+					int temperature = this.temperatureLayer.getLayerValue(position.latitude, position.longitude, elevation);
+					double temperatureValue = WeatherConverter.convertTempToValue(temperature);
+					this.setTemperature(temperatureValue);
+				}
+			}
+			if (this.lightningLayer != null || pref.getShowAllWeather())
+			{
+				if (this.lightningLayer.isEnabled())
+				{
+					int lightning = this.lightningLayer.getLayerValue(position.latitude, position.longitude, elevation);
+					double lightningValue = WeatherConverter.convertLightningToValue(lightning);
+					this.setLightning(lightningValue);
+					
+					if (lightningValue >= 0.0001)
+					{
+						this.lightningSpawner.stopProcess();
+						this.lightningSpawner = new LightningSpawner(lightningValue);
+						this.lightningSpawner.startProcess();
+					}
+				}
+			}
+		});
 	}
 	
 	public boolean showRain()

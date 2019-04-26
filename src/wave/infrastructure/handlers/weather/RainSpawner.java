@@ -1,8 +1,11 @@
 package wave.infrastructure.handlers.weather;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import wave.audio.RainSounds;
 
-public class RainSpawner
+public class RainSpawner implements ChangeListener<Double>
 {
 	private double intensity;
 	private RainSounds rain;
@@ -13,6 +16,13 @@ public class RainSpawner
 		this.rain = new RainSounds(intensity, true);
 		this.setIntensity(intensity);
 	}
+
+	public void playAudio()
+	{
+		// TODO add a fade effect
+		// TODO add varying intensities
+		this.rain.playAudio();
+	}
 	
 	public void setIntensity(double intensity)
 	{
@@ -21,10 +31,6 @@ public class RainSpawner
 			this.intensity = intensity;
 			
 			this.rain.setIntensity(intensity);
-			
-			// TODO add a fade effect
-			// TODO add varying intensities
-			this.rain.playAudio();
 		}
 	}
 	
@@ -36,5 +42,15 @@ public class RainSpawner
 	public void stopProcess()
 	{
 		this.rain.stopAudio();
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue)
+	{
+		this.setIntensity(newValue);
+		Platform.runLater(() -> 
+		{
+			this.playAudio();
+		});
 	}
 }
