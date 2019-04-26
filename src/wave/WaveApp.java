@@ -19,7 +19,6 @@ import wave.views.WaveWindow;
 // TODO:
 // - Crossfading
 // - Varying Intensity
-// - Wind fade
 public class WaveApp extends Application
 {
 	private static Stage primaryStage;

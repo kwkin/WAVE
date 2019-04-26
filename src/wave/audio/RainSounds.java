@@ -10,9 +10,11 @@ import wave.infrastructure.preferences.PreferencesLoader;
 
 public class RainSounds extends WeatherAudio
 {
+	public static final Path LIGHTEST = Paths.get("data", "audio", "rain_lightest_loop.wav");
 	public static final Path LIGHT = Paths.get("data", "audio", "rain_light_loop.wav");
 	public static final Path MEDIUM = Paths.get("data", "audio", "rain_medium_loop.wav");
 	public static final Path HEAVY = Paths.get("data", "audio", "rain_heavy_loop.wav");
+	public static final Path HEAVIEST = Paths.get("data", "audio", "rain_heaviest_loop.wav");
 	
 	public static final Path LIGHT_FADE = Paths.get("data", "audio", "rain_light_fade.wav");
 	public static final Path MEDIUM_FADE = Paths.get("data", "audio", "rain_medium_fade.wav");
@@ -135,17 +137,25 @@ public class RainSounds extends WeatherAudio
 		{
 			this.soundPath = null;
 		}
-		else if (intensity < RainColorValues.RAIN_15.getMeasurement())
+		else if (intensity <= RainColorValues.RAIN_5.getMeasurement())
+		{
+			this.soundPath = RainSounds.LIGHTEST;
+		}
+		else if (intensity <= RainColorValues.RAIN_15.getMeasurement())
 		{
 			this.soundPath = RainSounds.LIGHT;
 		}
-		else if (intensity < RainColorValues.RAIN_32.getMeasurement())
+		else if (intensity <= RainColorValues.RAIN_25.getMeasurement())
 		{
 			this.soundPath = RainSounds.MEDIUM;
 		}
-		else if (intensity < RainColorValues.RAIN_152.getMeasurement())
+		else if (intensity <= RainColorValues.RAIN_38.getMeasurement())
 		{
 			this.soundPath = RainSounds.HEAVY;
+		}
+		else
+		{
+			this.soundPath = RainSounds.HEAVIEST;
 		}
 	}
 	
