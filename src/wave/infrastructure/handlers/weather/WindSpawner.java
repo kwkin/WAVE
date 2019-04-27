@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import wave.audio.WindSounds;
 
+//TODO fixed wind clipping
 public class WindSpawner implements ChangeListener<Double>
 {
 	private double intensity;

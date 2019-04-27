@@ -20,7 +20,6 @@ public class RainSpawner implements ChangeListener<Double>
 
 	public void playAudio()
 	{
-		// TODO add varying intensities
 		if (this.previousIntensity < this.intensity)
 		{
 			this.rain.fadeStop(2000);

@@ -68,6 +68,13 @@ public class WindSounds extends WeatherAudio
 	{
 		if (this.intensity > 0)
 		{
+			int framePosition = 0;
+			Path previousPath = null;
+			if (this.sound != null)
+			{
+				previousPath = this.sound.getSoundToPlay();
+				framePosition = this.sound.getPosition();
+			}
 			// @formatter:off
 			this.sound = new PlaySound(
 					WIND_FILE,
@@ -79,6 +86,10 @@ public class WindSounds extends WeatherAudio
 					this.duration,
 					this.isLoop);
 			// @formatter:on
+			if (previousPath == this.soundPath)
+			{
+				this.sound.setPosition(framePosition);
+			}
 			this.thread = new Thread(this.sound);
 			this.thread.start();
 		}

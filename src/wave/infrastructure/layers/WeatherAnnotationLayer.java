@@ -98,7 +98,6 @@ public class WeatherAnnotationLayer extends AnnotationLayer
 			markerText.append(pref.getLengthUnitDisplay().lengthDescription(newValue.getElevation()));
 			markerText.append("\n");
 		}
-		// TODO append units
 		DecimalFormat weatherFormat = new DecimalFormat(".##");
 		if (this.handler.showRain())
 		{

@@ -76,13 +76,6 @@ public class SurveySounds extends WeatherAudio
 
 	public void playAudio()
 	{
-		int framePosition = 0;
-		Path previousPath = null;
-		if (this.sound != null)
-		{
-			previousPath = this.sound.getSoundToPlay();
-			framePosition = this.sound.getPosition();
-		}
 		// @formatter:off
 		this.sound = new PlaySound(
 				this.getHeadingIndex(), 
@@ -93,10 +86,6 @@ public class SurveySounds extends WeatherAudio
 				this.duration,
 				this.isLoop);
 		// @formatter:on
-		if (previousPath != this.soundPath)
-		{
-			this.sound.setPosition(framePosition);
-		}
 		Thread thread = new Thread(this.sound);
 		thread.start();
 	}
@@ -154,6 +143,7 @@ class PlaySound implements Runnable
 	public Path soundToPlay;
 	public double scaleFactor;
 	public int dur;
+	private int framePosition;
 	private Clip clip;
 	private HRTFData hrtf;
 	private boolean isLoop;
@@ -196,9 +186,10 @@ class PlaySound implements Runnable
 		}
 		try
 		{
-			AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
-			this.clip = AudioSystem.getClip();
-			this.clip.open(aStream);
+			if (this.framePosition < this.clip.getFrameLength())
+			{
+				this.clip.setFramePosition(framePosition);
+			}
 			if (this.isLoop)
 			{
 				this.clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -218,13 +209,7 @@ class PlaySound implements Runnable
 
 	public void setPosition(int framePosition)
 	{
-		if (this.clip != null)
-		{
-			if (framePosition < this.clip.getFrameLength())
-			{
-				this.clip.setFramePosition(framePosition);
-			}
-		}
+		this.framePosition = framePosition;
 	}
 	
 
@@ -401,6 +386,10 @@ class PlaySound implements Runnable
 			// write audio data to wav file
 			writeFile.writeFrames(finalBuffer, numFrames);
 			writeFile.close();
+
+			AudioInputStream aStream = AudioSystem.getAudioInputStream(this.soundFile);
+			this.clip = AudioSystem.getClip();
+			this.clip.open(aStream);
 		}
 		catch (Exception e)
 		{

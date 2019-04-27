@@ -29,7 +29,6 @@ public class LightningSoundTask extends TimerTask
 	
 	public long calculateDelay()
 	{
-		// TODO factor in distance
 		return this.delayOffset;
 	}
 
