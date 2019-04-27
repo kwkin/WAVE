@@ -76,6 +76,13 @@ public class SurveySounds extends WeatherAudio
 
 	public void playAudio()
 	{
+		int framePosition = 0;
+		Path previousPath = null;
+		if (this.sound != null)
+		{
+			previousPath = this.sound.getSoundToPlay();
+			framePosition = this.sound.getPosition();
+		}
 		// @formatter:off
 		this.sound = new PlaySound(
 				this.getHeadingIndex(), 
@@ -86,6 +93,10 @@ public class SurveySounds extends WeatherAudio
 				this.duration,
 				this.isLoop);
 		// @formatter:on
+		if (previousPath != this.soundPath)
+		{
+			this.sound.setPosition(framePosition);
+		}
 		Thread thread = new Thread(this.sound);
 		thread.start();
 	}
@@ -199,7 +210,34 @@ class PlaySound implements Runnable
 			e.printStackTrace();
 		}
 	}
+	
+	public Path getSoundToPlay()
+	{
+		return this.soundToPlay;
+	}
 
+	public void setPosition(int framePosition)
+	{
+		if (this.clip != null)
+		{
+			if (framePosition < this.clip.getFrameLength())
+			{
+				this.clip.setFramePosition(framePosition);
+			}
+		}
+	}
+	
+
+	public int getPosition()
+	{
+		int position = 0;
+		if (this.clip != null)
+		{
+			position = this.clip.getFramePosition();
+		}
+		return position;
+	}
+	
 	public void setGain(float gain)
 	{
 		if (this.clip != null)

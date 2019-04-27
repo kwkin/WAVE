@@ -8,6 +8,7 @@ import wave.infrastructure.handlers.weather.RainColorValues;
 import wave.infrastructure.preferences.Preferences;
 import wave.infrastructure.preferences.PreferencesLoader;
 
+// TODO force stop audio when changing quickly
 public class RainSounds extends WeatherAudio
 {
 	public static final Path LIGHTEST = Paths.get("data", "audio", "rain_lightest_loop.wav");

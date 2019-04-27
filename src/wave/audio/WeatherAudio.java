@@ -21,6 +21,7 @@ public abstract class WeatherAudio
 	protected Path soundPath;
 	protected int duration;
 	protected HRTFData hrtf;
+	protected int markerPosition;
 
 	public WeatherAudio()
 	{
