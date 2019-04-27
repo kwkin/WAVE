@@ -317,7 +317,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.windSpeedLabel, 0, rowIndex);
 		this.windSpeedSpinner = new Spinner<Double>();
 		this.windSpeedSpinner.setEditable(true);
-		SpinnerValueFactory<Double> windSpeedFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 127, 0);
+		SpinnerValueFactory<Double> windSpeedFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 100, 0);
 		Bindings.bindBidirectional(session.getWeatherHander().windSpeedProperty(), windSpeedFactory.valueProperty());
 		this.windSpeedSpinner.focusedProperty().addListener((observable, oldValue, newValue) ->
 		{
@@ -336,7 +336,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.windDirectionLabel, 0, rowIndex);
 		this.windDirectionSpinner = new Spinner<Double>();
 		this.windDirectionSpinner.setEditable(true);
-		SpinnerValueFactory<Double> windDirectionFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 127, 0);
+		SpinnerValueFactory<Double> windDirectionFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 360, 0);
 		Bindings.bindBidirectional(session.getWeatherHander().windDirectionProperty(),
 				windDirectionFactory.valueProperty());
 		this.windDirectionSpinner.focusedProperty().addListener((observable, oldValue, newValue) ->
@@ -356,7 +356,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.tempuratureLabel, 0, rowIndex);
 		this.temperatureSpinner = new Spinner<Double>();
 		this.temperatureSpinner.setEditable(true);
-		SpinnerValueFactory<Double> temperatureFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 127, 0);
+		SpinnerValueFactory<Double> temperatureFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000, 0);
 		Bindings.bindBidirectional(session.getWeatherHander().temperatureProperty(),
 				temperatureFactory.valueProperty());
 		this.temperatureSpinner.focusedProperty().addListener((observable, oldValue, newValue) ->
@@ -376,7 +376,7 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 		grid.add(this.humidityLabel, 0, rowIndex);
 		this.humiditySpinner = new Spinner<Double>();
 		this.humiditySpinner.setEditable(true);
-		SpinnerValueFactory<Double> humidityFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 127, 0);
+		SpinnerValueFactory<Double> humidityFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 100, 0);
 		Bindings.bindBidirectional(session.getWeatherHander().humidityProperty(), humidityFactory.valueProperty());
 		this.humiditySpinner.focusedProperty().addListener((observable, oldValue, newValue) ->
 		{

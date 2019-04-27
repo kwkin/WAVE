@@ -180,7 +180,7 @@ class PlaySound implements Runnable
 	public void run()
 	{
 		processAudio();
-		if (this.soundFile == null || this.soundToPlay == null || this.isStopped)
+		if (this.soundFile == null || this.soundToPlay == null || this.isStopped || this.clip == null)
 		{
 			return;
 		}
