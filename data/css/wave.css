@@ -268,6 +268,39 @@
 	-fx-background-color: -fx-base;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Tab Pane                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+.spinner {
+    -fx-background-color: -fx-test-base;
+    -fx-font-size: 18;
+    -fx-background-radius: 3 3 0 0;
+    -fx-border-color: -fx-base-light-component;
+    -fx-border-width: 0 0 1 0;
+	-fx-padding: 0.5em 0.2em 0.1em 0.1em;
+}
+
+.spinner > .text-field {
+    -fx-background-color: transparent;
+    -fx-font-size: 18;
+    -fx-border-width: 0 0 0 0;
+}
+
+.spinner .increment-arrow-button {
+    -fx-background-color: transparent;
+     /*Change the two 0's here to -1 to get rid of the horizontal line */
+    -fx-background-insets: 0 0 -1 0, 1 1 0 1, 2 2 1 2;
+    -fx-background-radius: 0 3 0 0, 0 2 0 0, 0 1 0 0;
+    -fx-padding: 0.333335em 0.666667em 0.333335em 0.666667em;  /* 5 8 3 8 */
+}
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 1 1 1 1, 1 2 2 2;
+    -fx-background-radius: 0 0 3 0, 0 0 2 0, 0 0 1 0;
+    -fx-padding: 0.333335em 0.666667em 0.333335em 0.666667em;  /* 3 8 5 8 */
+}
 
 /*******************************************************************************
  *                                                                             *
