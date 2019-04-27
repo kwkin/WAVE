@@ -55,8 +55,8 @@ public class ThunderSounds extends WeatherAudio
 		// @formatter:off
 		this.sound = new PlaySound(
 				THUNDER_FILE,
-				this.getHeadingIndex(), 
-				this.getElevationIndex(), 
+				this.headingAngle, 
+				this.elevationAngle, 
 				this.soundPath, 
 				this.hrtf, 
 				this.scaleFactor, 

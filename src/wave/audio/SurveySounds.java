@@ -78,8 +78,8 @@ public class SurveySounds extends WeatherAudio
 	{
 		// @formatter:off
 		this.sound = new PlaySound(
-				this.getHeadingIndex(), 
-				this.getElevationIndex(), 
+				this.headingAngle, 
+				this.elevationAngle, 
 				this.soundPath, 
 				this.hrtf, 
 				this.scaleFactor, 
@@ -112,7 +112,7 @@ public class SurveySounds extends WeatherAudio
 		}
 		return hasStopped;
 	}
-	
+
 	public void setScaleFactor(double scaleFactor)
 	{
 		this.scaleFactor = scaleFactor;
@@ -138,8 +138,8 @@ class PlaySound implements Runnable
 {
 	private final static File SOUND_FILE = new File("survey_sound.wav");
 
-	public int aIndex;
-	public int eIndex;
+	public double heading;
+	public double elevation;
 	public Path soundToPlay;
 	public double scaleFactor;
 	public int dur;
@@ -147,34 +147,56 @@ class PlaySound implements Runnable
 	private Clip clip;
 	private HRTFData hrtf;
 	private boolean isLoop;
+	private boolean is3D;
 	private File soundFile = SOUND_FILE;
 	private boolean isStopped;
 
-	public PlaySound(int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
-	{
-		this.aIndex = aIndex;
-		this.eIndex = eIndex;
-		this.soundToPlay = sound;
-		this.hrtf = hrtf;
-		this.scaleFactor = scaleFactor;
-		this.dur = dur;
-		this.isLoop = isLoop;
-
-		processAudio();
-	}
-
-	public PlaySound(File soundFile, int aIndex, int eIndex, Path sound, HRTFData hrtf, double scaleFactor, int dur,
-			boolean isLoop)
+	public PlaySound(File soundFile, Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
 	{
 		this.soundFile = soundFile;
-		this.aIndex = aIndex;
-		this.eIndex = eIndex;
 		this.soundToPlay = sound;
 		this.hrtf = hrtf;
 		this.scaleFactor = scaleFactor;
 		this.dur = dur;
 		this.isLoop = isLoop;
+		this.is3D = true;
+	}
 
+	public PlaySound(Path sound, HRTFData hrtf, double scaleFactor, int dur, boolean isLoop)
+	{
+		this.soundToPlay = sound;
+		this.hrtf = hrtf;
+		this.scaleFactor = scaleFactor;
+		this.dur = dur;
+		this.isLoop = isLoop;
+		this.is3D = false;
+	}
+
+	public PlaySound(double heading, double elevation, Path sound, HRTFData hrtf, double scaleFactor, int dur,
+			boolean isLoop)
+	{
+		this.heading = heading;
+		this.elevation = elevation;
+		this.soundToPlay = sound;
+		this.hrtf = hrtf;
+		this.scaleFactor = scaleFactor;
+		this.dur = dur;
+		this.isLoop = isLoop;
+		this.is3D = true;
+	}
+
+	public PlaySound(File soundFile, double heading, double elevation, Path sound, HRTFData hrtf, double scaleFactor,
+			int dur, boolean isLoop)
+	{
+		this.soundFile = soundFile;
+		this.heading = heading;
+		this.elevation = elevation;
+		this.soundToPlay = sound;
+		this.hrtf = hrtf;
+		this.scaleFactor = scaleFactor;
+		this.dur = dur;
+		this.isLoop = isLoop;
+		this.is3D = true;
 	}
 
 	public void run()
@@ -201,7 +223,7 @@ class PlaySound implements Runnable
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Path getSoundToPlay()
 	{
 		return this.soundToPlay;
@@ -211,7 +233,6 @@ class PlaySound implements Runnable
 	{
 		this.framePosition = framePosition;
 	}
-	
 
 	public int getPosition()
 	{
@@ -222,7 +243,7 @@ class PlaySound implements Runnable
 		}
 		return position;
 	}
-	
+
 	public void setGain(float gain)
 	{
 		if (this.clip != null)
@@ -284,10 +305,10 @@ class PlaySound implements Runnable
 			int delay;
 
 			// final amount of frames
-			int finalF;
+			int finalF = 1;
 
 			// construct final audio data array
-			double[][] finalBuffer;
+			double[][] finalBuffer = new double[2][finalF];
 
 			// Indexing for individual channels
 			int j;
@@ -299,60 +320,98 @@ class PlaySound implements Runnable
 			// Close the wavFile
 			wavFile.close();
 
-			if (aIndex != -1 || eIndex != -1)
+			if (this.is3D)
 			{
-				aIndex = Math.max(aIndex, 12);
-				eIndex = Math.max(eIndex, 24);
-				lft = this.hrtf.getLeftData(aIndex, eIndex);
-				rgt = this.hrtf.getRightData(aIndex, eIndex);
-				convLft = new double[lft.length + leftBuffer.length - 1];
-				convRgt = new double[rgt.length + rightBuffer.length - 1];
-				delay = (int) Math.round(hrtf.getDelay(aIndex, eIndex));
-
-				j = 0;
-				k = 0;
-
-				// Write data for each channel, audio data is interlaced into buffer array
-				// index 0 is the left channel, index 1 is the right channel
-				for (int i = 0; i < buffer.length - 1; i++)
+				int aIndex;
+				int eIndex;
+				double scale;
+				CipicHRTF indicesHrtf = new CipicHRTF(this.heading, this.elevation);
+				for (int crossFade = 0; crossFade < 2; ++crossFade)
 				{
-					if (i % 2 == 0)
+					if (crossFade == 0)
 					{
-						leftBuffer[j++] = buffer[i] * scaleFactor;
+						aIndex = indicesHrtf.lowerIndex();
+						eIndex = indicesHrtf.lowerElIndex();
+						scale = indicesHrtf.lowerScale();
 					}
 					else
 					{
-						rightBuffer[k++] = buffer[i] * scaleFactor;
+						aIndex = indicesHrtf.higherIndex();
+						eIndex = indicesHrtf.higherElIndex();
+						scale = indicesHrtf.higherScale();
 					}
-				}
 
-				// perform convolution
-				if (aIndex != -1 || eIndex != -1)
-				{
+					lft = this.hrtf.getLeftData(aIndex, eIndex);
+					rgt = this.hrtf.getRightData(aIndex, eIndex);
+					convLft = new double[lft.length + leftBuffer.length - 1];
+					convRgt = new double[rgt.length + rightBuffer.length - 1];
+					delay = (int) Math.round(hrtf.getDelay(aIndex, eIndex));
+
+					j = 0;
+					k = 0;
+
+					// Write data for each channel, audio data is interlaced into buffer array
+					// index 0 is the left channel, index 1 is the right channel
+					for (int i = 0; i < buffer.length - 1; i++)
+					{
+						if (i % 2 == 0)
+						{
+							leftBuffer[j++] = buffer[i] * scaleFactor;
+						}
+						else
+						{
+							rightBuffer[k++] = buffer[i] * scaleFactor;
+						}
+					}
+
+					// perform convolution
 					convLft = MathArrays.convolve(lft, leftBuffer);
 					convRgt = MathArrays.convolve(rgt, rightBuffer);
-				}
-				// final amount of frames
-				finalF = delay + convLft.length;
 
-				// construct final audio data array
-				finalBuffer = new double[2][finalF];
+					// final amount of frames
+					finalF = delay + convLft.length;
 
-				// delay channel based on azimuth
-				if (aIndex < 12)
-				{
-					for (int i = 0; i < finalF - delay - 1; i++)
+					// construct final audio data array
+					finalBuffer = new double[2][finalF];
+
+					// delay channel based on azimuth
+					if (crossFade == 0)
 					{
-						finalBuffer[0][i] = convLft[i];
-						finalBuffer[1][i + delay] = convRgt[i];
+						if (aIndex < 12)
+						{
+							for (int i = 0; i < finalF - delay - 1; i++)
+							{
+								finalBuffer[0][i] = (convLft[i] * scale);
+								finalBuffer[1][i + delay] = (convRgt[i] * scale);
+							}
+						}
+						else
+						{
+							for (int i = 0; i < finalF - delay - 1; i++)
+							{
+								finalBuffer[0][i + delay] = convLft[i] * scale;
+								finalBuffer[1][i] = convRgt[i] * scale;
+							}
+						}
 					}
-				}
-				else
-				{
-					for (int i = 0; i < finalF - delay - 1; i++)
+					else
 					{
-						finalBuffer[0][i + delay] = convLft[i];
-						finalBuffer[1][i] = convRgt[i];
+						if (aIndex < 12)
+						{
+							for (int i = 0; i < finalF - delay - 1; i++)
+							{
+								finalBuffer[0][i] += convLft[i] * scale;
+								finalBuffer[1][i + delay] += convRgt[i] * scale;
+							}
+						}
+						else
+						{
+							for (int i = 0; i < finalF - delay - 1; i++)
+							{
+								finalBuffer[0][i + delay] += convLft[i] * scale;
+								finalBuffer[1][i] += convRgt[i] * scale;
+							}
+						}
 					}
 				}
 			}
@@ -393,7 +452,7 @@ class PlaySound implements Runnable
 		}
 		catch (Exception e)
 		{
-			
+
 		}
 	}
 }

@@ -78,8 +78,8 @@ public class WindSounds extends WeatherAudio
 			// @formatter:off
 			this.sound = new PlaySound(
 					WIND_FILE,
-					this.getHeadingIndex(), 
-					this.getElevationIndex(), 
+					this.headingAngle, 
+					this.elevationIndex, 
 					this.soundPath, 
 					this.hrtf, 
 					this.scaleFactor, 

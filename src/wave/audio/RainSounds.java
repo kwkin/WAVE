@@ -92,8 +92,6 @@ public class RainSounds extends WeatherAudio
 		{
 			this.baseSound = new PlaySound(
 					RAIN_FILE,
-					this.getHeadingIndex(), 
-					this.getElevationIndex(), 
 					this.soundPath, 
 					this.hrtf, 
 					this.scaleFactor * (1 - this.modGain), 
@@ -101,8 +99,6 @@ public class RainSounds extends WeatherAudio
 					this.isLoop);
 			this.modSound = new PlaySound(
 					RAIN_MOD_FILE,
-					this.getHeadingIndex(), 
-					this.getElevationIndex(), 
 					this.modSoundPath, 
 					this.hrtf, 
 					this.scaleFactor * this.modGain, 
