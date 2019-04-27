@@ -38,7 +38,7 @@ public class SurveySounds extends WeatherAudio
 		this.scaleFactor = volume;
 	}
 
-	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor)
+	public SurveySounds(int heading, int elevation, Path soundPath)
 	{
 		super(heading, elevation, soundPath);
 		Preferences preferences = PreferencesLoader.preferences();

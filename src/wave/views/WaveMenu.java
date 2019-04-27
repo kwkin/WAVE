@@ -40,6 +40,7 @@ import wave.infrastructure.layers.LatLonGraticule;
 import wave.infrastructure.layers.WindLayer;
 import wave.infrastructure.preferences.PreferencesLoader;
 import wave.views.windows.AboutWindow;
+import wave.views.windows.PlaybackWindow;
 import wave.views.windows.preferences.PreferencesWindow;
 import wave.views.windows.survey.SurveyWindow;
 
@@ -207,6 +208,13 @@ public class WaveMenu extends MenuBar
 		// Help menu
 		Menu helpMenu = new Menu("Help");
 		this.getMenus().add(helpMenu);
+		MenuItem playbackMenu = new MenuItem("Audio Playback...");
+		helpMenu.getItems().add(playbackMenu);
+		playbackMenu.setOnAction((value) ->
+		{
+			PlaybackWindow about = new PlaybackWindow();
+			about.show();
+		});
 		MenuItem weatherHelp = new MenuItem("Weather Information...");
 		helpMenu.getItems().add(weatherHelp);
 		weatherHelp.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
@@ -217,7 +225,7 @@ public class WaveMenu extends MenuBar
 		helpMenu.getItems().add(new SeparatorMenuItem());
 		MenuItem aboutHelp = new MenuItem("About WAVE...");
 		helpMenu.getItems().add(aboutHelp);
-		helpMenu.setOnAction((value) ->
+		aboutHelp.setOnAction((value) ->
 		{
 			AboutWindow about = new AboutWindow();
 			about.show();
