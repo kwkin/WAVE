@@ -1,5 +1,7 @@
 package wave.infrastructure.handlers.weather;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import wave.audio.WindSounds;
@@ -9,7 +11,6 @@ public class WindSpawner implements ChangeListener<Double>
 	private double intensity;
 	private double direction;
 	private WindSounds wind;
-	private double previousIntensity;
 
 	public WindSpawner(double intensity, double direction)
 	{
@@ -22,31 +23,15 @@ public class WindSpawner implements ChangeListener<Double>
 
 	public void playAudio()
 	{
-		// TODO add varying intensities
-		if (Math.abs(this.previousIntensity - this.intensity) > 1)
-		{
-			if (this.previousIntensity < this.intensity)
-			{
-				this.wind.fadeStop(1500);
-			}
-			else
-			{
-				this.wind.fadeStop(1500);
-			}
-			this.wind.playAudio();
-		}
+		this.wind.fadeStop(1500);
+		this.wind.playAudio();
 	}
 
 	public void setIntensity(double intensity)
 	{
 		if (this.intensity != intensity)
 		{
-			if (Math.abs(this.previousIntensity - this.intensity) > 1)
-			{
-				this.previousIntensity = this.intensity;
-			}
 			this.intensity = intensity;
-			
 			this.wind.setIntensity(intensity);
 		}
 	}
@@ -57,9 +42,12 @@ public class WindSpawner implements ChangeListener<Double>
 	}
 
 	public void setDirection(double direction)
-	{
-		this.direction = direction;
-		this.wind.setHeading(direction);
+	{		
+		if (this.direction != direction)
+		{
+			this.direction = direction;
+			this.wind.setHeading(direction);
+		}
 	}
 
 	public double getDirection()
@@ -75,7 +63,26 @@ public class WindSpawner implements ChangeListener<Double>
 	@Override
 	public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue)
 	{
-		this.setDirection(newValue);
-		this.playAudio();
+		Platform.runLater(() -> 
+		{
+			@SuppressWarnings("unchecked")
+			SimpleObjectProperty<Double> obs = (SimpleObjectProperty<Double>) observable;
+			if (obs.getName() == "spd")
+			{
+				if (Math.abs(this.intensity - newValue) >= 1)
+				{
+					this.setIntensity(newValue);
+					this.playAudio();
+				}
+			}
+			else if (obs.getName() == "dir")
+			{
+				if (Math.abs(this.direction - newValue) >= 1)
+				{
+					this.setDirection(newValue);
+					this.playAudio();
+				}
+			}
+		});
 	}
 }

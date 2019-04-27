@@ -109,7 +109,6 @@ public class RainSounds extends WeatherAudio
 					this.duration,
 					this.isLoop);
 			// @formatter:on
-			System.out.println(this.modGain);
 			Thread baseThread = new Thread(this.baseSound);
 			baseThread.start();
 			Thread modThread = new Thread(this.modSound);

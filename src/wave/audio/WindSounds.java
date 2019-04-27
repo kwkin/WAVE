@@ -22,7 +22,7 @@ public class WindSounds extends WeatherAudio
 	public static final Path EXTREME_FADE = Paths.get("data", "audio", "wind_heaviest_fade.wav");
 
 	public static final File WIND_FILE = new File("wind_sounds.wav");
-	
+
 	private double intensity;
 	private double scaleFactor;
 	private boolean isLoop;
@@ -66,9 +66,9 @@ public class WindSounds extends WeatherAudio
 	@Override
 	public void playAudio()
 	{
-		// @formatter:off
 		if (this.intensity > 0)
 		{
+			// @formatter:off
 			this.sound = new PlaySound(
 					WIND_FILE,
 					this.getHeadingIndex(), 
@@ -141,7 +141,7 @@ public class WindSounds extends WeatherAudio
 		{
 			this.soundPath = WindSounds.HIGH;
 		}
-		else if (intensity < 50)
+		else
 		{
 			this.soundPath = WindSounds.EXTREME;
 		}

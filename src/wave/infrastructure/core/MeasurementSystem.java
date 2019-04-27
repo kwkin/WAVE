@@ -114,7 +114,7 @@ public enum MeasurementSystem
 			string = "mph";
 			break;
 		case METRIC:
-			string = "m/s";
+			string = "km/h";
 			break;
 		default:
 			string = "";

@@ -242,8 +242,11 @@ class PlaySound implements Runnable
 	{
 		if (this.clip != null)
 		{
-			FloatControl gainControl = (FloatControl) this.clip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(gain);
+			if (this.clip.isOpen())
+			{
+				FloatControl gainControl = (FloatControl) this.clip.getControl(FloatControl.Type.MASTER_GAIN);
+				gainControl.setValue(gain);
+			}
 		}
 	}
 
@@ -401,7 +404,7 @@ class PlaySound implements Runnable
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			
 		}
 	}
 }

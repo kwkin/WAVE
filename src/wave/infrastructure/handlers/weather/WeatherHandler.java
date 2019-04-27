@@ -44,8 +44,8 @@ public class WeatherHandler
 		this.longitude = new SimpleObjectProperty<Double>(0.0);
 		this.elevation = new SimpleObjectProperty<Double>(0.0);
 		this.rain = new SimpleObjectProperty<Double>(0.0);
-		this.windDirection = new SimpleObjectProperty<Double>(0.0);
-		this.windSpeed = new SimpleObjectProperty<Double>(0.0);
+		this.windDirection = new SimpleObjectProperty<Double>(null, "dir", 0.0);
+		this.windSpeed = new SimpleObjectProperty<Double>(null, "spd", 0.0);
 		this.humidity = new SimpleObjectProperty<Double>(0.0);
 		this.temperature = new SimpleObjectProperty<Double>(0.0);
 		this.lightning = new SimpleObjectProperty<Double>(0.0);
@@ -55,6 +55,7 @@ public class WeatherHandler
 		
 		this.windSpawner = new WindSpawner(0, 0);
 		this.windDirection.addListener(this.windSpawner);
+		this.windSpeed.addListener(this.windSpawner);
 		
 		this.lightningSpawner = new LightningSpawner(0);
 		this.lightningSpawner.startProcess();
@@ -92,8 +93,6 @@ public class WeatherHandler
 					this.setWindDirection(direction);
 					double speed = this.windLayer.getSpeed();
 					this.setWindSpeed(speed);
-					
-					this.windSpawner.setIntensity(speed);
 				}
 			}
 			if (this.humidityLayer != null || pref.getShowAllWeather())
