@@ -301,8 +301,6 @@ class PlaySound implements Runnable
 
 			if (aIndex != -1 || eIndex != -1)
 			{
-				aIndex = Math.max(aIndex, 12);
-				eIndex = Math.max(eIndex, 24);
 				lft = this.hrtf.getLeftData(aIndex, eIndex);
 				rgt = this.hrtf.getRightData(aIndex, eIndex);
 				convLft = new double[lft.length + leftBuffer.length - 1];

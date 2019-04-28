@@ -27,7 +27,7 @@ public class WindSounds extends WeatherAudio
 	private double scaleFactor;
 	private boolean isLoop;
 	private Thread thread;
-	private PlaySound sound;
+	private PlayCIPICSound sound;
 	
 	public WindSounds(double heading, double intensity)
 	{
@@ -76,10 +76,10 @@ public class WindSounds extends WeatherAudio
 				framePosition = this.sound.getPosition();
 			}
 			// @formatter:off
-			this.sound = new PlaySound(
+			this.sound = new PlayCIPICSound(
 					WIND_FILE,
-					this.getHeadingIndex(), 
-					this.getElevationIndex(), 
+					this.headingAngle, 
+					this.elevationAngle, 
 					this.soundPath, 
 					this.hrtf, 
 					this.scaleFactor, 
