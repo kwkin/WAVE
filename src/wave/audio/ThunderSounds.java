@@ -59,12 +59,25 @@ public class ThunderSounds extends WeatherAudio
 				this.getElevationIndex(), 
 				this.soundPath, 
 				this.hrtf, 
-				this.scaleFactor, 
+				this.getVolume(), 
 				this.duration,
 				false);
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
+	}
+	
+	public void setVolume(double scale)
+	{
+		this.scaleFactor = scale;
+		this.stopAudio();
+		this.playAudio();
+	}
+	
+	public double getVolume()
+	{
+		Preferences preferences = PreferencesLoader.preferences();
+		return preferences.getMasterVolume() * preferences.getThunderVolume();
 	}
 
 	public void setScaleFactor(double scaleFactor)

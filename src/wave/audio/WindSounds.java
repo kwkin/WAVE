@@ -82,7 +82,7 @@ public class WindSounds extends WeatherAudio
 					this.elevationAngle, 
 					this.soundPath, 
 					this.hrtf, 
-					this.scaleFactor, 
+					this.getVolume(), 
 					this.duration,
 					this.isLoop);
 			// @formatter:on
@@ -106,6 +106,12 @@ public class WindSounds extends WeatherAudio
 			hasStopped = true;
 		}
 		return hasStopped;
+	}
+	
+	public double getVolume()
+	{
+		Preferences preferences = PreferencesLoader.preferences();
+		return preferences.getMasterVolume() * preferences.getWindVolume();
 	}
 
 	public void setScaleFactor(double scaleFactor)

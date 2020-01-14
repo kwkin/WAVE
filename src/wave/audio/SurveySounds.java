@@ -41,37 +41,31 @@ public class SurveySounds extends WeatherAudio
 	public SurveySounds(int heading, int elevation, Path soundPath)
 	{
 		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
 	}
 
 	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor, int duration)
 	{
 		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
 		this.duration = duration;
 	}
 
 	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor, boolean isLoop)
 	{
 		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
 		this.isLoop = isLoop;
 	}
 
 	public SurveySounds(int heading, int elevation, Path soundPath, double scaleFactor, int duration, boolean isLoop)
 	{
 		super(heading, elevation, soundPath);
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume();
-		this.scaleFactor = volume;
 		this.duration = duration;
 		this.isLoop = isLoop;
+	}
+	
+	public double getVolume()
+	{
+		Preferences preferences = PreferencesLoader.preferences();
+		return preferences.getMasterVolume();
 	}
 
 	public void playAudio()
@@ -82,9 +76,13 @@ public class SurveySounds extends WeatherAudio
 				this.elevationAngle, 
 				this.soundPath, 
 				this.hrtf, 
-				this.scaleFactor, 
+				this.getVolume(), 
 				this.duration,
 				this.isLoop);
+		if (this.headingAngle == -1 && this.elevationAngle == -1)
+		{
+			this.sound.set3D(false);
+		}
 		// @formatter:on
 		Thread thread = new Thread(this.sound);
 		thread.start();
@@ -485,6 +483,11 @@ class PlayCIPICSound implements Runnable
 			e.printStackTrace();
 		}
 	}
+	
+	public void set3D(boolean is3D)
+	{
+		this.is3D = is3D;
+	}
 
 	public Path getSoundToPlay()
 	{
@@ -568,6 +571,7 @@ class PlayCIPICSound implements Runnable
 
 			// final amount of frames
 			int finalF = 1;
+			int minIndex = 1;
 
 			// construct final audio data array
 			double[][] finalBuffer = new double[2][finalF];
@@ -629,19 +633,17 @@ class PlayCIPICSound implements Runnable
 					// perform convolution
 					convLft = MathArrays.convolve(lft, leftBuffer);
 					convRgt = MathArrays.convolve(rgt, rightBuffer);
-
-					// final amount of frames
-					finalF = delay + convLft.length;
-
-					// construct final audio data array
-					finalBuffer = new double[2][finalF];
-
+					
 					// delay channel based on azimuth
 					if (crossFade == 0)
 					{
+						finalF = delay + convLft.length;
+						minIndex = Math.min(finalF - delay - 1, convLft.length);
+						minIndex = Math.min(minIndex, convRgt.length);
+						finalBuffer = new double[2][finalF];
 						if (aIndex < 12)
 						{
-							for (int i = 0; i < finalF - delay - 1; i++)
+							for (int i = 0; i < minIndex; i++)
 							{
 								finalBuffer[0][i] = (convLft[i] * scale);
 								finalBuffer[1][i + delay] = (convRgt[i] * scale);
@@ -649,7 +651,7 @@ class PlayCIPICSound implements Runnable
 						}
 						else
 						{
-							for (int i = 0; i < finalF - delay - 1; i++)
+							for (int i = 0; i < minIndex; i++)
 							{
 								finalBuffer[0][i + delay] = convLft[i] * scale;
 								finalBuffer[1][i] = convRgt[i] * scale;
@@ -658,9 +660,11 @@ class PlayCIPICSound implements Runnable
 					}
 					else
 					{
+						minIndex = Math.min(finalF - delay - 1, convLft.length);
+						minIndex = Math.min(minIndex, convRgt.length);
 						if (aIndex < 12)
 						{
-							for (int i = 0; i < finalF - delay - 1; i++)
+							for (int i = 0; i < minIndex; i++)
 							{
 								finalBuffer[0][i] += convLft[i] * scale;
 								finalBuffer[1][i + delay] += convRgt[i] * scale;
@@ -668,7 +672,7 @@ class PlayCIPICSound implements Runnable
 						}
 						else
 						{
-							for (int i = 0; i < finalF - delay - 1; i++)
+							for (int i = 0; i < minIndex; i++)
 							{
 								finalBuffer[0][i + delay] += convLft[i] * scale;
 								finalBuffer[1][i] += convRgt[i] * scale;
@@ -714,7 +718,7 @@ class PlayCIPICSound implements Runnable
 		}
 		catch (Exception e)
 		{
-
+			e.printStackTrace();
 		}
 	}
 }

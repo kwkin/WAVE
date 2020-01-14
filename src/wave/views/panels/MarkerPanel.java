@@ -28,8 +28,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.converter.DoubleStringConverter;
-import wave.audio.RainSounds;
-import wave.audio.SurveySounds;
 import wave.components.IconWeatherButton;
 import wave.infrastructure.WaveSession;
 import wave.infrastructure.core.MeasurementSystem;
@@ -435,16 +433,14 @@ public class MarkerPanel extends BorderPane implements ChangeListener<Object>
 			}
 		});
 
-		Button playSoundButton = new Button("Sound");
-		playSoundButton.setMaxWidth(Double.MAX_VALUE);
-		playSoundButton.setOnAction((event) ->
-		{
-			SurveySounds sound = new SurveySounds(RainSounds.HEAVY, true);
-			sound.playAudio();
-			sound.fadeStop();
-		});
-		grid.add(playSoundButton, 1, rowIndex, 2, 1);
-		rowIndex++;
+//		Button playSoundButton = new Button("Toggle Sound");
+//		playSoundButton.setMaxWidth(Double.MAX_VALUE);
+//		playSoundButton.setOnAction((event) ->
+//		{
+//			
+//		});
+//		grid.add(playSoundButton, 1, rowIndex, 2, 1);
+//		rowIndex++;
 
 		PreferencesLoader.preferences().lengthUnitDisplayProperty().addListener(this);
 	}

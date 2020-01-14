@@ -18,6 +18,7 @@ public class CipicHRTF
 	{
 		this.headingAngle = headingAngle;
 		this.elevationAngle = elevationAngle;
+		this.normalizeHeading();
 		this.lowerIndex = this.lowerAIndex(this.headingAngle);
 		this.higherIndex = this.higherAIndex(this.headingAngle);
 		if (this.lowerIndex == this.higherIndex && this.lowerElIndex == this.higherElIndex)
@@ -216,6 +217,13 @@ public class CipicHRTF
 			index = 24;
 		}
 	    return (int) index;
+	}
+	
+	private void normalizeHeading()
+	{
+		double radHeading = Math.toRadians(this.headingAngle);
+		double normalized = Math.toDegrees(Math.atan2(Math.sin(radHeading), Math.cos(radHeading)));
+		this.headingAngle = normalized;
 	}
 	
 	public static void main(String[] args)

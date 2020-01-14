@@ -36,10 +36,6 @@ public class RainSounds extends WeatherAudio
 	{
 		super();
 		this.setIntensity(intensity);
-
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume() * preferences.getRainVolume();
-		this.scaleFactor = volume;
 	}
 	
 	public RainSounds(double intensity, boolean isLoop)
@@ -48,9 +44,6 @@ public class RainSounds extends WeatherAudio
 		this.setIntensity(intensity);
 		this.isLoop = isLoop;
 
-		Preferences preferences = PreferencesLoader.preferences();
-		double volume = preferences.getMasterVolume() * preferences.getRainVolume();
-		this.scaleFactor = volume;
 	}
 
 	public RainSounds(double intensity, double scaleFactor)
@@ -67,6 +60,13 @@ public class RainSounds extends WeatherAudio
 		this.setIntensity(intensity);
 		this.isLoop = isLoop;
 		this.scaleFactor = scaleFactor;
+	}
+	
+	public void setVolume(double scale)
+	{
+		this.scaleFactor = scale;
+		this.stopAudio();
+		this.playAudio();
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ public class RainSounds extends WeatherAudio
 					this.getElevationIndex(), 
 					this.soundPath, 
 					this.hrtf, 
-					this.scaleFactor * (1 - this.modGain), 
+					this.getVolume() * (1 - this.modGain), 
 					this.duration,
 					this.isLoop);
 			this.modSound = new PlaySound(
@@ -105,7 +105,7 @@ public class RainSounds extends WeatherAudio
 					this.getElevationIndex(), 
 					this.modSoundPath, 
 					this.hrtf, 
-					this.scaleFactor * this.modGain, 
+					this.getVolume() * this.modGain, 
 					this.duration,
 					this.isLoop);
 			// @formatter:on
@@ -114,6 +114,12 @@ public class RainSounds extends WeatherAudio
 			Thread modThread = new Thread(this.modSound);
 			modThread.start();
 		}
+	}
+	
+	public double getVolume()
+	{
+		Preferences preferences = PreferencesLoader.preferences();
+		return preferences.getMasterVolume() * preferences.getRainVolume();
 	}
 
 	public void setScaleFactor(double scaleFactor)
