@@ -1,5 +1,5 @@
 # WAVE
-The Weather Auditory and Visual Environment seeks to integrate 3D audio and visuals of weather on a virtual globe. Weather is presented in an interactive wy using overlays and positional audio which varies on weather conditions and intensity.
+The Weather Auditory and Visual Environment seeks to integrate 3D audio and visuals of weather on a virtual globe. Weather is presented in an interactive way using overlays and positional audio which varies on weather conditions and intensity.
 
 ![Desktop Application Sample](/img/sample1.png)
 ![Panel Features](/img/sample2.png)
