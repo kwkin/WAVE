@@ -5,14 +5,14 @@ The Weather Auditory and Visual Environment seeks to integrate 3D audio and visu
 ![Panel Features](/img/sample2.png)
 
 ## Group Information
-The 
+This application started as a semester-long class project.
 
-Group: Earth, Wind, and Audio
+Team name: Earth, Wind, and Audio
 
 **Members:** 
-1) Eric D. Goicochea, UF-ID: 6414-8523
-2) Bridget L. Homer, UF-ID: 6963-3242
-3) Kenneth W. King, UF-ID: 0901-3401
+1) Eric D. Goicochea
+2) Bridget L. Homer
+3) Kenneth W. King
 
 
 ## Dependencies
